@@ -36,9 +36,9 @@ ScheduleMonitor 就是用来解决上面这些问题的。
 
 ```xml
 <dependency>
-    <groupId>com.lyloou.component</groupId>
+    <groupId>com.lyloou</groupId>
     <artifactId>component-schedule-monitor</artifactId>
-    <version>1.0.2-SNAPSHOT</version>
+    <version>1.0.4</version>
 </dependency>
 ```
 

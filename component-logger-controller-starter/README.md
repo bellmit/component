@@ -5,6 +5,6 @@
 <dependency>
     <groupId>com.lyloou</groupId>
     <artifactId>component-logger-controller</artifactId>
-    <version>1.0.2-SNAPSHOT</version>
+    <version>1.0.4</version>
 </dependency>
 ```
