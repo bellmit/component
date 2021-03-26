@@ -53,6 +53,29 @@
 ```properties
 logging.level.com.lyloou.component.loggerrequeststatistic=INFO
 ```
+3. 在需要统计的 controller 类上，或mapping方法上添加注解
+```java
+@RestController
+// 对整个controller中的api有效
+@RequestStatistic
+public class PlaylistController extends BaseController {
+    // ...
+}
+```
+
+或者
+
+```java
+@RestController
+public class HiController extends BaseController {
+    // 只对此方法统计
+    @RequestStatistic
+    @GetMapping("hi")
+    public String sayHi(){
+        return "hi";
+    }
+}
+```
 
 效果：
 当发起请求时，会打印类似信息如下
