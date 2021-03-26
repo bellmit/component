@@ -18,6 +18,8 @@
         <module>component-schedule-monitor-starter</module>
         <module>component-logger-controller-starter</module>
         <module>component-dto</module>
+        <module>component-tool-code-generator</module>
+        <module>component-logger-request-statistic-starter</module>
     </modules>
 
     <properties>
@@ -50,7 +52,17 @@
             </dependency>
             <dependency>
                 <groupId>com.lyloou</groupId>
+                <artifactId>component-logger-request-statistic-starter</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.lyloou</groupId>
                 <artifactId>component-schedule-monitor</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.lyloou</groupId>
+                <artifactId>component-tool-code-generator</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
