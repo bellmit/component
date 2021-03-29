@@ -20,7 +20,7 @@
 ```xml
 <dependency>
     <groupId>com.lyloou</groupId>
-    <artifactId>component-logger-controller</artifactId>
+    <artifactId>component-logger-controller-starter</artifactId>
     <version>${project.version}</version>
 </dependency>
 ```
@@ -32,7 +32,7 @@
 ```xml
 <dependency>
     <groupId>com.lyloou</groupId>
-    <artifactId>component-schedule-monitor</artifactId>
+    <artifactId>component-schedule-monitor-starter</artifactId>
     <version>${project.version}</version>
 </dependency>
 ```

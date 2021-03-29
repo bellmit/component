@@ -2,9 +2,10 @@
 
 使用
 ```xml
+
 <dependency>
     <groupId>com.lyloou</groupId>
-    <artifactId>component-logger-controller</artifactId>
-    <version>1.0.4</version>
+    <artifactId>component-logger-controller-starter</artifactId>
+    <version>LOU-1.0.5</version>
 </dependency>
 ```

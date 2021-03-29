@@ -8,7 +8,7 @@
 
     <groupId>com.lyloou</groupId>
     <artifactId>component-parent</artifactId>
-    <version>1.0.4</version>
+    <version>LOU-1.0.5</version>
 
     <name>component-parent</name>
     <url>https://github.com/lyloou/component</url>
@@ -47,7 +47,7 @@
             </dependency>
             <dependency>
                 <groupId>com.lyloou</groupId>
-                <artifactId>component-logger-controller</artifactId>
+                <artifactId>component-logger-controller-starter</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
@@ -57,7 +57,7 @@
             </dependency>
             <dependency>
                 <groupId>com.lyloou</groupId>
-                <artifactId>component-schedule-monitor</artifactId>
+                <artifactId>component-schedule-monitor-starter</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

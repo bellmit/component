@@ -5,12 +5,12 @@
     <parent>
         <artifactId>component-parent</artifactId>
         <groupId>com.lyloou</groupId>
-        <version>1.0.4</version>
+        <version>LOU-1.0.5</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <packaging>jar</packaging>
 
-    <artifactId>component-schedule-monitor</artifactId>
+    <artifactId>component-schedule-monitor-starter</artifactId>
 
     <properties>
         <spring-boot.repackage.skip>true</spring-boot.repackage.skip>
