@@ -1,0 +1,119 @@
+package com.lyloou.component.redismanager;
+
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import org.springframework.data.redis.cache.RedisCacheConfiguration;
+import org.springframework.data.redis.cache.RedisCacheManager;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
+import org.springframework.data.redis.serializer.RedisSerializationContext;
+import org.springframework.data.redis.serializer.RedisSerializer;
+import org.springframework.data.redis.serializer.StringRedisSerializer;
+
+import java.time.Duration;
+
+/**
+ * 自动注入定时器监听器配置
+ *
+ * @author lilou
+ * @since 2021/3/7
+ */
+@EnableCaching
+@Configuration
+@EnableAspectJAutoProxy
+public class RedisManagerAutoConfiguration {
+
+    @Bean
+    @ConditionalOnMissingBean(ApplicationContextHelper.class)
+    public ApplicationContextHelper applicationContextHelper() {
+        return new ApplicationContextHelper();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(RedisService.class)
+    RedisService redisService() {
+        return new RedisServiceImpl();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(RedisManagerService.class)
+    public RedisManagerService redisManagerHandler() {
+        return new RedisManagerService();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(RedisManagerController.class)
+    public RedisManagerController redisManagerController() {
+        return new RedisManagerController();
+    }
+
+    // /这里序列化解决@Cacheable 存值后value 显示字节码问题
+    @Bean
+    @ConditionalOnMissingBean(name = "cacheManager")
+    @Qualifier("cacheManager")
+    public CacheManager cacheManager(RedisConnectionFactory factory) {
+        RedisSerializer<String> redisSerializer = new StringRedisSerializer();
+        Jackson2JsonRedisSerializer<Object> jackson2JsonRedisSerializer = jackson2JsonRedisSerializer();
+
+        // 配置序列化（解决乱码的问题）
+        RedisCacheConfiguration config = RedisCacheConfiguration.defaultCacheConfig()
+                //失效时间
+                .entryTtl(Duration.ZERO)
+                .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(redisSerializer))
+                .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(jackson2JsonRedisSerializer))
+                .disableCachingNullValues();
+
+        return RedisCacheManager.builder(factory)
+                .cacheDefaults(config)
+                .build();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(name = "jackson2JsonRedisSerializer")
+    @Qualifier("jackson2JsonRedisSerializer")
+    public Jackson2JsonRedisSerializer<Object> jackson2JsonRedisSerializer() {
+        Jackson2JsonRedisSerializer<Object> jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer<>(Object.class);
+
+        //解决查询缓存转换异常的问题
+        ObjectMapper om = new ObjectMapper();
+        om.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
+        om.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
+        jackson2JsonRedisSerializer.setObjectMapper(om);
+        return jackson2JsonRedisSerializer;
+    }
+
+    //这里序列化解决手动存值后value 显示字节码问题
+    @Bean
+    @ConditionalOnMissingBean(name = "redisTemplate")
+    @Qualifier("redisTemplate")
+    public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory factory) {
+        //配置redisTemplate
+        RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
+        // 配置连接工厂
+        redisTemplate.setConnectionFactory(factory);
+
+        //设置序列化
+        RedisSerializer<String> stringSerializer = new StringRedisSerializer();
+        //使用Jackson2JsonRedisSerializer<Object>来序列化和反序列化redis的value值（默认使用JDK的序列化方式）
+        Jackson2JsonRedisSerializer<Object> jackson2JsonRedisSerializer = jackson2JsonRedisSerializer();
+        //key序列化
+        redisTemplate.setKeySerializer(stringSerializer);
+        //value序列化
+        redisTemplate.setValueSerializer(jackson2JsonRedisSerializer);
+        //Hash key序列化
+        redisTemplate.setHashKeySerializer(stringSerializer);
+        //Hash value序列化
+        redisTemplate.setHashValueSerializer(jackson2JsonRedisSerializer);
+        redisTemplate.afterPropertiesSet();
+        return redisTemplate;
+    }
+}

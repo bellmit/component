@@ -1,0 +1,12 @@
+logging:
+    level:
+        com:
+            lyloou:
+                springredis: debug
+spring:
+    application:
+        name: component-redis-manager-starter-test
+    redis:
+        host: 127.0.0.1
+        password: ''
+        port: 6379
