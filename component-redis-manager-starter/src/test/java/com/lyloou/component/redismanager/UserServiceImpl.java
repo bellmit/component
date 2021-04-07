@@ -18,7 +18,7 @@ import java.util.Random;
  */
 @Service
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
-@CacheConfig(cacheNames = "bbbbbbbb")
+@CacheConfig(cacheNames = CacheNames.TEST_TMP)
 public class UserServiceImpl implements UserService {
     @Autowired
     @Qualifier("redisTemplate")
@@ -27,7 +27,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
     @Override
-    @Cacheable(cacheNames = "user-name", key = "#id")
+    @Cacheable(cacheNames = CacheNames.TEST_USER, key = "#id")
     public User getUser(Integer id) {
         final User user = userRepository.getById(id);
         // 服务类调用，缓存不生效，由于aop调用需要代理（其实也是可以接受的）
@@ -39,8 +39,8 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
-    // @Cacheable(cacheNames = "person", key = "#id")
-    @Cacheable(key = "#id")
+    @Cacheable(cacheNames = CacheNames.TEST_PERSON, key = "#id")
+    // @Cacheable(key = "#id")
     @Override
     public User getPerson(Integer id) {
         final User user = userRepository.getById(id);
@@ -49,8 +49,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Caching(evict = {
-            @CacheEvict(cacheNames = "user-name", key = "#user.id"),
-            @CacheEvict(value = "person", allEntries = true)
+            @CacheEvict(cacheNames = CacheNames.TEST_USER, key = "#user.id"),
+            @CacheEvict(value = CacheNames.TEST_PERSON, allEntries = true)
     })
     public Boolean saveOrUpdateUser(User user) {
         if (user.getId() == null) {

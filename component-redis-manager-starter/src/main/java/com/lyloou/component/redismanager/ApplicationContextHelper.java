@@ -4,6 +4,7 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.core.PriorityOrdered;
@@ -52,22 +53,38 @@ public class ApplicationContextHelper implements ApplicationContextAware, BeanPo
 
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
-        final RedisManagerService handler = applicationContext.getBean(RedisManagerService.class);
 
         final Method[] declaredMethods = bean.getClass().getDeclaredMethods();
         for (Method declaredMethod : declaredMethods) {
             final CacheConfig cacheConfig = declaredMethod.getDeclaringClass().getAnnotation(CacheConfig.class);
-            final Cacheable cacheable = declaredMethod.getAnnotation(Cacheable.class);
-            if (cacheable == null) {
-                continue;
+
+            final Caching caching = declaredMethod.getAnnotation(Caching.class);
+            if (caching != null) {
+                final Cacheable[] cacheableArray = caching.cacheable();
+                if (cacheableArray.length > 0) {
+                    for (Cacheable cacheable : cacheableArray) {
+                        doPutPrefix(cacheConfig, cacheable);
+                    }
+                }
             }
 
-            String[] cacheNames = getCacheNames(cacheConfig, cacheable);
-            for (String cacheName : cacheNames) {
-                handler.putPrefix(cacheName, true);
-            }
+            final Cacheable cacheable = declaredMethod.getAnnotation(Cacheable.class);
+            doPutPrefix(cacheConfig, cacheable);
         }
         return bean;
+    }
+
+    private void doPutPrefix(CacheConfig cacheConfig, Cacheable cacheable) {
+
+        if (cacheable == null) {
+            return;
+        }
+
+        RedisManagerService handler = applicationContext.getBean(RedisManagerService.class);
+        String[] cacheNames = getCacheNames(cacheConfig, cacheable);
+        for (String cacheName : cacheNames) {
+            handler.putPrefix(cacheName, true);
+        }
     }
 
     private String[] getCacheNames(CacheConfig cacheConfig, Cacheable cacheable) {
