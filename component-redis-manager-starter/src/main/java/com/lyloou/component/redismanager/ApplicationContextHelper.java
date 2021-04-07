@@ -11,7 +11,7 @@ import org.springframework.core.PriorityOrdered;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
-import java.util.stream.Stream;
+import java.util.ArrayList;
 
 /**
  * ApplicationContextHelper
@@ -88,7 +88,14 @@ public class ApplicationContextHelper implements ApplicationContextAware, BeanPo
     }
 
     private String[] getCacheNames(CacheConfig cacheConfig, Cacheable cacheable) {
-        return Stream.of(cacheable.cacheNames(), cacheable.value(), cacheConfig.cacheNames())
+        final ArrayList<String[]> list = new ArrayList<>();
+        list.add(cacheable.cacheNames());
+        list.add(cacheable.value());
+        if (cacheConfig != null) {
+            list.add(cacheConfig.cacheNames());
+        }
+
+        return list.stream()
                 .filter(strings -> strings.length > 0)
                 .findFirst()
                 .orElse(new String[]{});
