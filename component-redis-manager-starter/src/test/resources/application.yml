@@ -10,3 +10,5 @@ spring:
         host: 127.0.0.1
         password: ''
         port: 6379
+        cache-null-values: true
+        expire-ttl: 611

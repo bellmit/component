@@ -20,7 +20,7 @@ public class RedisManagerController {
     @Autowired
     RedisManagerService redisManagerService;
 
-    @RequestMapping("/listPrefix")
+    @RequestMapping("/list")
     public Result list() {
         return Result.success(redisManagerService.listPrefix());
     }
@@ -35,6 +35,15 @@ public class RedisManagerController {
                       @RequestParam(required = false) String key) {
         final boolean result = redisManagerService.del(prefix, key);
         return Result.success(String.format("删除缓存：%s::%s，结果:%s", prefix, key, result));
+    }
+
+    @RequestMapping("/expire")
+    public Result expire(@RequestParam(required = true) String prefix,
+                         @RequestParam(required = false) String key,
+                         @RequestParam(required = false) Integer ttl
+    ) {
+        final boolean result = redisManagerService.expire(prefix, key, ttl);
+        return Result.success(String.format("设置缓存过期：%s::%s，ttl:%s, 结果:%s", prefix, key, ttl, result));
     }
 
     @RequestMapping("/delKey")

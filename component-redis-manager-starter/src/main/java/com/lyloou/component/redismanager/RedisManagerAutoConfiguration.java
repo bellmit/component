@@ -3,8 +3,9 @@ package com.lyloou.component.redismanager;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.beans.factory.annotation.Value;
+import lombok.Data;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
@@ -29,17 +30,11 @@ import java.time.Duration;
  */
 @EnableCaching
 @Configuration
+@Data
 @EnableAspectJAutoProxy
+@EnableConfigurationProperties({RedisManagerProperties.class})
 public class RedisManagerAutoConfiguration {
 
-    @Value("${spring.redis.cache-null-values:true}")
-    private Boolean cacheNullValues;
-
-    /**
-     * cache 300s(default)
-     */
-    @Value("${spring.redis.ttl:300}")
-    private Integer ttl;
 
     @Bean
     @ConditionalOnMissingBean(ApplicationContextHelper.class)
@@ -68,18 +63,18 @@ public class RedisManagerAutoConfiguration {
     // /这里序列化解决@Cacheable 存值后value 显示字节码问题
     @Bean
     @ConditionalOnMissingBean(CacheManager.class)
-    public CacheManager cacheManager(RedisConnectionFactory factory) {
+    public CacheManager cacheManager(RedisManagerProperties redisManagerProperties, RedisConnectionFactory factory) {
         RedisSerializer<String> redisSerializer = new StringRedisSerializer();
         Jackson2JsonRedisSerializer<Object> jackson2JsonRedisSerializer = jackson2JsonRedisSerializer();
 
         // 配置序列化（解决乱码的问题）
         RedisCacheConfiguration config = RedisCacheConfiguration.defaultCacheConfig()
                 //失效时间
-                .entryTtl(Duration.ofSeconds(ttl))
+                .entryTtl(Duration.ofSeconds(redisManagerProperties.getExpireTtl()))
                 .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(redisSerializer))
                 .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(jackson2JsonRedisSerializer));
 
-        if (!cacheNullValues) {
+        if (!redisManagerProperties.getCacheNullValues()) {
             // allow cache null values
             config = config.disableCachingNullValues();
         }
