@@ -104,11 +104,6 @@ public class RedisServiceImpl implements RedisService {
     }
 
     @Override
-    public int passed(String key) {
-        return 0;
-    }
-
-    @Override
     public void expire(final int seconds, final String... keys) {
         byte[][] bytes = new byte[keys.length][];
         for (int i = 0; i < keys.length; i++) {
@@ -206,40 +201,33 @@ public class RedisServiceImpl implements RedisService {
 
     @Override
     public Double zincrby(String key, Double score, String value) {
-        log.debug("===>REDIS ZINCRBY key={},value={},score={}", key, value, score);
         return redisTemplate.execute((RedisCallback<Double>) redisConnection -> {
             Double dScore = score;
             dScore = redisConnection.zIncrBy(key.getBytes(), dScore, value.getBytes());
-            log.debug("===>REDIS ZINCRBY score = {}, newScore = {}", score, dScore);
             return dScore;
         });
     }
 
     @Override
-    public Boolean zadd(String key, Long score, String value) {
-        log.debug("===>REDIS ZAA ,key={},value={},score={}", key, value, score);
+    public Boolean zadd(String key, Double score, String value) {
         return redisTemplate.execute((RedisCallback<Boolean>) redisConnection ->
-                redisConnection.zAdd(key.getBytes(), score.doubleValue(), value.getBytes()));
+                redisConnection.zAdd(key.getBytes(), score, value.getBytes()));
     }
 
     @Override
     public Double zscore(String key, String value) {
-        log.debug("===>REDIS ZSCORE ,key={},value={}", key, value);
         return redisTemplate.execute((RedisCallback<Double>) redisConnection -> {
 
             Double score = redisConnection.zScore(key.getBytes(), value.getBytes());
             if (score != null) {
-                log.debug("===>REDIS ZSCORE ,获得结果score={}", score);
                 return score;
             }
-            log.debug("===>REDIS ZSCORE key或value不存在于zset中,key={},value={}", key, value);
             return null;
         });
     }
 
     @Override
     public Map<String, Double> valueToScore(final String key, final int offset, final int count) {
-        log.debug("===>REDIS VALUE_TO_SCORE ,key={}", key);
         return redisTemplate.execute((RedisCallback<Map<String, Double>>) redisConnection -> {
             Map<String, Double> map = new HashMap<>();
             final RedisZSetCommands.Range range = new RedisZSetCommands.Range();

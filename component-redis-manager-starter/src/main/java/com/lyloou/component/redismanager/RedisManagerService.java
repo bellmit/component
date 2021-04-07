@@ -4,9 +4,9 @@ package com.lyloou.component.redismanager;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -22,11 +22,12 @@ import java.util.concurrent.ConcurrentHashMap;
 public class RedisManagerService {
 
     @Autowired
-    @Qualifier("redisService")
     private RedisService redisService;
+
     public static final String SEP = "::";
     public static final String STAR = "*";
     public static final String SEP_STAR = SEP + STAR;
+    public static final Integer DEFAULT_TTL = 300;
 
     /**
      * 存放任务的状态的map
@@ -38,11 +39,11 @@ public class RedisManagerService {
         return prefixMap;
     }
 
-    public boolean isPrefixExisted(String prefix) {
+    public boolean isNotExisted(String prefix) {
         if (Strings.isEmpty(prefix)) {
-            return false;
+            return true;
         }
-        return prefixMap.containsKey(prefix);
+        return !prefixMap.containsKey(prefix);
     }
 
     public void putPrefix(String key, Boolean status) {
@@ -53,7 +54,10 @@ public class RedisManagerService {
     // 手动调用删除方法
     public boolean del(String wrapKey) {
         try {
-
+            final String[] prefixKeyArray = wrapKey.split(SEP);
+            if (isNotExisted(prefixKeyArray[0])) {
+                return false;
+            }
             redisService.del(wrapKey);
             return true;
         } catch (Exception e) {
@@ -63,8 +67,9 @@ public class RedisManagerService {
     }
 
     public boolean del(String prefix, String key) {
+
         try {
-            if (!prefixMap.containsKey(prefix)) {
+            if (isNotExisted(prefix)) {
                 return false;
             }
 
@@ -82,7 +87,31 @@ public class RedisManagerService {
         }
     }
 
+    public boolean expire(String prefix, String key, Integer ttl) {
+        try {
+            if (isNotExisted(prefix)) {
+                return false;
+            }
+
+            String wrapKey = prefix;
+            if (Strings.isNotEmpty(key)) {
+                wrapKey = wrapKey + SEP + key;
+            }
+            if (ttl == null) {
+                ttl = DEFAULT_TTL;
+            }
+            redisService.expire(ttl, wrapKey);
+            return true;
+        } catch (Exception e) {
+            log.warn("设置ttl失败：prefix={}，key={}，ttl={}，error={}", prefix, key, ttl, e.getMessage());
+            return false;
+        }
+    }
+
     public Set<String> keys(String prefix) {
+        if (isNotExisted(prefix)) {
+            return new HashSet<>();
+        }
         return redisService.keys(prefix + SEP_STAR);
     }
 }

@@ -3,7 +3,7 @@ package com.lyloou.component.redismanager;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
@@ -32,6 +32,15 @@ import java.time.Duration;
 @EnableAspectJAutoProxy
 public class RedisManagerAutoConfiguration {
 
+    @Value("${spring.redis.cache-null-values:true}")
+    private Boolean cacheNullValues;
+
+    /**
+     * cache 300s(default)
+     */
+    @Value("${spring.redis.ttl:300}")
+    private Integer ttl;
+
     @Bean
     @ConditionalOnMissingBean(ApplicationContextHelper.class)
     public ApplicationContextHelper applicationContextHelper() {
@@ -58,8 +67,7 @@ public class RedisManagerAutoConfiguration {
 
     // /这里序列化解决@Cacheable 存值后value 显示字节码问题
     @Bean
-    @ConditionalOnMissingBean(name = "cacheManager")
-    @Qualifier("cacheManager")
+    @ConditionalOnMissingBean(CacheManager.class)
     public CacheManager cacheManager(RedisConnectionFactory factory) {
         RedisSerializer<String> redisSerializer = new StringRedisSerializer();
         Jackson2JsonRedisSerializer<Object> jackson2JsonRedisSerializer = jackson2JsonRedisSerializer();
@@ -67,10 +75,14 @@ public class RedisManagerAutoConfiguration {
         // 配置序列化（解决乱码的问题）
         RedisCacheConfiguration config = RedisCacheConfiguration.defaultCacheConfig()
                 //失效时间
-                .entryTtl(Duration.ZERO)
+                .entryTtl(Duration.ofSeconds(ttl))
                 .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(redisSerializer))
-                .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(jackson2JsonRedisSerializer))
-                .disableCachingNullValues();
+                .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(jackson2JsonRedisSerializer));
+
+        if (!cacheNullValues) {
+            // allow cache null values
+            config = config.disableCachingNullValues();
+        }
 
         return RedisCacheManager.builder(factory)
                 .cacheDefaults(config)
@@ -78,8 +90,7 @@ public class RedisManagerAutoConfiguration {
     }
 
     @Bean
-    @ConditionalOnMissingBean(name = "jackson2JsonRedisSerializer")
-    @Qualifier("jackson2JsonRedisSerializer")
+    @ConditionalOnMissingBean(Jackson2JsonRedisSerializer.class)
     public Jackson2JsonRedisSerializer<Object> jackson2JsonRedisSerializer() {
         Jackson2JsonRedisSerializer<Object> jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer<>(Object.class);
 
@@ -93,8 +104,7 @@ public class RedisManagerAutoConfiguration {
 
     //这里序列化解决手动存值后value 显示字节码问题
     @Bean
-    @ConditionalOnMissingBean(name = "redisTemplate")
-    @Qualifier("redisTemplate")
+    @ConditionalOnMissingBean(RedisTemplate.class)
     public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory factory) {
         //配置redisTemplate
         RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();

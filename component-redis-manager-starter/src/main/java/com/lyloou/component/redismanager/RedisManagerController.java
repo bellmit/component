@@ -27,19 +27,12 @@ public class RedisManagerController {
 
     @RequestMapping("/keys")
     public Result keys(String prefix) {
-        if (!redisManagerService.isPrefixExisted(prefix)) {
-            return Result.error("prefix is invalid");
-        }
         return Result.success(redisManagerService.keys(prefix));
     }
 
     @RequestMapping("/del")
     public Result del(@RequestParam(required = true) String prefix,
                       @RequestParam(required = false) String key) {
-        if (!redisManagerService.isPrefixExisted(prefix)) {
-            return Result.error("prefix is invalid");
-        }
-
         final boolean result = redisManagerService.del(prefix, key);
         return Result.success(String.format("删除缓存：%s::%s，结果:%s", prefix, key, result));
     }
@@ -47,11 +40,6 @@ public class RedisManagerController {
     @RequestMapping("/delKey")
     public Result del(String key) {
         if (Strings.isEmpty(key)) {
-            return Result.error("key is invalid");
-        }
-
-        final String[] prefixKeyArray = key.split(RedisManagerService.SEP);
-        if (!redisManagerService.isPrefixExisted(prefixKeyArray[0])) {
             return Result.error("key is invalid");
         }
 

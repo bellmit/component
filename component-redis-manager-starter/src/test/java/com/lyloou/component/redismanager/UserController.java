@@ -3,7 +3,6 @@ package com.lyloou.component.redismanager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,8 +19,8 @@ import java.util.Set;
 @Slf4j
 public class UserController {
     private final UserService userService;
-    @Qualifier("redisTemplate")
     private final RedisTemplate<String, Object> redisTemplate;
+    private final RedisManagerService redisManagerService;
 
     @RequestMapping("getUser")
     public void getUser() {
@@ -49,10 +48,26 @@ public class UserController {
     public void keysTest() {
         log.info("user 1:{}", userService.getUser(1));
         log.info("user 2:{}", userService.getUser(2));
+        log.info("user 3:{}", userService.getUser(3));
+        log.info("user 4:{}", userService.getUser(4));
+        log.info("user 5:{}", userService.getUser(5));
+        log.info("user 6:{}", userService.getUser(6));
+        log.info("user 7:{}", userService.getUser(7));
         log.info("person 2:{}", userService.getPerson(3));
 
         Set<String> keys = redisTemplate.keys("user-name::*");
         log.info("keys:{}", keys);
+    }
+
+    @RequestMapping("ttlTest")
+    public void ttlTest() {
+        log.info("user 1:{}", redisManagerService.expire(CacheNames.TEST_USER, "1", 100));
+        log.info("user 2:{}", redisManagerService.expire(CacheNames.TEST_USER, "2", 100));
+        log.info("user 3:{}", redisManagerService.expire(CacheNames.TEST_USER, "3", 100));
+        log.info("user 4:{}", redisManagerService.expire(CacheNames.TEST_USER, "4", 100));
+        log.info("user 5:{}", redisManagerService.expire(CacheNames.TEST_USER, "5", 100));
+        log.info("user 6:{}", redisManagerService.expire(CacheNames.TEST_USER, "6", 100));
+        log.info("user 7:{}", redisManagerService.expire(CacheNames.TEST_USER, "7", 100));
     }
 
     @RequestMapping("keyDeleteTest")
