@@ -39,9 +39,9 @@ public class RedisManagerAutoConfiguration {
 
 
     @Bean
-    @ConditionalOnMissingBean(ApplicationContextHelper.class)
-    public ApplicationContextHelper applicationContextHelper() {
-        return new ApplicationContextHelper();
+    @ConditionalOnMissingBean(RedisManagerApplicationContextHelper.class)
+    public RedisManagerApplicationContextHelper redisManagerApplicationContextHelper() {
+        return new RedisManagerApplicationContextHelper();
     }
 
     @Bean
@@ -66,15 +66,7 @@ public class RedisManagerAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean(CacheManager.class)
     public CacheManager cacheManager(RedisManagerProperties redisManagerProperties, RedisConnectionFactory factory) {
-        RedisSerializer<String> redisSerializer = new StringRedisSerializer();
-        Jackson2JsonRedisSerializer<Object> jackson2JsonRedisSerializer = jackson2JsonRedisSerializer();
-
-        // 配置序列化（解决乱码的问题）
-        RedisCacheConfiguration defaultConfig = RedisCacheConfiguration.defaultCacheConfig()
-                //失效时间
-                .entryTtl(Duration.ofSeconds(redisManagerProperties.getTtl()))
-                .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(redisSerializer))
-                .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(jackson2JsonRedisSerializer));
+        RedisCacheConfiguration defaultConfig = getDefaultRedisCacheConfiguration(redisManagerProperties);
 
         if (!redisManagerProperties.getCacheNullValues()) {
             // allow cache null values
@@ -87,12 +79,21 @@ public class RedisManagerAutoConfiguration {
                 .build();
     }
 
+    private RedisCacheConfiguration getDefaultRedisCacheConfiguration(RedisManagerProperties redisManagerProperties) {
+        RedisSerializer<String> redisSerializer = new StringRedisSerializer();
+        Jackson2JsonRedisSerializer<Object> jackson2JsonRedisSerializer = jackson2JsonRedisSerializer();
+        return RedisCacheConfiguration.defaultCacheConfig()
+                //失效时间
+                .entryTtl(Duration.ofSeconds(redisManagerProperties.getTtl()))
+                .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(redisSerializer))
+                // 配置序列化（解决乱码的问题）
+                .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(jackson2JsonRedisSerializer));
+    }
+
     public Map<String, RedisCacheConfiguration> getCacheConfigurations(RedisManagerProperties redisManagerProperties) {
         final HashMap<String, RedisCacheConfiguration> cacheConfigurations = new HashMap<>();
 
-
         for (CacheConfig cacheConfig : redisManagerProperties.getCacheConfigList()) {
-            RedisCacheConfiguration configuration = RedisCacheConfiguration.defaultCacheConfig();
             if (cacheConfig.getTtl() == null) {
                 cacheConfig.setTtl(redisManagerProperties.getTtl());
             }
@@ -100,11 +101,12 @@ public class RedisManagerAutoConfiguration {
                 cacheConfig.setCacheNullValues(redisManagerProperties.getCacheNullValues());
             }
 
-            configuration = configuration.entryTtl(Duration.ofSeconds(cacheConfig.getTtl()));
+            RedisCacheConfiguration defaultConfig = getDefaultRedisCacheConfiguration(redisManagerProperties);
+            defaultConfig = defaultConfig.entryTtl(Duration.ofSeconds(cacheConfig.getTtl()));
             if (!cacheConfig.getCacheNullValues()) {
-                configuration = configuration.disableCachingNullValues();
+                defaultConfig = defaultConfig.disableCachingNullValues();
             }
-            cacheConfigurations.put(cacheConfig.getCacheName(), configuration);
+            cacheConfigurations.put(cacheConfig.getCacheName(), defaultConfig);
         }
         return cacheConfigurations;
     }
@@ -147,3 +149,4 @@ public class RedisManagerAutoConfiguration {
         return redisTemplate;
     }
 }
+

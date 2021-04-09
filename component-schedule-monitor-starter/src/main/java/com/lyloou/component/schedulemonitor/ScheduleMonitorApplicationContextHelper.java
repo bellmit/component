@@ -18,13 +18,13 @@ import java.lang.reflect.Method;
  * @date 2021-03-06 9:45
  */
 @Component
-public class ApplicationContextHelper implements ApplicationContextAware, BeanPostProcessor, PriorityOrdered {
+public class ScheduleMonitorApplicationContextHelper implements ApplicationContextAware, BeanPostProcessor, PriorityOrdered {
     private static ApplicationContext applicationContext;
 
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        ApplicationContextHelper.applicationContext = applicationContext;
+        ScheduleMonitorApplicationContextHelper.applicationContext = applicationContext;
     }
 
     public static <T> T getBean(Class<T> targetClz) {
@@ -32,15 +32,15 @@ public class ApplicationContextHelper implements ApplicationContextAware, BeanPo
     }
 
     public static Object getBean(String claz) {
-        return ApplicationContextHelper.applicationContext.getBean(claz);
+        return ScheduleMonitorApplicationContextHelper.applicationContext.getBean(claz);
     }
 
     public static <T> T getBean(String name, Class<T> requiredType) {
-        return ApplicationContextHelper.applicationContext.getBean(name, requiredType);
+        return ScheduleMonitorApplicationContextHelper.applicationContext.getBean(name, requiredType);
     }
 
     public static <T> T getBean(Class<T> requiredType, Object... params) {
-        return ApplicationContextHelper.applicationContext.getBean(requiredType, params);
+        return ScheduleMonitorApplicationContextHelper.applicationContext.getBean(requiredType, params);
     }
 
     public static ApplicationContext getApplicationContext() {

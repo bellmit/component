@@ -22,9 +22,9 @@ public class ScheduleMonitorAutoConfiguration {
     }
 
     @Bean
-    @ConditionalOnMissingBean(ApplicationContextHelper.class)
-    public ApplicationContextHelper applicationContextHelper() {
-        return new ApplicationContextHelper();
+    @ConditionalOnMissingBean(ScheduleMonitorApplicationContextHelper.class)
+    public ScheduleMonitorApplicationContextHelper scheduleMonitorApplicationContextHelper() {
+        return new ScheduleMonitorApplicationContextHelper();
     }
 
     @Bean

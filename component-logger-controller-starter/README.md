@@ -6,6 +6,6 @@
 <dependency>
     <groupId>com.lyloou</groupId>
     <artifactId>component-logger-controller-starter</artifactId>
-    <version>LOU-1.0.5</version>
+    <version>LOU-1.0.6</version>
 </dependency>
 ```

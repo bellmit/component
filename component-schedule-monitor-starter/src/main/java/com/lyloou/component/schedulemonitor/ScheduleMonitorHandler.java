@@ -65,7 +65,7 @@ public class ScheduleMonitorHandler {
             return false;
         }
 
-        final Object bean = ApplicationContextHelper.getBean(method.getDeclaringClass());
+        final Object bean = ScheduleMonitorApplicationContextHelper.getBean(method.getDeclaringClass());
         try {
             final boolean originStatus = method.isAccessible();
             method.setAccessible(true);
