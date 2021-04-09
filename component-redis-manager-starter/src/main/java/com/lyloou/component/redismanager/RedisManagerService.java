@@ -39,11 +39,11 @@ public class RedisManagerService {
         return prefixMap;
     }
 
-    public boolean isNotExisted(String prefix) {
+    public boolean isNotValid(String prefix) {
         if (Strings.isEmpty(prefix)) {
             return true;
         }
-        return !prefixMap.containsKey(prefix);
+        return false;
     }
 
     public void putPrefix(String key, Boolean status) {
@@ -55,7 +55,7 @@ public class RedisManagerService {
     public boolean del(String wrapKey) {
         try {
             final String[] prefixKeyArray = wrapKey.split(SEP);
-            if (isNotExisted(prefixKeyArray[0])) {
+            if (isNotValid(prefixKeyArray[0])) {
                 return false;
             }
             redisService.del(wrapKey);
@@ -69,7 +69,7 @@ public class RedisManagerService {
     public boolean del(String prefix, String key) {
 
         try {
-            if (isNotExisted(prefix)) {
+            if (isNotValid(prefix)) {
                 return false;
             }
 
@@ -89,7 +89,7 @@ public class RedisManagerService {
 
     public boolean expire(String prefix, String key, Integer ttl) {
         try {
-            if (isNotExisted(prefix)) {
+            if (isNotValid(prefix)) {
                 return false;
             }
 
@@ -109,7 +109,7 @@ public class RedisManagerService {
     }
 
     public Set<String> keys(String prefix) {
-        if (isNotExisted(prefix)) {
+        if (isNotValid(prefix)) {
             return new HashSet<>();
         }
         return redisService.keys(prefix + SEP_STAR);
