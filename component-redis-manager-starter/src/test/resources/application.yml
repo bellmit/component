@@ -1,14 +1,21 @@
 logging:
-    level:
-        com:
-            lyloou:
-                springredis: debug
+  level:
+    com:
+      lyloou:
+        springredis: debug
 spring:
-    application:
-        name: component-redis-manager-starter-test
-    redis:
-        host: 127.0.0.1
-        password: ''
-        port: 6379
+  application:
+    name: component-redis-manager-starter-test
+  redis:
+    host: 127.0.0.1
+    password: ''
+    port: 6379
+    cache-null-values: true
+    ttl: 611
+    cache-config-list:
+      - cache-name: com.lyloou.component.redismanager.user
+        cache-null-values: false
+        ttl: 888
+      - cache-name: com.lyloou.component.redismanager.person
         cache-null-values: true
-        expire-ttl: 611
+        ttl: 998

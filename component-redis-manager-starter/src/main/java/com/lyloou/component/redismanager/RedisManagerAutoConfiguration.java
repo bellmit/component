@@ -21,6 +21,8 @@ import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 import java.time.Duration;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 自动注入定时器监听器配置
@@ -68,20 +70,43 @@ public class RedisManagerAutoConfiguration {
         Jackson2JsonRedisSerializer<Object> jackson2JsonRedisSerializer = jackson2JsonRedisSerializer();
 
         // 配置序列化（解决乱码的问题）
-        RedisCacheConfiguration config = RedisCacheConfiguration.defaultCacheConfig()
+        RedisCacheConfiguration defaultConfig = RedisCacheConfiguration.defaultCacheConfig()
                 //失效时间
-                .entryTtl(Duration.ofSeconds(redisManagerProperties.getExpireTtl()))
+                .entryTtl(Duration.ofSeconds(redisManagerProperties.getTtl()))
                 .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(redisSerializer))
                 .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(jackson2JsonRedisSerializer));
 
         if (!redisManagerProperties.getCacheNullValues()) {
             // allow cache null values
-            config = config.disableCachingNullValues();
+            defaultConfig = defaultConfig.disableCachingNullValues();
         }
 
         return RedisCacheManager.builder(factory)
-                .cacheDefaults(config)
+                .cacheDefaults(defaultConfig)
+                .withInitialCacheConfigurations(getCacheConfigurations(redisManagerProperties))
                 .build();
+    }
+
+    public Map<String, RedisCacheConfiguration> getCacheConfigurations(RedisManagerProperties redisManagerProperties) {
+        final HashMap<String, RedisCacheConfiguration> cacheConfigurations = new HashMap<>();
+
+
+        for (CacheConfig cacheConfig : redisManagerProperties.getCacheConfigList()) {
+            RedisCacheConfiguration configuration = RedisCacheConfiguration.defaultCacheConfig();
+            if (cacheConfig.getTtl() == null) {
+                cacheConfig.setTtl(redisManagerProperties.getTtl());
+            }
+            if (cacheConfig.getCacheNullValues() == null) {
+                cacheConfig.setCacheNullValues(redisManagerProperties.getCacheNullValues());
+            }
+
+            configuration = configuration.entryTtl(Duration.ofSeconds(cacheConfig.getTtl()));
+            if (!cacheConfig.getCacheNullValues()) {
+                configuration = configuration.disableCachingNullValues();
+            }
+            cacheConfigurations.put(cacheConfig.getCacheName(), configuration);
+        }
+        return cacheConfigurations;
     }
 
     @Bean

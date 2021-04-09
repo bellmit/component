@@ -20,16 +20,34 @@ public class RedisManagerController {
     @Autowired
     RedisManagerService redisManagerService;
 
+    /**
+     * 获取本项目中所有可控的key前缀前缀
+     *
+     * @return 结果
+     */
     @RequestMapping("/list")
     public Result list() {
         return Result.success(redisManagerService.listPrefix());
     }
 
+    /**
+     * 根据前缀获取所有的 key
+     *
+     * @param prefix 前缀
+     * @return 结果
+     */
     @RequestMapping("/keys")
     public Result keys(String prefix) {
         return Result.success(redisManagerService.keys(prefix));
     }
 
+    /**
+     * 删除缓存
+     *
+     * @param prefix 前缀
+     * @param key    键
+     * @return 结果
+     */
     @RequestMapping("/del")
     public Result del(@RequestParam(required = true) String prefix,
                       @RequestParam(required = false) String key) {
@@ -37,6 +55,15 @@ public class RedisManagerController {
         return Result.success(String.format("删除缓存：%s::%s，结果:%s", prefix, key, result));
     }
 
+    /**
+     * 设置key过期时间
+     * 也可以通过 spring.redis.cache-config-list 来单独配置
+     *
+     * @param prefix 前缀
+     * @param key    键
+     * @param ttl    超时
+     * @return 结果
+     */
     @RequestMapping("/expire")
     public Result expire(@RequestParam(required = true) String prefix,
                          @RequestParam(required = false) String key,
@@ -46,6 +73,12 @@ public class RedisManagerController {
         return Result.success(String.format("设置缓存过期：%s::%s，ttl:%s, 结果:%s", prefix, key, ttl, result));
     }
 
+    /**
+     * 根据具体的key删除缓存
+     *
+     * @param key 键
+     * @return 结果
+     */
     @RequestMapping("/delKey")
     public Result del(String key) {
         if (Strings.isEmpty(key)) {
