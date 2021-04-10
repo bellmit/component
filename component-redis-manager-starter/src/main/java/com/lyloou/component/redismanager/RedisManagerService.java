@@ -4,6 +4,7 @@ package com.lyloou.component.redismanager;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.cache.CacheKeyPrefix;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -24,7 +25,7 @@ public class RedisManagerService {
     @Autowired
     private RedisService redisService;
 
-    public static final String SEP = "::";
+    public static final String SEP = CacheKeyPrefix.SEPARATOR;
     public static final String STAR = "*";
     public static final String SEP_STAR = SEP + STAR;
     public static final Integer DEFAULT_TTL = 300;

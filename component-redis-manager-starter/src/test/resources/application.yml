@@ -14,7 +14,7 @@ spring:
     ttl: 611
     cache-config-list:
       - cache-name: com.lyloou.component.redismanager.user
-        cache-null-values: false
+        cache-null-values: true
         ttl: 888
       - cache-name: com.lyloou.component.redismanager.person
         cache-null-values: true
