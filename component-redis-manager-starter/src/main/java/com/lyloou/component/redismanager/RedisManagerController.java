@@ -1,11 +1,18 @@
 package com.lyloou.component.redismanager;
 
-import com.lyloou.component.dto.Result;
+import com.lyloou.component.dto.MultiResponse;
+import com.lyloou.component.dto.SingleResponse;
+import com.lyloou.component.dto.SystemCodeMessage;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Map;
+import java.util.Set;
 
 /**
  * <p>监控管理api</p>
@@ -14,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2021/3/7
  */
 @RestController
+@Api(tags = "redis缓存管理")
 @RequestMapping("/redismanager")
 public class RedisManagerController {
 
@@ -26,8 +34,9 @@ public class RedisManagerController {
      * @return 结果
      */
     @RequestMapping("/list")
-    public Result list() {
-        return Result.success(redisManagerService.listPrefix());
+    @ApiOperation(value = "获取本项目中所有可控的key前缀前缀")
+    public SingleResponse<Map<String, Boolean>> list() {
+        return SingleResponse.buildSuccess(redisManagerService.listPrefix());
     }
 
     /**
@@ -37,8 +46,9 @@ public class RedisManagerController {
      * @return 结果
      */
     @RequestMapping("/keys")
-    public Result keys(String prefix) {
-        return Result.success(redisManagerService.keys(prefix));
+    @ApiOperation(value = "根据前缀获取所有的 key")
+    public MultiResponse<Set<String>, String> keys(String prefix) {
+        return MultiResponse.buildSuccess(redisManagerService.keys(prefix));
     }
 
     /**
@@ -49,10 +59,11 @@ public class RedisManagerController {
      * @return 结果
      */
     @RequestMapping("/del")
-    public Result del(@RequestParam(required = true) String prefix,
-                      @RequestParam(required = false) String key) {
+    @ApiOperation(value = "删除缓存")
+    public SingleResponse<String> del(@RequestParam(required = true) String prefix,
+                                      @RequestParam(required = false) String key) {
         final boolean result = redisManagerService.del(prefix, key);
-        return Result.success(String.format("删除缓存：%s::%s，结果:%s", prefix, key, result));
+        return SingleResponse.buildSuccess(String.format("删除缓存：%s::%s，结果:%s", prefix, key, result));
     }
 
     /**
@@ -65,12 +76,13 @@ public class RedisManagerController {
      * @return 结果
      */
     @RequestMapping("/expire")
-    public Result expire(@RequestParam(required = true) String prefix,
-                         @RequestParam(required = false) String key,
-                         @RequestParam(required = false) Integer ttl
+    @ApiOperation(value = "设置key过期时间")
+    public SingleResponse<String> expire(@RequestParam(required = true) String prefix,
+                                         @RequestParam(required = false) String key,
+                                         @RequestParam(required = false) Integer ttl
     ) {
         final boolean result = redisManagerService.expire(prefix, key, ttl);
-        return Result.success(String.format("设置缓存过期：%s::%s，ttl:%s, 结果:%s", prefix, key, ttl, result));
+        return SingleResponse.buildSuccess(String.format("设置缓存过期：%s::%s，ttl:%s, 结果:%s", prefix, key, ttl, result));
     }
 
     /**
@@ -80,12 +92,13 @@ public class RedisManagerController {
      * @return 结果
      */
     @RequestMapping("/delKey")
-    public Result del(String key) {
+    @ApiOperation(value = "根据具体的key删除缓存")
+    public SingleResponse<String> del(String key) {
         if (Strings.isEmpty(key)) {
-            return Result.error("key is invalid");
+            return SingleResponse.buildFailure(SystemCodeMessage.ILLEGAL_DATA, "key is invalid");
         }
 
         final boolean result = redisManagerService.del(key);
-        return Result.success(String.format("删除缓存：%s，结果:%s", key, result));
+        return SingleResponse.buildSuccess(String.format("删除缓存：%s，结果:%s", key, result));
     }
 }

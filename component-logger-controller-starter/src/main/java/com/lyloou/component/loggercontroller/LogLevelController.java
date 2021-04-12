@@ -3,7 +3,7 @@ package com.lyloou.component.loggercontroller;
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.LoggerContext;
-import com.lyloou.component.dto.Result;
+import com.lyloou.component.dto.SingleResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.util.Strings;
 import org.slf4j.LoggerFactory;
@@ -39,8 +39,8 @@ public class LogLevelController {
      * curl [baseUrl]/log/level/change?packageName=root&level=error
      */
     @GetMapping("/change")
-    public Result changeLevel(@RequestParam String level, @RequestParam String packageName) {
-        return Result.success(setLogger(packageName, level));
+    public SingleResponse<String> changeLevel(@RequestParam String level, @RequestParam String packageName) {
+        return SingleResponse.buildSuccess(setLogger(packageName, level));
     }
 
     /**
@@ -52,7 +52,7 @@ public class LogLevelController {
      * curl [baseUrl]/log/level/get?package=[包名]
      */
     @GetMapping("/get")
-    public Result get(String packageName) {
+    SingleResponse<Map<String, String>> get(String packageName) {
         Map<String, String> map = new HashMap<>(1);
 
         if (Strings.isNotEmpty(packageName)) {
@@ -61,18 +61,18 @@ public class LogLevelController {
             map.put(packageName, null);
         }
 
-        return Result.success(map);
+        return SingleResponse.buildSuccess(map);
     }
 
     @GetMapping("/del")
-    public Result del(@RequestParam String packageName) {
+    SingleResponse<String> del(@RequestParam String packageName) {
         final List<Logger> loggerList = loggerContext.getLoggerList();
         loggerList.removeIf(next -> Objects.equals(next.getName(), packageName));
-        return Result.success();
+        return SingleResponse.buildSuccess();
     }
 
     @GetMapping("/list")
-    public Result list() {
+    SingleResponse<Map<String, String>> list() {
         final List<Logger> loggerList = loggerContext.getLoggerList();
         //全局日志等级 + 项目日志等级 + 具体包的日志等级
         Map<String, String> map = new HashMap<>();
@@ -80,7 +80,7 @@ public class LogLevelController {
         loggerList.stream()
                 .filter(logger -> Objects.nonNull(logger.getName()) && Objects.nonNull(logger.getLevel()))
                 .forEach(logger -> map.put(logger.getName(), logger.getLevel().levelStr));
-        return Result.success(map);
+        return SingleResponse.buildSuccess(map);
     }
 
 

@@ -1,6 +1,6 @@
 package com.lyloou.component.redismanager;
 
-import com.lyloou.component.dto.Result;
+import com.lyloou.component.dto.SingleResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +20,6 @@ public class RemoteManagerController {
     @GetMapping("/deleteUser")
     public Object deleteUser(String key) {
         final String url = String.format("http://localhost:8080/redismanager/del?key=%s&prefix=%s", key, CacheNames.TEST_USER);
-        return restTemplate.getForEntity(url, Result.class);
+        return restTemplate.getForEntity(url, SingleResponse.class);
     }
 }

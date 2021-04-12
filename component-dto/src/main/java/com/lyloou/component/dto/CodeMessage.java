@@ -3,7 +3,7 @@ package com.lyloou.component.dto;
 /**
  * @author lilou
  */
-public interface CodeMsg {
+public interface CodeMessage {
 
     /**
      * 错误code 定义码
@@ -11,6 +11,7 @@ public interface CodeMsg {
      * 10-**-** 表示系统全局的
      * 20-**-** 表示api模块
      * 30-**-** 表示admin模块
+     * 40-**-** 表示第三方模块
      * <p>
      * <br/> 第一部分： 二位，系统模块
      * <br/> 第二部分： 二位，业务模块
@@ -19,12 +20,12 @@ public interface CodeMsg {
      *
      * @return 状态码
      */
-    int code();
+    String code();
 
     /**
      * 返回消息
      *
      * @return 消息
      */
-    String msg();
+    String message();
 }
