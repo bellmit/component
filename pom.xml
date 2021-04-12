@@ -8,7 +8,7 @@
 
     <groupId>com.lyloou</groupId>
     <artifactId>component-parent</artifactId>
-    <version>LOU-1.0.6</version>
+    <version>LOU-1.0.7</version>
 
     <name>component-parent</name>
     <url>https://github.com/lyloou/component</url>
