@@ -202,8 +202,24 @@
             <timezone>+8</timezone>
         </developer>
     </developers>
+    <profiles>
+        <profile>
+            <id>component-module</id>
+            <modules>
+                <module>component-schedule-monitor-starter</module>
+                <module>component-logger-controller-starter</module>
+                <module>component-dto</module>
+                <module>component-tool-code-generator</module>
+                <module>component-logger-request-statistic-starter</module>
+                <module>component-redis-manager-starter</module>
+                <module>component-dto-page</module>
+                <module>component-domain-starter</module>
+            </modules>
+        </profile>
+    </profiles>
 
     <build>
+
         <plugins>
 
             <plugin>
@@ -300,5 +316,8 @@
                 </configuration>
             </plugin>
         </plugins>
+
     </build>
+
+
 </project>
