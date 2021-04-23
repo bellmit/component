@@ -1,15 +1,18 @@
 package com.lyloou.component.keyvalueitem.service.impl;
 
+import com.lyloou.component.dto.PageResponse;
 import com.lyloou.component.keyvalueitem.dto.clientobject.KeyValueItemCo;
 import com.lyloou.component.keyvalueitem.dto.clientobject.KeyValueItemForAppCo;
 import com.lyloou.component.keyvalueitem.dto.command.KeyValueItemDeleteCmd;
 import com.lyloou.component.keyvalueitem.dto.command.KeyValueItemSaveOrUpdateCmd;
 import com.lyloou.component.keyvalueitem.dto.command.query.KeyValueItemGetQry;
 import com.lyloou.component.keyvalueitem.dto.command.query.KeyValueItemListQry;
+import com.lyloou.component.keyvalueitem.dto.command.query.KeyValueItemPageQry;
 import com.lyloou.component.keyvalueitem.executor.KeyValueItemDeleteCmdExe;
 import com.lyloou.component.keyvalueitem.executor.KeyValueItemSaveOrUpdateCmdExe;
 import com.lyloou.component.keyvalueitem.executor.query.KeyValueItemGetQryExe;
 import com.lyloou.component.keyvalueitem.executor.query.KeyValueItemListQryExe;
+import com.lyloou.component.keyvalueitem.executor.query.KeyValueItemPageQryExe;
 import com.lyloou.component.keyvalueitem.service.KeyValueItemAdminService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +30,7 @@ public class KeyValueItemAdminServiceImpl implements KeyValueItemAdminService {
     private final KeyValueItemDeleteCmdExe keyValueItemDeleteCmdExe;
     private final KeyValueItemSaveOrUpdateCmdExe keyValueItemUpdateCmdExe;
     private final KeyValueItemListQryExe keyValueItemListQryExe;
+    private final KeyValueItemPageQryExe keyValueItemPageQryExe;
     private final KeyValueItemGetQryExe keyValueItemGetQryExe;
 
     @Override
@@ -47,5 +51,10 @@ public class KeyValueItemAdminServiceImpl implements KeyValueItemAdminService {
     @Override
     public KeyValueItemForAppCo getKeyValueItem(KeyValueItemGetQry qry) {
         return keyValueItemGetQryExe.execute(qry);
+    }
+
+    @Override
+    public PageResponse<KeyValueItemCo> pageKeyValueItem(KeyValueItemPageQry qry) {
+        return PageResponse.buildSuccess(keyValueItemPageQryExe.execute(qry));
     }
 }

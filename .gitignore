@@ -31,3 +31,5 @@ build/
 .vscode/
 application-private.properties
 release
+*.log
+/log

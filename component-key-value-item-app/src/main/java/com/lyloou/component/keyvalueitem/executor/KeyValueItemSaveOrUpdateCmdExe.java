@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Component;
 
 /**
@@ -21,7 +22,11 @@ public class KeyValueItemSaveOrUpdateCmdExe {
 
     private final KeyValueItemService keyValueItemService;
 
-    @CacheEvict(value = CacheNames.KeyValueItemCo_NAME_KEY, key = "#cmd.keyValueItem.itemName + '::' + #cmd.keyValueItem.itemKey")
+    @Caching(evict = {
+            @CacheEvict(value = CacheNames.KeyValueItemCo_NAME_KEY, key = "#cmd.keyValueItem.itemName + '::' + #cmd.keyValueItem.itemKey"),
+            @CacheEvict(value = CacheNames.KeyValueItemCo_PAGE_KEY, allEntries = true),
+            @CacheEvict(value = CacheNames.KeyValueItemCo_LIST_KEY, allEntries = true),
+    })
     public boolean execute(KeyValueItemSaveOrUpdateCmd cmd) {
         final KeyValueItemCo keyValueItemCo = cmd.getKeyValueItem();
         KeyValueItemEntity entity = new KeyValueItemEntity();

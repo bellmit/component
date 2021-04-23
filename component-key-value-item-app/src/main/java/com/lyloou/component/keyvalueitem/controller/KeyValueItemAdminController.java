@@ -1,6 +1,7 @@
 package com.lyloou.component.keyvalueitem.controller;
 
 
+import com.lyloou.component.dto.PageResponse;
 import com.lyloou.component.dto.SingleResponse;
 import com.lyloou.component.keyvalueitem.dto.clientobject.KeyValueItemCo;
 import com.lyloou.component.keyvalueitem.dto.clientobject.KeyValueItemForAppCo;
@@ -8,6 +9,7 @@ import com.lyloou.component.keyvalueitem.dto.command.KeyValueItemDeleteCmd;
 import com.lyloou.component.keyvalueitem.dto.command.KeyValueItemSaveOrUpdateCmd;
 import com.lyloou.component.keyvalueitem.dto.command.query.KeyValueItemGetQry;
 import com.lyloou.component.keyvalueitem.dto.command.query.KeyValueItemListQry;
+import com.lyloou.component.keyvalueitem.dto.command.query.KeyValueItemPageQry;
 import com.lyloou.component.keyvalueitem.service.KeyValueItemAdminService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -35,16 +37,22 @@ import java.util.List;
 public class KeyValueItemAdminController {
     private final KeyValueItemAdminService keyValueItemAdminService;
 
-    @ApiOperation(value = "获取键值项", notes = "根据参数获取键值项")
+    @ApiOperation(value = "获取键值项列表", notes = "根据参数获取键值项列表")
     @GetMapping("list")
     public SingleResponse<List<KeyValueItemCo>> listKeyValueItem(@Valid KeyValueItemListQry qry) {
         return SingleResponse.buildSuccess(keyValueItemAdminService.listKeyValueItem(qry));
     }
 
-    @ApiOperation(value = "获取键值项", notes = "根据参数获取键值项")
+    @ApiOperation(value = "获取键值项", notes = "根据参数获取具体键值项")
     @GetMapping("get")
     public SingleResponse<KeyValueItemForAppCo> getKeyValueItem(@Valid KeyValueItemGetQry qry) {
         return SingleResponse.buildSuccess(keyValueItemAdminService.getKeyValueItem(qry));
+    }
+
+    @ApiOperation(value = "分页获取键值项", notes = "根据参数获取键值项")
+    @GetMapping("page")
+    public PageResponse<KeyValueItemCo> pageKeyValueItem(@Valid KeyValueItemPageQry qry) {
+        return keyValueItemAdminService.pageKeyValueItem(qry);
     }
 
     @ApiOperation(value = "删除键值项", notes = "根据参数删除指定的键值项")

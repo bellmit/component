@@ -7,6 +7,7 @@ import com.lyloou.component.keyvalueitem.repository.service.KeyValueItemService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Component;
 
 /**
@@ -18,7 +19,11 @@ import org.springframework.stereotype.Component;
 public class KeyValueItemDeleteCmdExe {
     private final KeyValueItemService keyValueItemService;
 
-    @CacheEvict(value = CacheNames.KeyValueItemCo_NAME_KEY, key = "#cmd.itemName + '::' + #cmd.itemKey")
+    @Caching(evict = {
+            @CacheEvict(value = CacheNames.KeyValueItemCo_NAME_KEY, key = "#cmd.itemName + '::' + #cmd.itemKey"),
+            @CacheEvict(value = CacheNames.KeyValueItemCo_PAGE_KEY, allEntries = true),
+            @CacheEvict(value = CacheNames.KeyValueItemCo_LIST_KEY, allEntries = true),
+    })
     public boolean execute(KeyValueItemDeleteCmd cmd) {
         return keyValueItemService.lambdaUpdate()
                 .eq(KeyValueItemEntity::getItemName, cmd.getItemName())

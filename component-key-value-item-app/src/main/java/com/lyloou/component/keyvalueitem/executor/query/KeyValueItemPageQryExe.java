@@ -1,8 +1,11 @@
 package com.lyloou.component.keyvalueitem.executor.query;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.lyloou.component.dto.PageInfoHelper;
 import com.lyloou.component.keyvalueitem.dto.CacheNames;
 import com.lyloou.component.keyvalueitem.dto.clientobject.KeyValueItemCo;
-import com.lyloou.component.keyvalueitem.dto.command.query.KeyValueItemListQry;
+import com.lyloou.component.keyvalueitem.dto.command.query.KeyValueItemPageQry;
 import com.lyloou.component.keyvalueitem.repository.entity.KeyValueItemEntity;
 import com.lyloou.component.keyvalueitem.repository.service.KeyValueItemService;
 import lombok.RequiredArgsConstructor;
@@ -20,16 +23,20 @@ import java.util.stream.Collectors;
  */
 @Component
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
-public class KeyValueItemListQryExe {
+public class KeyValueItemPageQryExe {
     private final KeyValueItemService keyValueItemService;
 
-    @Cacheable(value = CacheNames.KeyValueItemCo_LIST_KEY, key = "#qry.itemName + '::' + #qry.itemKey")
-    public List<KeyValueItemCo> execute(KeyValueItemListQry qry) {
-        return keyValueItemService.lambdaQuery()
-                .eq(KeyValueItemEntity::getItemName, qry.getItemName())
+    @Cacheable(value = CacheNames.KeyValueItemCo_PAGE_KEY, key = "#qry.itemName + '::' + #qry.itemKey+'::' + #qry.pageNo + '::'+ #qry.pageSize")
+    public PageInfo<KeyValueItemCo> execute(KeyValueItemPageQry qry) {
+        PageHelper.startPage(qry.getPageNo(), qry.getPageSize());
+
+        final List<KeyValueItemEntity> entityList = keyValueItemService.lambdaQuery()
+                .eq(qry.getItemName() != null, KeyValueItemEntity::getItemName, qry.getItemName())
                 .eq(qry.getItemKey() != null, KeyValueItemEntity::getItemKey, qry.getItemKey())
                 .eq(KeyValueItemEntity::getDeleted, 0)
-                .list()
+                .list();
+
+        final List<KeyValueItemCo> list = entityList
                 .stream()
                 .map(keyValueItemEntity -> {
                     final KeyValueItemCo keyValueItemCo = new KeyValueItemCo();
@@ -37,5 +44,7 @@ public class KeyValueItemListQryExe {
                     return keyValueItemCo;
                 })
                 .collect(Collectors.toList());
+        return PageInfoHelper.getPageInfo(entityList, list);
+
     }
 }

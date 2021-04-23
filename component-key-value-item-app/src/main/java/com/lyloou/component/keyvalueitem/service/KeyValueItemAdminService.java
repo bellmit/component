@@ -1,12 +1,14 @@
 package com.lyloou.component.keyvalueitem.service;
 
 
+import com.lyloou.component.dto.PageResponse;
 import com.lyloou.component.keyvalueitem.dto.clientobject.KeyValueItemCo;
 import com.lyloou.component.keyvalueitem.dto.clientobject.KeyValueItemForAppCo;
 import com.lyloou.component.keyvalueitem.dto.command.KeyValueItemDeleteCmd;
 import com.lyloou.component.keyvalueitem.dto.command.KeyValueItemSaveOrUpdateCmd;
 import com.lyloou.component.keyvalueitem.dto.command.query.KeyValueItemGetQry;
 import com.lyloou.component.keyvalueitem.dto.command.query.KeyValueItemListQry;
+import com.lyloou.component.keyvalueitem.dto.command.query.KeyValueItemPageQry;
 
 import java.util.List;
 
@@ -48,4 +50,12 @@ public interface KeyValueItemAdminService {
      * @return 结果
      */
     KeyValueItemForAppCo getKeyValueItem(KeyValueItemGetQry qry);
+
+    /**
+     * 分页获取
+     *
+     * @param qry
+     * @return
+     */
+    PageResponse<KeyValueItemCo> pageKeyValueItem(KeyValueItemPageQry qry);
 }
