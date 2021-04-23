@@ -23,6 +23,7 @@
         <module>component-redis-manager-starter</module>
         <module>component-dto-page</module>
         <module>component-domain-starter</module>
+        <module>component-key-value-item-app</module>
     </modules>
 
     <properties>
@@ -41,6 +42,7 @@
         <aspectj.version>1.9.4</aspectj.version>
         <guava.version>30.1-jre</guava.version>
         <pagehelper.version>1.2.12</pagehelper.version>
+        <jedis.version>3.3.0</jedis.version>
     </properties>
 
     <dependencyManagement>
@@ -48,6 +50,11 @@
             <dependency>
                 <groupId>com.lyloou</groupId>
                 <artifactId>component-dto</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.lyloou</groupId>
+                <artifactId>component-dto-page</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
@@ -71,6 +78,11 @@
                 <version>${project.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>com.lyloou</groupId>
+                <artifactId>component-redis-manager-starter</artifactId>
+                <version>${project.version}</version>
+            </dependency>
             <!--Springboot配置-->
             <dependency>
                 <groupId>org.springframework.boot</groupId>
@@ -144,7 +156,11 @@
                 <artifactId>guava</artifactId>
                 <version>${guava.version}</version>
             </dependency>
-
+            <dependency>
+                <groupId>redis.clients</groupId>
+                <artifactId>jedis</artifactId>
+                <version>${jedis.version}</version>
+            </dependency>
             <!--分页插件-->
             <dependency>
                 <groupId>com.github.pagehelper</groupId>
