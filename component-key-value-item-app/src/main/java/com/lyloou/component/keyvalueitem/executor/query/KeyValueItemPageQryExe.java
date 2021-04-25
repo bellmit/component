@@ -29,7 +29,7 @@ public class KeyValueItemPageQryExe {
     private final KeyValueItemService keyValueItemService;
 
     @Cacheable(value = CacheNames.KeyValueItemCo_PAGE_KEY, key = "#qry.itemName + '::' + #qry.itemKey+'::' + #qry.cachePageKey")
-    public PageInfo<KeyValueItemCo> execute(KeyValueItemPageQry qry) {
+    public PageInfo<KeyValueItemCo> execute3(KeyValueItemPageQry qry) {
         final Page<Object> page = PageHelper.startPage(qry.getPageNum(), qry.getPageSize());
         if (!Strings.isEmpty(qry.getOrderBy())) {
             page.setOrderBy(qry.getOrderBy().concat(" ").concat(qry.getOrderDirection()));
@@ -51,6 +51,47 @@ public class KeyValueItemPageQryExe {
                 })
                 .collect(Collectors.toList());
         return PageInfoHelper.getPageInfo(entityList, list);
+
+    }
+
+    /**
+     * 对于大数据的优化
+     * 1. 先根据分页信息查id
+     * 2. 再根据id，查数据
+     */
+    @Cacheable(value = CacheNames.KeyValueItemCo_PAGE_KEY, key = "#qry.itemName + '::' + #qry.itemKey+'::' + #qry.cachePageKey")
+    public PageInfo<KeyValueItemCo> execute(KeyValueItemPageQry qry) {
+        final Page<Object> page = PageHelper.startPage(qry.getPageNum(), qry.getPageSize());
+        if (!Strings.isEmpty(qry.getOrderBy())) {
+            page.setOrderBy(qry.getOrderBy().concat(" ").concat(qry.getOrderDirection()));
+        }
+        page.setCount(qry.isNeedTotalCount());
+
+        // 先查id
+        final List<Integer> idList = keyValueItemService.lambdaQuery()
+                .select(KeyValueItemEntity::getId)
+                .eq(qry.getItemName() != null, KeyValueItemEntity::getItemName, qry.getItemName())
+                .eq(qry.getItemKey() != null, KeyValueItemEntity::getItemKey, qry.getItemKey())
+                .eq(KeyValueItemEntity::getDeleted, 0)
+                .list()
+                .stream().map(KeyValueItemEntity::getId)
+                .collect(Collectors.toList());
+
+        // 再根据id查数据
+        final List<KeyValueItemEntity> entityList = keyValueItemService.lambdaQuery()
+                .in(KeyValueItemEntity::getId, idList)
+                .list();
+
+        // 转化
+        final List<KeyValueItemCo> list = entityList
+                .stream()
+                .map(keyValueItemEntity -> {
+                    final KeyValueItemCo keyValueItemCo = new KeyValueItemCo();
+                    BeanUtils.copyProperties(keyValueItemEntity, keyValueItemCo);
+                    return keyValueItemCo;
+                })
+                .collect(Collectors.toList());
+        return PageInfoHelper.getPageInfo(idList, list);
 
     }
 }
