@@ -1,5 +1,7 @@
 package com.lyloou.component.dto;
 
+import io.swagger.annotations.ApiModelProperty;
+
 /**
  * Page Query Param
  *
@@ -13,27 +15,30 @@ public abstract class PageQuery extends Query {
 
     private static final int DEFAULT_PAGE_SIZE = 10;
 
+    @ApiModelProperty(value = "页大小")
     private int pageSize = DEFAULT_PAGE_SIZE;
 
-    private int pageIndex = 1;
+    @ApiModelProperty(value = "页数")
+    private int pageNum = 1;
 
+    @ApiModelProperty(value = "排序字段")
     private String orderBy;
 
-    private String orderDirection = DESC;
+    @ApiModelProperty(value = "排序方向")
+    private String orderDirection = ASC;
 
-    private String groupBy;
-
+    @ApiModelProperty(value = "是否需要总数")
     private boolean needTotalCount = true;
 
-    public int getPageIndex() {
-        if (pageIndex < 1) {
+    public int getPageNum() {
+        if (pageNum < 1) {
             return 1;
         }
-        return pageIndex;
+        return pageNum;
     }
 
-    public PageQuery setPageIndex(int pageIndex) {
-        this.pageIndex = pageIndex;
+    public PageQuery setPageNum(int pageNum) {
+        this.pageNum = pageNum;
         return this;
     }
 
@@ -52,8 +57,10 @@ public abstract class PageQuery extends Query {
         return this;
     }
 
+
+    @ApiModelProperty(hidden = true)
     public int getOffset() {
-        return (getPageIndex() - 1) * getPageSize();
+        return (getPageNum() - 1) * getPageSize();
     }
 
     public String getOrderBy() {
@@ -76,14 +83,6 @@ public abstract class PageQuery extends Query {
         return this;
     }
 
-    public String getGroupBy() {
-        return groupBy;
-    }
-
-    public void setGroupBy(String groupBy) {
-        this.groupBy = groupBy;
-    }
-
     public boolean isNeedTotalCount() {
         return needTotalCount;
     }
@@ -92,4 +91,19 @@ public abstract class PageQuery extends Query {
         this.needTotalCount = needTotalCount;
     }
 
+    /**
+     * 用于缓存的查询键
+     *
+     * @return 结果
+     */
+    @ApiModelProperty(hidden = true)
+    public String getCachePageKey() {
+        return "{" +
+                "pageIndex=" + pageNum +
+                ", pageSize=" + pageSize +
+                ", orderBy='" + orderBy + '\'' +
+                ", orderDirection='" + orderDirection + '\'' +
+                ", needTotalCount=" + needTotalCount +
+                '}';
+    }
 }

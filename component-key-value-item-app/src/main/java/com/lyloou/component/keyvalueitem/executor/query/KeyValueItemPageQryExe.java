@@ -1,5 +1,6 @@
 package com.lyloou.component.keyvalueitem.executor.query;
 
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.lyloou.component.dto.PageInfoHelper;
@@ -9,6 +10,7 @@ import com.lyloou.component.keyvalueitem.dto.command.query.KeyValueItemPageQry;
 import com.lyloou.component.keyvalueitem.repository.entity.KeyValueItemEntity;
 import com.lyloou.component.keyvalueitem.repository.service.KeyValueItemService;
 import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
@@ -26,9 +28,13 @@ import java.util.stream.Collectors;
 public class KeyValueItemPageQryExe {
     private final KeyValueItemService keyValueItemService;
 
-    @Cacheable(value = CacheNames.KeyValueItemCo_PAGE_KEY, key = "#qry.itemName + '::' + #qry.itemKey+'::' + #qry.pageNo + '::'+ #qry.pageSize")
+    @Cacheable(value = CacheNames.KeyValueItemCo_PAGE_KEY, key = "#qry.itemName + '::' + #qry.itemKey+'::' + #qry.cachePageKey")
     public PageInfo<KeyValueItemCo> execute(KeyValueItemPageQry qry) {
-        PageHelper.startPage(qry.getPageNo(), qry.getPageSize());
+        final Page<Object> page = PageHelper.startPage(qry.getPageNum(), qry.getPageSize());
+        if (!Strings.isEmpty(qry.getOrderBy())) {
+            page.setOrderBy(qry.getOrderBy().concat(" ").concat(qry.getOrderDirection()));
+        }
+        page.setCount(qry.isNeedTotalCount());
 
         final List<KeyValueItemEntity> entityList = keyValueItemService.lambdaQuery()
                 .eq(qry.getItemName() != null, KeyValueItemEntity::getItemName, qry.getItemName())

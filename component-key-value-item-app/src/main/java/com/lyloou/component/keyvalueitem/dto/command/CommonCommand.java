@@ -1,7 +1,7 @@
 package com.lyloou.component.keyvalueitem.dto.command;
 
 
-import com.lyloou.component.keyvalueitem.dto.DTO;
+import com.lyloou.component.dto.Command;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -13,7 +13,7 @@ import lombok.EqualsAndHashCode;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class CommonCommand extends DTO {
+public class CommonCommand extends Command {
     @ApiModelProperty(value = "操作人", hidden = true)
     private String operator;
 }
