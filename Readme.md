@@ -177,3 +177,41 @@ spring:
 3. 结合 `@Cacheable` 、`@Caching`、`@CacheEvict` 来管理缓存
 
 4. 具体查看 [component-redis-manager-starter](./component-redis-manager-starter/Readme.md)
+
+## component-file-qiniu-controller-starter
+
+描述：上传文件，七牛api方式
+
+1. 加依赖
+
+```xml
+
+<dependency>
+    <groupId>com.lyloou</groupId>
+    <artifactId>component-file-qiniu-controller-starter</artifactId>
+    <version>${project.version}</version>
+</dependency>
+```
+
+2. 添加redis配置
+
+```yml
+file:
+  qiniu:
+    accessKey: "xxxxxxxxxxxxxxxxxx"
+    secretKey: "xxxxxxxxxxxxxxxxx"
+    bucket: "lyloou"
+    bucketUrl: "http://cdn.example.com"
+    uploadDir: "tmp/"
+```
+
+3. 调用方式
+
+```
+POST  http://localhost:8080/file/qiniu/upload
+form-data
+key: file
+value: filepath
+```
+
+4. 具体查看 [component-file-qiniu-controller-starter](./component-file-qiniu-controller-starter/Readme.md)

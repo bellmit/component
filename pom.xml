@@ -24,6 +24,7 @@
         <module>component-dto-page</module>
         <module>component-domain-starter</module>
         <module>component-key-value-item-app</module>
+        <module>component-file-qiniu-controller-starter</module>
     </modules>
 
     <properties>
@@ -47,6 +48,7 @@
 
     <dependencyManagement>
         <dependencies>
+            <!--component配置-->
             <dependency>
                 <groupId>com.lyloou</groupId>
                 <artifactId>component-dto</artifactId>
@@ -83,6 +85,13 @@
                 <artifactId>component-redis-manager-starter</artifactId>
                 <version>${project.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>com.lyloou</groupId>
+                <artifactId>component-file-qiniu-controller-starter</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
             <!--Springboot配置-->
             <dependency>
                 <groupId>org.springframework.boot</groupId>

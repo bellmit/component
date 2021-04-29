@@ -1,0 +1,13 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: component-file-qiniu-controller-starter
+
+file:
+  qiniu:
+    accessKey: "xxxxxxxxxxxxxxxxxx"
+    secretKey: "xxxxxxxxxxxxxxxxx"
+    bucket: "lyloou"
+    bucketUrl: "http://cdn.example.com"
+    uploadDir: "tmp/"
