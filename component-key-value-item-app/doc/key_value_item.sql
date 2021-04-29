@@ -23,22 +23,20 @@ SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS `key_value_item`;
 CREATE TABLE `key_value_item`
 (
-    `id`           int(11) UNSIGNED                                              NOT NULL AUTO_INCREMENT COMMENT 'ID',
-    `item_name`    varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '项名称',
-    `item_key`     varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci        NOT NULL DEFAULT '' COMMENT '项key',
-    `item_value`   text CHARACTER SET utf8 COLLATE utf8_general_ci               NULL COMMENT '项值',
-    `memo`         varchar(511) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL     DEFAULT NULL COMMENT '备注',
-    `creator`      varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL     DEFAULT NULL COMMENT '创建人',
-    `modifier`     varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL     DEFAULT NULL COMMENT '修改人',
-    `deleted`      int(1)                                                        NOT NULL DEFAULT 0 COMMENT '是否删除：0未删除，1已删除',
-    `created_time` datetime(0)                                                   NULL     DEFAULT NULL COMMENT '更新时间',
-    `updated_time` datetime(0)                                                   NULL     DEFAULT NULL COMMENT '更新时间',
+    `id`           int(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'ID',
+    `item_name`    varchar(100)     NOT NULL DEFAULT '' COMMENT '项名称',
+    `item_key`     varchar(50)      NOT NULL DEFAULT '' COMMENT '项key',
+    `item_value`   text             NULL COMMENT '项值',
+    `memo`         varchar(511)     NULL     DEFAULT NULL COMMENT '备注',
+    `creator`      varchar(100)     NULL     DEFAULT NULL COMMENT '创建人',
+    `modifier`     varchar(100)     NULL     DEFAULT NULL COMMENT '修改人',
+    `deleted`      int(1)           NOT NULL DEFAULT 0 COMMENT '是否删除：0未删除，1已删除',
+    `created_time` datetime(0)      NULL     DEFAULT NULL COMMENT '更新时间',
+    `updated_time` datetime(0)      NULL     DEFAULT NULL COMMENT '更新时间',
     PRIMARY KEY (`id`) USING BTREE,
     UNIQUE INDEX `idx_name_key` (`item_name`, `item_key`) USING BTREE COMMENT '名称和键组成的唯一索引'
 ) ENGINE = InnoDB
-  AUTO_INCREMENT = 6
-  CHARACTER SET = utf8mb4
-  COLLATE = utf8mb4_general_ci COMMENT = '键值项'
+  AUTO_INCREMENT = 1 COMMENT = '键值项'
   ROW_FORMAT = Dynamic;
 
 -- ----------------------------
