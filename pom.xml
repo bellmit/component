@@ -25,6 +25,7 @@
         <module>component-domain-starter</module>
         <module>component-key-value-item-app</module>
         <module>component-file-qiniu-controller-starter</module>
+        <module>component-notify-qywechat-library</module>
     </modules>
 
     <properties>
