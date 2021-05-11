@@ -92,6 +92,11 @@
                 <artifactId>component-file-qiniu-controller-starter</artifactId>
                 <version>${project.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.lyloou</groupId>
+                <artifactId>component-notify-qywechat-library</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 
             <!--Springboot配置-->
             <dependency>
