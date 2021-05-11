@@ -11,7 +11,7 @@ import java.util.ArrayList;
  * @since 2021/5/11
  */
 public class ClientTest {
-    public static final String CHATBOT_WEBHOOK = "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=bdbe32a6-cdb6-4fa0-807a-163c39bb811f";
+    public static final String CHATBOT_WEBHOOK = "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=bdbe32a6-cdb6-4fa0-807a-11111111111";
 
     public static void main(String[] args) {
         sendSplit();
@@ -54,7 +54,7 @@ public class ClientTest {
     private static void sendText() {
         TextMessage message = new TextMessage("你是我的小苹果");
         final ArrayList<String> mentionedMobileList = new ArrayList<>();
-        mentionedMobileList.add("15290836505");
+        mentionedMobileList.add("15290831111");
         message.setMentionedMobileList(mentionedMobileList);
         message.setAtAll(false);
         sendAndPrint(message);
