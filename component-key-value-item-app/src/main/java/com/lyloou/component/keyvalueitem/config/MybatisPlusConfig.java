@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 /**
  * MybatisPlusConfig
  *
- * @author liuchang
+ * @author lilou
  **/
 @Configuration
 @MapperScan("com.lyloou.component.keyvalueitem.repository.mapper")
