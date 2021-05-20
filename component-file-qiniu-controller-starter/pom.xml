@@ -60,31 +60,8 @@
         <dependency>
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-all</artifactId>
-            <version>5.5.8</version>
         </dependency>
     </dependencies>
 
-    <profiles>
-        <profile>
-            <id>local</id>
-            <properties>
-                <projectActive>local</projectActive>
-            </properties>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-        </profile>
-        <profile>
-            <id>dev</id>
-            <properties>
-                <projectActive>dev</projectActive>
-            </properties>
-        </profile>
-        <profile>
-            <id>master</id>
-            <properties>
-                <projectActive>master</projectActive>
-            </properties>
-        </profile>
-    </profiles>
+
 </project>

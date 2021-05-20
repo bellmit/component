@@ -12,7 +12,7 @@
 
     <name>component-parent</name>
     <url>https://github.com/lyloou/component</url>
-    <description>Component project for Spring Boot</description>
+    <description>Component Parent</description>
 
     <modules>
         <module>component-schedule-monitor-starter</module>
@@ -47,8 +47,9 @@
         <pagehelper.version>1.2.12</pagehelper.version>
         <jedis.version>3.3.0</jedis.version>
         <swagger.version>2.9.2</swagger.version>
+        <hutool.version>5.5.8</hutool.version>
 
-        <lyloou.component.version>1.0.9</lyloou.component.version>
+        <lyloou.component.version>1.0.10</lyloou.component.version>
     </properties>
 
     <dependencyManagement>
@@ -207,6 +208,12 @@
                     </exclusion>
                 </exclusions>
             </dependency>
+
+            <dependency>
+                <groupId>cn.hutool</groupId>
+                <artifactId>hutool-all</artifactId>
+                <version>${hutool.version}</version>
+            </dependency>
         </dependencies>
 
     </dependencyManagement>
@@ -348,6 +355,7 @@
                             <encoding>UTF-8</encoding>
                             <charset>UTF-8</charset>
                             <additionalparam>-Xdoclint:none</additionalparam>
+                            <failOnError>false</failOnError>
                         </configuration>
                     </execution>
                 </executions>

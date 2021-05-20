@@ -10,7 +10,6 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <description>${project.artifactId}</description>
     <artifactId>component-dto-page</artifactId>
     <properties>
         <swagger.version>2.9.2</swagger.version>
