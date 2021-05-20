@@ -21,7 +21,13 @@ spring:
       password: 123456
       pool-name: DatebookHikariCP
       username: root
-
+  # 下面是统一处理错误
+  mvc:
+    # 错误时会抛出异常
+    throw-exception-if-no-handler-found: true
+  resources:
+    # 不要为我们工程中的资源文件建立映射
+    add-mappings: false
   # redis config
   redis:
     host: 127.0.0.1

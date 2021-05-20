@@ -33,7 +33,7 @@ public class ExceptionHandlerServiceLogImpl implements ExceptionHandlerService {
 
     @Override
     public String serverName() {
-        return String.format("[%s]", appName);
+        return appName;
     }
 
     @Override
@@ -43,13 +43,13 @@ public class ExceptionHandlerServiceLogImpl implements ExceptionHandlerService {
         }
         switch (level) {
             case INFO:
-                log.info(serverName(), throwableToString(e));
+                log.info("[{}]: briefMsg: {}\n detailMsg: {}", serverName(), e.getMessage(), throwableToString(e));
                 break;
             case WARN:
-                log.warn(serverName(), throwableToString(e));
+                log.warn("[{}]: briefMsg: {}\n detailMsg: {}", serverName(), e.getMessage(), throwableToString(e));
                 break;
             case ERROR:
-                log.error(serverName(), throwableToString(e));
+                log.error("[{}]: briefMsg: {}\n detailMsg: {}", serverName(), e.getMessage(), throwableToString(e));
             case NONE:
                 break;
             default:

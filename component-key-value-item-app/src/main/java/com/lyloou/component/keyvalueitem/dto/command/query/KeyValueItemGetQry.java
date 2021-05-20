@@ -1,6 +1,6 @@
 package com.lyloou.component.keyvalueitem.dto.command.query;
 
-import com.lyloou.component.keyvalueitem.dto.command.CommonCommand;
+import com.lyloou.component.dto.Query;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -16,7 +16,7 @@ import javax.validation.constraints.NotNull;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @ApiModel(value = "列出片单参数实体")
-public class KeyValueItemGetQry extends CommonCommand {
+public class KeyValueItemGetQry extends Query {
 
     @ApiModelProperty(value = "项名称", required = true)
     @NotNull(message = "项名称不能为空")

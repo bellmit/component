@@ -41,13 +41,13 @@ public class CommonExceptionHandler {
     }
 
     @ExceptionHandler(AccessDeniedException.class)
-    public SingleResponse<Void> handleAuthorizationException(AccessDeniedException e) {
+    public SingleResponse<Void> handleAuthorizationException(Exception e) {
         handleThrowable(e, ErrorLevel.WARN);
         return SingleResponse.buildFailure(CommonCodeMessage.FORBIDDEN.appendMessage(e.getMessage()));
     }
 
     @ExceptionHandler(ParamException.class)
-    public SingleResponse<Void> paramException(ParamException e) {
+    public SingleResponse<Void> paramException(Exception e) {
         handleThrowable(e, ErrorLevel.WARN);
         return SingleResponse.buildFailure(CommonCodeMessage.ILLEGAL_PARAM.appendMessage(e.getMessage()));
     }
@@ -68,13 +68,22 @@ public class CommonExceptionHandler {
      * 自定义验证异常
      */
     @ExceptionHandler(BizException.class)
-    public SingleResponse<Void> handleBusinessException(BizException e) {
+    public SingleResponse<Void> handleBusinessException(Exception e) {
         handleThrowable(e, ErrorLevel.ERROR);
         return SingleResponse.buildFailure(CommonCodeMessage.BIZ_ERROR.appendMessage(e.getMessage()));
     }
 
+    /**
+     * 可能需要添加以下配置，才能监听得到
+     * spring.mvc.throw-exception-if-no-handler-found=true
+     * # 不要为我们工程中的资源文件建立映射
+     * spring.resources.add-mappings=false
+     *
+     * @param e
+     * @return
+     */
     @ExceptionHandler(NoHandlerFoundException.class)
-    public SingleResponse<Void> handleNoHandlerFoundException(NoHandlerFoundException e) {
+    public SingleResponse<Void> handleNoHandlerFoundException(Exception e) {
         handleThrowable(e, ErrorLevel.WARN);
         return SingleResponse.buildFailure(CommonCodeMessage.NOT_FOUND.appendMessage(e.getMessage()));
     }
