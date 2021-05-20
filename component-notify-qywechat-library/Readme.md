@@ -11,7 +11,7 @@
 <dependency>
     <groupId>com.lyloou</groupId>
     <artifactId>component-notify-qywechat-library</artifactId>
-    <version>${project.version}</version>
+    <version>${lyloou.component.version}</version>
 </dependency>
 ```
 

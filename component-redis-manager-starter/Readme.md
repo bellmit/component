@@ -80,7 +80,7 @@ refresh方案不便管理，不好排查，侵入性太强
 <dependency>
     <groupId>com.lyloou</groupId>
     <artifactId>component-redis-manager-starter</artifactId>
-    <version>${project.version}</version>
+    <version>${lyloou.component.version}</version>
 </dependency>
 ```
 

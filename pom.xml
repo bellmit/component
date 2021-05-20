@@ -8,7 +8,7 @@
 
     <groupId>com.lyloou</groupId>
     <artifactId>component-parent</artifactId>
-    <version>1.0.8</version>
+    <version>${lyloou.component.version}</version>
 
     <name>component-parent</name>
     <url>https://github.com/lyloou/component</url>
@@ -47,6 +47,8 @@
         <pagehelper.version>1.2.12</pagehelper.version>
         <jedis.version>3.3.0</jedis.version>
         <swagger.version>2.9.2</swagger.version>
+
+        <lyloou.component.version>1.0.9</lyloou.component.version>
     </properties>
 
     <dependencyManagement>
@@ -55,54 +57,54 @@
             <dependency>
                 <groupId>com.lyloou</groupId>
                 <artifactId>component-dto</artifactId>
-                <version>${project.version}</version>
+                <version>${lyloou.component.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.lyloou</groupId>
                 <artifactId>component-dto-page</artifactId>
-                <version>${project.version}</version>
+                <version>${lyloou.component.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.lyloou</groupId>
                 <artifactId>component-logger-controller-starter</artifactId>
-                <version>${project.version}</version>
+                <version>${lyloou.component.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.lyloou</groupId>
                 <artifactId>component-logger-request-statistic-starter</artifactId>
-                <version>${project.version}</version>
+                <version>${lyloou.component.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.lyloou</groupId>
                 <artifactId>component-schedule-monitor-starter</artifactId>
-                <version>${project.version}</version>
+                <version>${lyloou.component.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.lyloou</groupId>
                 <artifactId>component-tool-code-generator</artifactId>
-                <version>${project.version}</version>
+                <version>${lyloou.component.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>com.lyloou</groupId>
                 <artifactId>component-redis-manager-starter</artifactId>
-                <version>${project.version}</version>
+                <version>${lyloou.component.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>com.lyloou</groupId>
                 <artifactId>component-file-qiniu-controller-starter</artifactId>
-                <version>${project.version}</version>
+                <version>${lyloou.component.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.lyloou</groupId>
                 <artifactId>component-notify-qywechat-library</artifactId>
-                <version>${project.version}</version>
+                <version>${lyloou.component.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.lyloou</groupId>
                 <artifactId>component-exception-handler-starter</artifactId>
-                <version>${project.version}</version>
+                <version>${lyloou.component.version}</version>
             </dependency>
 
             <!--Springboot配置-->

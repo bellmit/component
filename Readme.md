@@ -13,7 +13,7 @@
 <dependency>
     <groupId>com.lyloou</groupId>
     <artifactId>component-dto</artifactId>
-    <version>${project.version}</version>
+    <version>${lyloou.component.version}</version>
 </dependency>
 ```
 
@@ -32,7 +32,7 @@
 <dependency>
     <groupId>com.lyloou</groupId>
     <artifactId>component-logger-controller-starter</artifactId>
-    <version>${project.version}</version>
+    <version>${lyloou.component.version}</version>
 </dependency>
 ```
 
@@ -51,7 +51,7 @@
 <dependency>
     <groupId>com.lyloou</groupId>
     <artifactId>component-schedule-monitor-starter</artifactId>
-    <version>${project.version}</version>
+    <version>${lyloou.component.version}</version>
 </dependency>
 ```
 
@@ -70,7 +70,7 @@
 <dependency>
     <groupId>com.lyloou</groupId>
     <artifactId>component-logger-request-statistic-starter</artifactId>
-    <version>${project.version}</version>
+    <version>${lyloou.component.version}</version>
 </dependency>
 ```
 
@@ -139,7 +139,7 @@ CURL -X POST "http://localhost:8080/room/admin/playlist/copy" -H "host:localhost
 <dependency>
     <groupId>com.lyloou</groupId>
     <artifactId>component-tool-code-generator</artifactId>
-    <version>${project.version}</version>
+    <version>${lyloou.component.version}</version>
 </dependency>
 ```
 
@@ -158,7 +158,7 @@ CURL -X POST "http://localhost:8080/room/admin/playlist/copy" -H "host:localhost
 <dependency>
     <groupId>com.lyloou</groupId>
     <artifactId>component-redis-manager-starter</artifactId>
-    <version>${project.version}</version>
+    <version>${lyloou.component.version}</version>
 </dependency>
 ```
 
@@ -189,7 +189,7 @@ spring:
 <dependency>
     <groupId>com.lyloou</groupId>
     <artifactId>component-file-qiniu-controller-starter</artifactId>
-    <version>${project.version}</version>
+    <version>${lyloou.component.version}</version>
 </dependency>
 ```
 

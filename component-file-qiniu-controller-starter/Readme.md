@@ -7,7 +7,7 @@
 <dependency>
     <groupId>com.lyloou</groupId>
     <artifactId>component-file-qiniu-controller-starter</artifactId>
-    <version>${project.version}</version>
+    <version>${lyloou.component.version}</version>
 </dependency>
 ```
 
