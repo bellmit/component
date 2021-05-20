@@ -2,7 +2,7 @@ package com.lyloou.component.redismanager;
 
 import com.lyloou.component.dto.MultiResponse;
 import com.lyloou.component.dto.SingleResponse;
-import com.lyloou.component.dto.SystemCodeMessage;
+import com.lyloou.component.dto.codemessage.CommonCodeMessage;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.logging.log4j.util.Strings;
@@ -95,7 +95,7 @@ public class RedisManagerController {
     @ApiOperation(value = "根据具体的key删除缓存")
     public SingleResponse<String> del(String key) {
         if (Strings.isEmpty(key)) {
-            return SingleResponse.buildFailure(SystemCodeMessage.ILLEGAL_DATA, "key is invalid");
+            return SingleResponse.buildFailure(CommonCodeMessage.ILLEGAL_PARAM.appendMessage("key is invalid"));
         }
 
         final boolean result = redisManagerService.del(key);

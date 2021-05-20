@@ -11,6 +11,7 @@ import com.baomidou.mybatisplus.generator.config.rules.DbColumnType;
 import com.baomidou.mybatisplus.generator.config.rules.IColumnType;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
 import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
+import org.apache.logging.log4j.util.Strings;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -208,7 +209,9 @@ public class CodeGenerator {
         strategy.setSuperServiceClass(strategySuperServiceClass);
         strategy.setSuperControllerClass(strategySuperControllerClass);
         // 写于父类中的公共字段
-        strategy.setSuperEntityColumns(strategySuperEntityColumns.split(","));
+        if (Strings.isNotEmpty(strategySuperEntityColumns)) {
+            strategy.setSuperEntityColumns(strategySuperEntityColumns.split(","));
+        }
 
         // 设置需要生成的表名
         strategy.setInclude(strategyTableArray);

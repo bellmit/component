@@ -1,5 +1,8 @@
 package com.lyloou.component.dto;
 
+import com.lyloou.component.dto.codemessage.CodeMessage;
+import com.lyloou.component.dto.codemessage.CommonCodeMessage;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -36,7 +39,7 @@ public class MultiResponse<T extends Collection<R>, R> extends Response {
     public static <T extends Collection<R>, R> MultiResponse<T, R> buildFailure() {
         MultiResponse<T, R> response = new MultiResponse<>();
         response.setSuccess(false);
-        response.setCodeMessage(SystemCodeMessage.SYSTEM_ERROR);
+        response.setCodeMessage(CommonCodeMessage.ERROR);
         return response;
     }
 
@@ -74,7 +77,7 @@ public class MultiResponse<T extends Collection<R>, R> extends Response {
     public static <T extends Collection<R>, R> MultiResponse<T, R> buildSuccess(T data) {
         MultiResponse<T, R> response = new MultiResponse<>();
         response.setSuccess(true);
-        response.setCodeMessage(SystemCodeMessage.SUCCESS);
+        response.setCodeMessage(CommonCodeMessage.SUCCESS);
         response.setData(data);
         return response;
     }
@@ -82,7 +85,7 @@ public class MultiResponse<T extends Collection<R>, R> extends Response {
     public static <T extends Collection<R>, R> MultiResponse<T, R> buildSuccess() {
         MultiResponse<T, R> response = new MultiResponse<>();
         response.setSuccess(true);
-        response.setCodeMessage(SystemCodeMessage.SUCCESS);
+        response.setCodeMessage(CommonCodeMessage.SUCCESS);
         return response;
     }
 

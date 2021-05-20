@@ -1,5 +1,8 @@
 package com.lyloou.component.dto;
 
+import com.lyloou.component.dto.codemessage.CodeMessage;
+import com.lyloou.component.dto.codemessage.CommonCodeMessage;
+
 /**
  * Response to caller
  *
@@ -52,8 +55,8 @@ public class Response extends DTO {
     public static Response success() {
         Response response = new Response();
         response.setSuccess(true);
-        response.setCode(SystemCodeMessage.SUCCESS.code());
-        response.setMessage(SystemCodeMessage.SUCCESS.message());
+        response.setCode(CommonCodeMessage.SUCCESS.code());
+        response.setMessage(CommonCodeMessage.SUCCESS.message());
         return response;
     }
 

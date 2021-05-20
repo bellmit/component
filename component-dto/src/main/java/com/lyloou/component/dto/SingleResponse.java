@@ -1,5 +1,8 @@
 package com.lyloou.component.dto;
 
+import com.lyloou.component.dto.codemessage.CodeMessage;
+import com.lyloou.component.dto.codemessage.CommonCodeMessage;
+
 /**
  * Response with single record to return
  * <p/>
@@ -20,7 +23,7 @@ public class SingleResponse<T> extends Response {
     public static <T> SingleResponse<T> buildFailure() {
         SingleResponse<T> response = new SingleResponse<>();
         response.setSuccess(false);
-        response.setCodeMessage(SystemCodeMessage.SYSTEM_ERROR);
+        response.setCodeMessage(CommonCodeMessage.ERROR);
         return response;
     }
 
@@ -50,7 +53,7 @@ public class SingleResponse<T> extends Response {
     public static <T> SingleResponse<T> buildFailure(String message) {
         SingleResponse<T> response = new SingleResponse<>();
         response.setSuccess(false);
-        response.setCode(SystemCodeMessage.SYSTEM_ERROR.code());
+        response.setCode(CommonCodeMessage.ERROR.code());
         response.setMessage(message);
         return response;
     }
@@ -66,7 +69,7 @@ public class SingleResponse<T> extends Response {
     public static <T> SingleResponse<T> buildSuccess(T data) {
         SingleResponse<T> response = new SingleResponse<>();
         response.setSuccess(true);
-        response.setCodeMessage(SystemCodeMessage.SUCCESS);
+        response.setCodeMessage(CommonCodeMessage.SUCCESS);
         response.setData(data);
         return response;
     }
@@ -74,7 +77,7 @@ public class SingleResponse<T> extends Response {
     public static <T> SingleResponse<T> buildSuccess() {
         SingleResponse<T> response = new SingleResponse<>();
         response.setSuccess(true);
-        response.setCodeMessage(SystemCodeMessage.SUCCESS);
+        response.setCodeMessage(CommonCodeMessage.SUCCESS);
         return response;
     }
 }

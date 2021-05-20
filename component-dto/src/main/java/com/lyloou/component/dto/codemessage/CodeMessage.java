@@ -1,4 +1,4 @@
-package com.lyloou.component.dto;
+package com.lyloou.component.dto.codemessage;
 
 /**
  * @author lilou
@@ -28,4 +28,19 @@ public interface CodeMessage {
      * @return 消息
      */
     String message();
+
+    /**
+     * 替换内容
+     *
+     * @param msg 内容
+     * @return 消息
+     */
+    default String replaceMessage(String msg) {
+        return msg;
+    }
+
+    default String appendMessage(String msg) {
+        return message().concat(", ").concat(msg);
+    }
+
 }
