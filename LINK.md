@@ -10,3 +10,4 @@ https://github.com/lyloou/component
 
 https://mvnrepository.com/artifact/com.lyloou/component-parent
 https://repo1.maven.org/maven2/com/lyloou/component-parent/
+https://oss.sonatype.org/

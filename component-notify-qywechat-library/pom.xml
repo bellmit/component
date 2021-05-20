@@ -6,8 +6,7 @@
     <parent>
         <artifactId>component-parent</artifactId>
         <groupId>com.lyloou</groupId>
-        <!--suppress MavenPropertyInParent -->
-        <version>${lyloou.component.version}</version>
+        <version>1.0.11</version>
     </parent>
     <artifactId>component-notify-qywechat-library</artifactId>
 
