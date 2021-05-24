@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.cache.CacheKeyPrefix;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -36,15 +37,32 @@ public class RedisManagerService {
     private final Map<String, Boolean> prefixMap = new ConcurrentHashMap<>();
 
 
-    public Map<String, Boolean> listPrefix() {
-        return prefixMap;
+    public Map<String, Map<String, String>> list() {
+        Map<String, Map<String, String>> map = new HashMap<>();
+        final Map<String, Boolean> prefixMap = this.prefixMap;
+        prefixMap.forEach((prefix, aBoolean) -> {
+            map.put(prefix, getOperationMap(prefix));
+        });
+        return map;
     }
 
+    private Map<String, String> getOperationMap(String prefix) {
+        Map<String, String> map = new HashMap<>();
+        map.put("获取所有键", "/keys?prefix=".concat(prefix));
+        map.put("根据前缀和key删除", "/del?prefix=".concat(prefix).concat("&key="));
+        map.put("设置过期", "/expire?prefix=".concat(prefix).concat("&key=").concat("&ttl="));
+        map.put("根据具体key删除", "/delKey?key=".concat(prefix));
+        return map;
+    }
+
+    // 只允许操作自己的这个项目的key（防止乱删除）
     public boolean isNotValid(String prefix) {
         if (Strings.isEmpty(prefix)) {
             return true;
         }
-        return false;
+        final boolean noneMatch = prefixMap.keySet().stream()
+                .noneMatch(prefix::startsWith);
+        return noneMatch;
     }
 
     public void putPrefix(String key, Boolean status) {

@@ -7,6 +7,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,10 +34,10 @@ public class RedisManagerController {
      *
      * @return 结果
      */
-    @RequestMapping("/list")
+    @GetMapping("/list")
     @ApiOperation(value = "获取本项目中所有可控的key前缀前缀")
-    public SingleResponse<Map<String, Boolean>> list() {
-        return SingleResponse.buildSuccess(redisManagerService.listPrefix());
+    public SingleResponse<Map<String, Map<String, String>>> list() {
+        return SingleResponse.buildSuccess(redisManagerService.list());
     }
 
     /**
@@ -45,7 +46,7 @@ public class RedisManagerController {
      * @param prefix 前缀
      * @return 结果
      */
-    @RequestMapping("/keys")
+    @GetMapping("/keys")
     @ApiOperation(value = "根据前缀获取所有的 key")
     public MultiResponse<Set<String>, String> keys(String prefix) {
         return MultiResponse.buildSuccess(redisManagerService.keys(prefix));
@@ -58,7 +59,7 @@ public class RedisManagerController {
      * @param key    键
      * @return 结果
      */
-    @RequestMapping("/del")
+    @GetMapping("/del")
     @ApiOperation(value = "删除缓存")
     public SingleResponse<String> del(@RequestParam(required = true) String prefix,
                                       @RequestParam(required = false) String key) {
@@ -75,7 +76,7 @@ public class RedisManagerController {
      * @param ttl    超时
      * @return 结果
      */
-    @RequestMapping("/expire")
+    @GetMapping("/expire")
     @ApiOperation(value = "设置key过期时间")
     public SingleResponse<String> expire(@RequestParam(required = true) String prefix,
                                          @RequestParam(required = false) String key,
@@ -91,7 +92,7 @@ public class RedisManagerController {
      * @param key 键
      * @return 结果
      */
-    @RequestMapping("/delKey")
+    @GetMapping("/delKey")
     @ApiOperation(value = "根据具体的key删除缓存")
     public SingleResponse<String> del(String key) {
         if (Strings.isEmpty(key)) {
