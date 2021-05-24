@@ -4,6 +4,7 @@ package com.lyloou.component.exceptionhandler.handler;
 import com.lyloou.component.dto.SingleResponse;
 import com.lyloou.component.dto.codemessage.CommonCodeMessage;
 import com.lyloou.component.exceptionhandler.exception.BizException;
+import com.lyloou.component.exceptionhandler.exception.CommonException;
 import com.lyloou.component.exceptionhandler.exception.ParamException;
 import com.lyloou.component.exceptionhandler.model.ErrorLevel;
 import com.lyloou.component.exceptionhandler.service.ExceptionHandlerService;
@@ -47,10 +48,29 @@ public class CommonExceptionHandler {
     }
 
     @ExceptionHandler(ParamException.class)
-    public SingleResponse<Void> paramException(Exception e) {
+    public SingleResponse<Void> paramException(ParamException e) {
         handleThrowable(e, ErrorLevel.WARN);
-        return SingleResponse.buildFailure(CommonCodeMessage.ILLEGAL_PARAM.appendMessage(e.getMessage()));
+        return SingleResponse.buildFailure(e.getCode(), e.getMessage());
     }
+
+    /**
+     * 自定义验证异常
+     */
+    @ExceptionHandler(BizException.class)
+    public SingleResponse<Void> handleBusinessException(BizException e) {
+        handleThrowable(e, ErrorLevel.ERROR);
+        return SingleResponse.buildFailure(e.getCode(), e.getMessage());
+    }
+
+    /**
+     * 自定义验证异常
+     */
+    @ExceptionHandler(CommonException.class)
+    public SingleResponse<Void> handleBusinessException(CommonException e) {
+        handleThrowable(e, ErrorLevel.ERROR);
+        return SingleResponse.buildFailure(e.getCode(), e.getMessage());
+    }
+
 
     private void handleThrowable(Throwable e, ErrorLevel level) {
         for (ExceptionHandlerService handlerService : handlerServiceList) {
@@ -64,14 +84,6 @@ public class CommonExceptionHandler {
         return SingleResponse.buildFailure(e.getMessage());
     }
 
-    /**
-     * 自定义验证异常
-     */
-    @ExceptionHandler(BizException.class)
-    public SingleResponse<Void> handleBusinessException(Exception e) {
-        handleThrowable(e, ErrorLevel.ERROR);
-        return SingleResponse.buildFailure(CommonCodeMessage.BIZ_ERROR.appendMessage(e.getMessage()));
-    }
 
     /**
      * 可能需要添加以下配置，才能监听得到

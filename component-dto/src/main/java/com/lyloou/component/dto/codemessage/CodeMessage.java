@@ -39,7 +39,16 @@ public interface CodeMessage {
         return msg;
     }
 
+    /**
+     * 追加消息内容
+     *
+     * @param msg 附加内容
+     * @return 消息内容
+     */
     default String appendMessage(String msg) {
+        if (msg == null || msg.trim().length() == 0) {
+            return message();
+        }
         return message().concat(", ").concat(msg);
     }
 
