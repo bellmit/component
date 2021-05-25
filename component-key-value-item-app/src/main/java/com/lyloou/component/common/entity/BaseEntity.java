@@ -1,4 +1,4 @@
-package com.lyloou.component.keyvalueitem.repository.entity;
+package com.lyloou.component.common.entity;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;

@@ -1,4 +1,4 @@
-package com.lyloou.component.keyvalueitem;
+package com.lyloou.component;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -8,8 +8,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @since 2021/4/23
  */
 @SpringBootApplication
-public class KeyValueItemApplication {
+public class ItemApplication {
     public static void main(String[] args) {
-        SpringApplication.run(KeyValueItemApplication.class, args);
+        SpringApplication.run(ItemApplication.class, args);
     }
 }

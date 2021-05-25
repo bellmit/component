@@ -3,7 +3,7 @@ package com.lyloou.component.keyvallueitem;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.lyloou.component.keyvalueitem.KeyValueItemApplication;
+import com.lyloou.component.ItemApplication;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.json.JsonParseException;
@@ -17,7 +17,7 @@ import org.springframework.web.context.WebApplicationContext;
 import java.io.IOException;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest(classes = KeyValueItemApplication.class)
+@SpringBootTest(classes = ItemApplication.class)
 @WebAppConfiguration
 public abstract class AbstractTest {
     protected MockMvc mvc;

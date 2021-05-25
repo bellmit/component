@@ -1,4 +1,4 @@
-package com.lyloou.component.keyvalueitem.config;
+package com.lyloou.component.common.config;
 
 import com.google.common.base.Predicates;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -36,7 +36,7 @@ public class SwaggerConfig {
                 .securityContexts(Arrays.asList(securityContext()))
                 .securitySchemes(Arrays.asList(apiKey()))
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.lyloou.component.keyvalueitem"))
+                .apis(RequestHandlerSelectors.basePackage("com.lyloou.component"))
                 .paths(PathSelectors.any())
                 // 关闭错误
                 .paths(Predicates.not(PathSelectors.regex("/error.*")))
@@ -54,7 +54,7 @@ public class SwaggerConfig {
     private ApiInfo buildApiInf() {
         return new ApiInfoBuilder()
                 .title("Sins Asmodeus 系统文档")
-                .contact(new Contact("lilou", "https://www.coocaa.com", "lilou@coocaa.com"))
+                .contact(new Contact("lilou", "https://www.lyloou.com", "lilou@lyloou.com"))
                 .version("1.0")
                 .build();
     }

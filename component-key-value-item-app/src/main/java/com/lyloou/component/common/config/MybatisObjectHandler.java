@@ -1,4 +1,4 @@
-package com.lyloou.component.keyvalueitem.config;
+package com.lyloou.component.common.config;
 
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import org.apache.ibatis.reflection.MetaObject;

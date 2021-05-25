@@ -1,6 +1,7 @@
 package com.lyloou.component.keyvalueitem.repository.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.lyloou.component.common.entity.BaseEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;

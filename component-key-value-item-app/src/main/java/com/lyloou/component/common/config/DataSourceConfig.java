@@ -1,4 +1,4 @@
-package com.lyloou.component.keyvalueitem.config;
+package com.lyloou.component.common.config;
 
 import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.boot.context.properties.ConfigurationProperties;

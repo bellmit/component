@@ -1,8 +1,8 @@
-package com.lyloou.component.keyvalueitem.dto.clientobject;
+package com.lyloou.component.common.dto;
 
+import com.lyloou.component.dto.DTO;
 import io.swagger.annotations.ApiModelProperty;
 
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,9 +12,7 @@ import java.util.Map;
  *
  * @author lilou
  */
-public abstract class ClientObject implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+public abstract class ClientObject extends DTO {
 
     /**
      * This is for extended values
