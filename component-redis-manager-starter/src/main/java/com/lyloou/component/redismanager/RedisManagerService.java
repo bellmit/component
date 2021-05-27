@@ -5,6 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.cache.CacheKeyPrefix;
+import org.springframework.lang.NonNull;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -34,13 +36,12 @@ public class RedisManagerService {
     /**
      * 存放任务的状态的map
      */
-    private final Map<String, Boolean> prefixMap = new ConcurrentHashMap<>();
+    private final Map<String, Boolean> cachePrefixMap = new ConcurrentHashMap<>();
 
 
     public Map<String, Map<String, String>> list() {
         Map<String, Map<String, String>> map = new HashMap<>();
-        final Map<String, Boolean> prefixMap = this.prefixMap;
-        prefixMap.forEach((prefix, aBoolean) -> {
+        this.cachePrefixMap.forEach((prefix, aBoolean) -> {
             map.put(prefix, getOperationMap(prefix));
         });
         return map;
@@ -60,18 +61,22 @@ public class RedisManagerService {
         if (Strings.isEmpty(prefix)) {
             return true;
         }
-        final boolean noneMatch = prefixMap.keySet().stream()
+        final boolean noneMatch = cachePrefixMap.keySet().stream()
                 .noneMatch(prefix::startsWith);
         return noneMatch;
     }
 
-    public void putPrefix(String key, Boolean status) {
-        prefixMap.put(key, status);
+    public void unregisterCachePrefix(String cachePrefix) {
+        cachePrefixMap.remove(cachePrefix);
+    }
+
+    public void registerCachePrefix(String cachePrefix) {
+        cachePrefixMap.put(cachePrefix, true);
     }
 
 
     // 手动调用删除方法
-    public boolean del(String wrapKey) {
+    public boolean delByWrapKey(String wrapKey) {
         try {
             final String[] prefixKeyArray = wrapKey.split(SEP);
             if (isNotValid(prefixKeyArray[0])) {
@@ -85,7 +90,7 @@ public class RedisManagerService {
         }
     }
 
-    public boolean del(String prefix, String key) {
+    public boolean delByPrefixAndKey(@NonNull String prefix, @Nullable String key) {
 
         try {
             if (isNotValid(prefix)) {

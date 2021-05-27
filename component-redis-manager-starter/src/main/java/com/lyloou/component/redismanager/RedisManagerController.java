@@ -63,7 +63,7 @@ public class RedisManagerController {
     @ApiOperation(value = "删除缓存")
     public SingleResponse<String> del(@RequestParam(required = true) String prefix,
                                       @RequestParam(required = false) String key) {
-        final boolean result = redisManagerService.del(prefix, key);
+        final boolean result = redisManagerService.delByPrefixAndKey(prefix, key);
         return SingleResponse.buildSuccess(String.format("删除缓存：%s::%s，结果:%s", prefix, key, result));
     }
 
@@ -99,7 +99,7 @@ public class RedisManagerController {
             return SingleResponse.buildFailure(CommonCodeMessage.ILLEGAL_PARAM.appendMessage("key is invalid"));
         }
 
-        final boolean result = redisManagerService.del(key);
+        final boolean result = redisManagerService.delByWrapKey(key);
         return SingleResponse.buildSuccess(String.format("删除缓存：%s，结果:%s", key, result));
     }
 }

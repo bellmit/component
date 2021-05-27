@@ -45,7 +45,7 @@ public class Demo {
 
     // 加入管理
     public void addCacheName() {
-        redisManagerService.putPrefix("com.lyloou.PersonCo", true);
+        redisManagerService.registerCachePrefix("com.lyloou.PersonCo_ID");
     }
 
     // 添加缓存
@@ -54,6 +54,50 @@ public class Demo {
         redisService.set(key);
     }
 }
+```
+
+另外为了安全考虑，只有被注册过的前缀才可以操作（特别是后台服务修改，需要更新前端服务生成的缓存时会用到；也可以直接调用前端服务的删除缓存api）
+
+```java
+public interface CachePrefix {
+    String FytInfoForTvCo_CHANNEL = "com.lyloou.fyt.dto.clientobject.tv.FytInfoForTvCo.channel";
+    String PlaylistForTvCo_ID = "com.lyloou.fyt.dto.clientobject.tv.PlaylistForTvCo.id";
+    String KeyValueItemCo_NAME_KEY = "com.lyloou.fyt.dto.clientobject.KeyValueItemCo.itemName.itemKey";
+
+    public static void main(String[] args) throws IllegalAccessException {
+        System.out.println(listAllCachePrefix());
+        System.out.println(FytInfoForTvCo_CHANNEL);
+    }
+
+    public static List<String> listAllCachePrefix() {
+        return Arrays.stream(CachePrefix.class.getDeclaredFields())
+                .map(field -> {
+                    try {
+                        return field.get(field.getName());
+                    } catch (IllegalAccessException e) {
+                        return null;
+                    }
+                })
+                .filter(Objects::nonNull)
+                .map(String::valueOf)
+                .collect(Collectors.toList());
+    }
+}
+
+@Component
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+public class CachePrefixRegister {
+    private final RedisManagerService redisManagerService;
+
+    @PostConstruct
+    public void doRegistration() {
+        final List<String> cachePrefixList = CachePrefix.listAllCachePrefix();
+        for (String cachePrefix : cachePrefixList) {
+            redisManagerService.registerCachePrefix(cachePrefix);
+        }
+    }
+}
+
 ```
 
 ## 四、它和 XX 技术有什么不一样？

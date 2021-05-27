@@ -83,7 +83,7 @@ public class RedisManagerApplicationContextHelper implements ApplicationContextA
         RedisManagerService handler = applicationContext.getBean(RedisManagerService.class);
         String[] cacheNames = getCacheNames(cacheConfig, cacheable);
         for (String cacheName : cacheNames) {
-            handler.putPrefix(cacheName, true);
+            handler.registerCachePrefix(cacheName);
         }
     }
 
