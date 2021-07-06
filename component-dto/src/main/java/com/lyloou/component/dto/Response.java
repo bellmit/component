@@ -16,6 +16,8 @@ public class Response extends DTO {
 
     private String code;
 
+    private String requestId;
+
     private String message;
 
     public boolean isSuccess() {
@@ -40,6 +42,14 @@ public class Response extends DTO {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public String getRequestId() {
+        return requestId;
+    }
+
+    public void setRequestId(String requestId) {
+        this.requestId = requestId;
     }
 
     public void setCodeMessage(CodeMessage codeMessage) {
