@@ -2,11 +2,13 @@ package com.lyloou.component.scenarioitem.convertor;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.util.ReflectUtil;
 import com.lyloou.component.scenarioitem.dto.ItemType;
 import com.lyloou.component.scenarioitem.dto.ScenarioItem;
 import com.lyloou.component.scenarioitem.dto.clientobject.ScenarioItemCO;
 import com.lyloou.component.scenarioitem.repository.entity.ScenarioItemEntity;
 
+import java.lang.reflect.Field;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -159,5 +161,62 @@ public class ScenarioItemConvertor {
         ScenarioItemEntity itemEntity = new ScenarioItemEntity();
         BeanUtil.copyProperties(itemCo, itemEntity);
         return itemEntity;
+    }
+
+
+    /**
+     * 将配置信息实例化
+     */
+    public static <T> T newInstance(ScenarioItem[] typeItems, Map<String, Map<String, Object>> configMap, Class<T> firstLevelClass) {
+        final Map<ItemType, List<ScenarioItemCO>> itemTypeListMap = toScenarioItemListMap(typeItems, configMap);
+        Map<String, Map<String, Object>> map = new HashMap<>(itemTypeListMap.size());
+        for (ItemType itemType : itemTypeListMap.keySet()) {
+            final Map<String, Object> itemKeyValueMap = getItemKeyValueMap(itemType, configMap);
+            map.put(itemType.getName(), itemKeyValueMap);
+        }
+
+        final T firstLevelInstance = ReflectUtil.newInstance(firstLevelClass);
+        final Field[] firstLevelFields = ReflectUtil.getFields(firstLevelClass);
+        for (Field field : firstLevelFields) {
+            final String firstLevelFieldName = field.getName();
+            final Class<?> firstLevelFieldType = field.getType();
+            final Object firstLevelFieldValue = getFirstLevelFieldValue(map.get(firstLevelFieldName), firstLevelFieldType);
+            ReflectUtil.setFieldValue(firstLevelInstance, firstLevelFieldName, firstLevelFieldValue);
+        }
+
+        return firstLevelInstance;
+    }
+
+    private static <T> T getFirstLevelFieldValue(Map<String, Object> itemKeyValueMap, Class<T> firstLevelFieldType) {
+        final T t = ReflectUtil.newInstance(firstLevelFieldType);
+        final Field[] fields = ReflectUtil.getFields(firstLevelFieldType);
+        for (Field field : fields) {
+            final String fieldName = field.getName();
+            final Object fieldValue = itemKeyValueMap.get(fieldName);
+            if (fieldValue != null) {
+                ReflectUtil.setFieldValue(t, fieldName, fieldValue);
+            }
+        }
+        return t;
+    }
+
+    public static Map<String, Map<String, Object>> getConfigMap(Object instance) {
+        final Field[] fields = instance.getClass().getDeclaredFields();
+        Map<String, Map<String, Object>> configMap = new HashMap<>(fields.length);
+        for (Field field : fields) {
+            final Map<String, Object> itemKeyValueMap = getItemKeyValueMap(ReflectUtil.getFieldValue(instance, field));
+            configMap.put(field.getName(), itemKeyValueMap);
+        }
+        return configMap;
+    }
+
+    private static Map<String, Object> getItemKeyValueMap(Object instance) {
+        final Field[] declaredFields = instance.getClass().getDeclaredFields();
+        Map<String, Object> map = new HashMap<>();
+        for (Field field : declaredFields) {
+            final Object fieldValue = ReflectUtil.getFieldValue(instance, field);
+            map.put(field.getName(), fieldValue);
+        }
+        return map;
     }
 }

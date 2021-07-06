@@ -10,6 +10,7 @@ import com.lyloou.component.scenarioitem.scenario.activity.dto.ActiveItemType;
 import com.lyloou.component.scenarioitem.scenario.activity.dto.ActivityConst;
 import com.lyloou.component.scenarioitem.scenario.activity.dto.ScanbuyTypeItem;
 import com.lyloou.component.scenarioitem.scenario.activity.dto.clientobject.ActivityCO;
+import com.lyloou.component.scenarioitem.scenario.activity.dto.clientobject.ScanbuyCO;
 
 import java.util.List;
 import java.util.Map;
@@ -106,6 +107,10 @@ public class ScanbuyTest {
         final Boolean typeItem3 = ScanbuyTypeItem.scanbuyBasicQrCodeContentShow.notNullValue(itemKeyValueMap2);
         System.out.println(typeItem2);
         System.out.println(typeItem3);
+
+        System.out.println("转换成 Instance ------------");
+        final ScanbuyCO scanbuyCO = ScenarioItemConvertor.newInstance(ScanbuyTypeItem.values(), configMap, ScanbuyCO.class);
+        System.out.println(scanbuyCO);
     }
 
 
