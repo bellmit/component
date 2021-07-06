@@ -15,28 +15,26 @@
     <description>Component Parent</description>
 
     <modules>
-        <module>component-schedule-monitor-starter</module>
-        <module>component-logger-controller-starter</module>
-        <module>component-dto</module>
-        <module>component-tool-code-generator</module>
-        <module>component-logger-request-statistic-starter</module>
-        <module>component-redis-manager-starter</module>
-        <module>component-dto-page</module>
         <module>component-domain-starter</module>
-        <module>component-key-value-item-app</module>
-        <module>component-file-qiniu-controller-starter</module>
-        <module>component-notify-qywechat-library</module>
+        <module>component-dto</module>
+        <module>component-dto-page</module>
         <module>component-exception-handler-starter</module>
+        <module>component-file-qiniu-controller-starter</module>
+        <module>component-key-value-item-app</module>
+        <module>component-logger-controller-starter</module>
+        <module>component-logger-request-id-starter</module>
+        <module>component-logger-request-statistic-starter</module>
+        <module>component-notify-qywechat-library</module>
+        <module>component-redis-manager-starter</module>
+        <module>component-schedule-monitor-starter</module>
+        <module>component-tool-code-generator</module>
     </modules>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-
         <maven.test.skip>true</maven.test.skip>
-
         <spring.boot.version>2.3.1.RELEASE</spring.boot.version>
         <spring.version>5.2.2.RELEASE</spring.version>
         <lombok.version>1.18.16</lombok.version>
@@ -54,7 +52,13 @@
 
     <dependencyManagement>
         <dependencies>
+
             <!--component配置-->
+            <dependency>
+                <groupId>com.lyloou</groupId>
+                <artifactId>component-domain-starter</artifactId>
+                <version>${lyloou.component.version}</version>
+            </dependency>
             <dependency>
                 <groupId>com.lyloou</groupId>
                 <artifactId>component-dto</artifactId>
@@ -67,12 +71,42 @@
             </dependency>
             <dependency>
                 <groupId>com.lyloou</groupId>
+                <artifactId>component-exception-handler-starter</artifactId>
+                <version>${lyloou.component.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.lyloou</groupId>
+                <artifactId>component-file-qiniu-controller-starter</artifactId>
+                <version>${lyloou.component.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.lyloou</groupId>
+                <artifactId>component-key-value-item-app</artifactId>
+                <version>${lyloou.component.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.lyloou</groupId>
                 <artifactId>component-logger-controller-starter</artifactId>
                 <version>${lyloou.component.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.lyloou</groupId>
+                <artifactId>component-logger-request-id-starter</artifactId>
+                <version>${lyloou.component.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.lyloou</groupId>
                 <artifactId>component-logger-request-statistic-starter</artifactId>
+                <version>${lyloou.component.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.lyloou</groupId>
+                <artifactId>component-notify-qywechat-library</artifactId>
+                <version>${lyloou.component.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.lyloou</groupId>
+                <artifactId>component-redis-manager-starter</artifactId>
                 <version>${lyloou.component.version}</version>
             </dependency>
             <dependency>
@@ -86,27 +120,6 @@
                 <version>${lyloou.component.version}</version>
             </dependency>
 
-            <dependency>
-                <groupId>com.lyloou</groupId>
-                <artifactId>component-redis-manager-starter</artifactId>
-                <version>${lyloou.component.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.lyloou</groupId>
-                <artifactId>component-file-qiniu-controller-starter</artifactId>
-                <version>${lyloou.component.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.lyloou</groupId>
-                <artifactId>component-notify-qywechat-library</artifactId>
-                <version>${lyloou.component.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.lyloou</groupId>
-                <artifactId>component-exception-handler-starter</artifactId>
-                <version>${lyloou.component.version}</version>
-            </dependency>
 
             <!--Springboot配置-->
             <dependency>
@@ -119,7 +132,6 @@
                 <artifactId>spring-boot-starter-web</artifactId>
                 <version>${spring.boot.version}</version>
             </dependency>
-
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-autoconfigure</artifactId>
@@ -170,7 +182,6 @@
                 <artifactId>aspectjweaver</artifactId>
                 <version>${aspectj.version}</version>
             </dependency>
-
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-test</artifactId>
@@ -272,9 +283,8 @@
     </profiles>
 
     <build>
-
+        <finalName>${project.artifactId}</finalName>
         <plugins>
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
