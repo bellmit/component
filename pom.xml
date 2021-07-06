@@ -8,7 +8,7 @@
 
     <groupId>com.lyloou</groupId>
     <artifactId>component-parent</artifactId>
-    <version>1.0.12</version>
+    <version>1.0.13</version>
 
     <name>component-parent</name>
     <url>https://github.com/lyloou/component</url>
@@ -47,7 +47,7 @@
         <swagger.version>2.9.2</swagger.version>
         <hutool.version>5.5.8</hutool.version>
 
-        <lyloou.component.version>1.0.12</lyloou.component.version>
+        <lyloou.component.version>1.0.13</lyloou.component.version>
     </properties>
 
     <dependencyManagement>

@@ -33,3 +33,4 @@ application-private.properties
 release
 *.log
 /log
+*.versionsBackup
