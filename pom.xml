@@ -27,6 +27,7 @@
         <module>component-notify-qywechat-library</module>
         <module>component-redis-manager-starter</module>
         <module>component-schedule-monitor-starter</module>
+        <module>component-tool-captcha-starter</module>
         <module>component-tool-code-generator</module>
     </modules>
 
@@ -120,6 +121,11 @@
             <dependency>
                 <groupId>com.lyloou</groupId>
                 <artifactId>component-schedule-monitor-starter</artifactId>
+                <version>${lyloou.component.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.lyloou</groupId>
+                <artifactId>component-tool-captcha-starter</artifactId>
                 <version>${lyloou.component.version}</version>
             </dependency>
             <dependency>

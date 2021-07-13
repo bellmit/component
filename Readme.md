@@ -1,5 +1,7 @@
 # 组件
 
+![build result](https://travis-ci.com/lyloou/component.svg?branch=master)
+
 ## component-dto
 
 描述：数据传输基础模块
