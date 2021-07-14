@@ -58,7 +58,7 @@ public class CommonExceptionHandler {
      */
     @ExceptionHandler(BizException.class)
     public SingleResponse<Void> handleBusinessException(BizException e) {
-        handleThrowable(e, ErrorLevel.ERROR);
+        handleThrowable(e, ErrorLevel.WARN);
         return SingleResponse.buildFailure(e.getCode(), e.getMessage());
     }
 
@@ -67,7 +67,7 @@ public class CommonExceptionHandler {
      */
     @ExceptionHandler(CommonException.class)
     public SingleResponse<Void> handleBusinessException(CommonException e) {
-        handleThrowable(e, ErrorLevel.ERROR);
+        handleThrowable(e, ErrorLevel.WARN);
         return SingleResponse.buildFailure(e.getCode(), e.getMessage());
     }
 

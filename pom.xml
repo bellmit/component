@@ -29,6 +29,7 @@
         <module>component-schedule-monitor-starter</module>
         <module>component-tool-captcha-starter</module>
         <module>component-tool-code-generator</module>
+        <module>component-tool-swagger2-starter</module>
     </modules>
 
     <properties>
@@ -131,6 +132,11 @@
             <dependency>
                 <groupId>com.lyloou</groupId>
                 <artifactId>component-tool-code-generator</artifactId>
+                <version>${lyloou.component.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.lyloou</groupId>
+                <artifactId>component-tool-swagger2-starter</artifactId>
                 <version>${lyloou.component.version}</version>
             </dependency>
 
@@ -238,6 +244,22 @@
                 <groupId>cn.hutool</groupId>
                 <artifactId>hutool-all</artifactId>
                 <version>${hutool.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-swagger2</artifactId>
+                <version>${swagger.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-swagger-common</artifactId>
+                <version>${swagger.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-swagger-ui</artifactId>
+                <version>${swagger.version}</version>
             </dependency>
         </dependencies>
 
