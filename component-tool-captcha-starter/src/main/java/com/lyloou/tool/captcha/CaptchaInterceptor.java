@@ -26,7 +26,7 @@ public class CaptchaInterceptor extends HandlerInterceptorAdapter {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         if (ifNeedCheck(handler)) {
             if (!validateCode(new ServletWebRequest(request))) {
-                throw new ParamException("无效的验证码");
+                throw new ParamException("验证码无效或已过期");
             }
         }
         return true;

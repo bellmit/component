@@ -54,10 +54,6 @@
             <groupId>com.lyloou</groupId>
             <artifactId>component-exception-handler-starter</artifactId>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.aspectj/aspectjweaver -->
-        <dependency>
-            <groupId>org.aspectj</groupId>
-            <artifactId>aspectjweaver</artifactId>
-        </dependency>
+
     </dependencies>
 </project>

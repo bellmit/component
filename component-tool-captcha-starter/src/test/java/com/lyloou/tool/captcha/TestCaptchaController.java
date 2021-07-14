@@ -2,8 +2,6 @@ package com.lyloou.tool.captcha;
 
 
 import com.lyloou.component.dto.SingleResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,8 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("captcha")
 public class TestCaptchaController {
 
-    private static final Logger logger = LoggerFactory.getLogger(TestCaptchaController.class);
-
     @Autowired
     CaptchaService captchaService;
 
@@ -30,8 +26,7 @@ public class TestCaptchaController {
         return SingleResponse.buildSuccess();
     }
 
-    // 测试需要验证码的情况
-    @CheckCaptcha
+    // 测试不需要验证码的情况
     @GetMapping(value = "/ping")
     public SingleResponse<String> ping() {
         return SingleResponse.buildSuccess("pong");

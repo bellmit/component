@@ -28,8 +28,7 @@ public class CaptchaController {
     @GetMapping(value = "/getCaptcha")
     public SingleResponse<CaptchaVO> getGraphValidateCode() {
         String uniqueId = IdUtil.fastSimpleUUID();
-        final String captchaKey = "captchaKey::" + uniqueId;
-
+        final String captchaKey = "captcha-key::" + uniqueId;
         CaptchaVO captchaVO = new CaptchaVO();
         captchaVO.setCaptchaKey(captchaKey);
         captchaVO.setImageBase64Data(captchaService.getCaptcha(captchaKey));
@@ -37,6 +36,7 @@ public class CaptchaController {
         // DEBUG模式下，直接把code返回出去，方便调试
         if (logger.isDebugEnabled()) {
             captchaVO.setCaptchaCode(captchaService.getCaptchaCode(captchaKey));
+            logger.debug("from captcha: captchaKey={}&captchaCode={}", captchaVO.getCaptchaKey(), captchaVO.getCaptchaCode());
         }
         return SingleResponse.buildSuccess(captchaVO);
     }

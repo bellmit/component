@@ -105,13 +105,19 @@ public class CodeDefaultCache implements CodeCache {
     @Getter
     @Setter
     private static class CacheCode {
+        /**
+         * 验证码
+         */
         private final String code;
+        /**
+         * 过期时间，单位：秒
+         */
         private final long expire;
 
         public CacheCode(String code, long expire) {
             this.code = code;
             // 实际过期时间等于当前时间加上有效期
-            this.expire = System.currentTimeMillis() + expire;
+            this.expire = System.currentTimeMillis() + expire * 1000;
         }
 
         boolean isExpired() {

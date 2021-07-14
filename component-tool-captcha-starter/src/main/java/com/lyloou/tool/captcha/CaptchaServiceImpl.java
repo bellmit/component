@@ -17,7 +17,7 @@ public class CaptchaServiceImpl implements CaptchaService {
 
     @Override
     public String getCaptcha(String captchaKey) {
-        LineCaptcha lineCaptcha = CaptchaUtil.createLineCaptcha(200, 100);
+        LineCaptcha lineCaptcha = CaptchaUtil.createLineCaptcha(160, 80);
         String captchaCode = lineCaptcha.getCode();
         codeCache.set(captchaKey, captchaCode, Duration.ofMinutes(5).getSeconds());
         return lineCaptcha.getImageBase64Data();
