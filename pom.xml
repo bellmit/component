@@ -54,6 +54,7 @@
         <pagehelper.version>1.2.12</pagehelper.version>
         <jedis.version>3.3.0</jedis.version>
         <swagger.version>2.9.2</swagger.version>
+        <swagger.annotation.version>1.5.20</swagger.annotation.version>
         <hutool.version>5.5.8</hutool.version>
         <jacoco-version>0.8.2</jacoco-version>
 
@@ -260,6 +261,11 @@
                 <groupId>io.springfox</groupId>
                 <artifactId>springfox-swagger-ui</artifactId>
                 <version>${swagger.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.swagger</groupId>
+                <artifactId>swagger-annotations</artifactId>
+                <version>${swagger.annotation.version}</version>
             </dependency>
         </dependencies>
 

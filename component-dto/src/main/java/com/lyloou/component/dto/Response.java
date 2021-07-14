@@ -2,6 +2,7 @@ package com.lyloou.component.dto;
 
 import com.lyloou.component.dto.codemessage.CodeMessage;
 import com.lyloou.component.dto.codemessage.CommonCodeMessage;
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * Response to caller
@@ -12,12 +13,16 @@ public class Response extends DTO {
 
     private static final long serialVersionUID = 1L;
 
+    @ApiModelProperty("返回结果")
     private boolean success;
 
+    @ApiModelProperty("返回码")
     private String code;
 
+    @ApiModelProperty("请求ID")
     private String requestId;
 
+    @ApiModelProperty("返回消息")
     private String message;
 
     public boolean isSuccess() {

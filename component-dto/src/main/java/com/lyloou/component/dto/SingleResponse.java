@@ -2,14 +2,18 @@ package com.lyloou.component.dto;
 
 import com.lyloou.component.dto.codemessage.CodeMessage;
 import com.lyloou.component.dto.codemessage.CommonCodeMessage;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * Response with single record to return
  * <p/>
  * Created by Danny.Lee on 2017/11/1.
  */
+@ApiModel("返回单对象数据分装")
 public class SingleResponse<T> extends Response {
 
+    @ApiModelProperty("返回的数据")
     private T data;
 
     public T getData() {

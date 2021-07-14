@@ -8,9 +8,6 @@ import java.lang.annotation.*;
 
 /**
  * Entity, Entity Object is prototype and is not thread-safe
- *
- * @author Frank Zhang
- * @date 2019-01-03 2:53 PM
  */
 @Inherited
 @Retention(RetentionPolicy.RUNTIME)

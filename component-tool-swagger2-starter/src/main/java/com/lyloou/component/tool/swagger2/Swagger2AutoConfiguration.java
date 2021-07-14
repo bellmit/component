@@ -55,7 +55,7 @@ public class Swagger2AutoConfiguration {
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(buildApiInf())
                 .securityContexts(Collections.singletonList(securityContext()))
-                .securitySchemes(Collections.singletonList(apiKey()))
+                .securitySchemes(Collections.singletonList(apiKey(swagger2Properties)))
                 .select()
                 .apis(selector)
                 .paths(PathSelectors.any())
@@ -86,8 +86,8 @@ public class Swagger2AutoConfiguration {
                 .build();
     }
 
-    private ApiKey apiKey() {
-        return new ApiKey("JWT", "Authorization", "header");
+    private ApiKey apiKey(Swagger2Properties swagger2Properties) {
+        return new ApiKey("JWT", swagger2Properties.getAuthorizationKey(), "header");
     }
 
     /**
@@ -106,6 +106,16 @@ public class Swagger2AutoConfiguration {
                 .required(false)
                 .build();
         pars.add(tokenPar.build());
+
+        Parameter headerParam = new ParameterBuilder()
+                .name("Content-Type")
+                .description("请求类型")
+                .modelRef(new ModelRef("string"))
+                .parameterType("header")
+                .required(false)
+                .build();
+        pars.add(headerParam);
+
         return pars;
     }
 

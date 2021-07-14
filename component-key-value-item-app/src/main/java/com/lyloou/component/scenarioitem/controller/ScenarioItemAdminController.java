@@ -27,7 +27,7 @@ import java.util.List;
  * @since 2021-03-17
  */
 @RestController
-@Api(tags = "[通用]-场景项API")
+@Api(tags = "[通用]-场景项接口")
 @RequestMapping("/admin/scenario-item")
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 @Validated

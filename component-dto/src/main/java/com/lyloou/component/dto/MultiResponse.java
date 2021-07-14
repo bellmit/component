@@ -2,6 +2,8 @@ package com.lyloou.component.dto;
 
 import com.lyloou.component.dto.codemessage.CodeMessage;
 import com.lyloou.component.dto.codemessage.CommonCodeMessage;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -14,10 +16,12 @@ import java.util.List;
  * <p/>
  * Created by Danny.Lee on 2017/11/1.
  */
+@ApiModel("返回列表数据分装")
 public class MultiResponse<T extends Collection<R>, R> extends Response {
 
     private static final long serialVersionUID = 1L;
 
+    @ApiModelProperty("返回的数据")
     private T data;
 
     public List<R> getData() {

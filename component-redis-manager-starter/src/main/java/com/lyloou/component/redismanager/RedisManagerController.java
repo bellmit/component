@@ -22,7 +22,7 @@ import java.util.Set;
  * @since 2021/3/7
  */
 @RestController
-@Api(tags = "redis缓存管理")
+@Api(tags = "【component】缓存-Redis缓存管理接口")
 @RequestMapping("/redismanager")
 public class RedisManagerController {
 

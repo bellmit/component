@@ -15,10 +15,10 @@ public abstract class PageQuery extends Query {
 
     private static final int DEFAULT_PAGE_SIZE = 10;
 
-    @ApiModelProperty(value = "页大小")
+    @ApiModelProperty(value = "页大小，默认10")
     private int pageSize = DEFAULT_PAGE_SIZE;
 
-    @ApiModelProperty(value = "页数")
+    @ApiModelProperty(value = "页数，默认1")
     private int pageNum = 1;
 
     @ApiModelProperty(value = "排序字段")

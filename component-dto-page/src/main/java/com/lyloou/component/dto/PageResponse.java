@@ -3,6 +3,8 @@ package com.lyloou.component.dto;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * Response with batch page record to return,
@@ -11,11 +13,12 @@ import com.github.pagehelper.PageInfo;
  * Created by xiaochu.lbj on 2020/06/30.
  */
 @SuppressWarnings("all")
+@ApiModel("返回分页数据分装")
 public class PageResponse<T> extends Response {
 
     private static final long serialVersionUID = 1L;
 
-
+    @ApiModelProperty("返回的数据")
     private PageInfo<T> data;
 
     public PageInfo<T> getData() {

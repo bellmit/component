@@ -17,7 +17,7 @@ public class LoggerControllerAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(LogLevelController.class)
-    public LogLevelController scheduleMonitorAspect() {
+    public LogLevelController logLevelController() {
         return new LogLevelController();
     }
 

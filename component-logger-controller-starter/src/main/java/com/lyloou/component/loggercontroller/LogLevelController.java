@@ -4,6 +4,9 @@ import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.LoggerContext;
 import com.lyloou.component.dto.SingleResponse;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiModelProperty;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.util.Strings;
 import org.slf4j.LoggerFactory;
@@ -25,6 +28,7 @@ import java.util.*;
 @Slf4j
 @RestController
 @RequestMapping("/log/level")
+@Api(tags = "【component】日志-日志级别控制接口")
 public class LogLevelController {
     LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
 
@@ -39,6 +43,7 @@ public class LogLevelController {
      * curl [baseUrl]/log/level/change?packageName=root&level=error
      */
     @GetMapping("/change")
+    @ApiOperation("修改日志级别接口")
     public SingleResponse<String> changeLevel(@RequestParam String level, @RequestParam String packageName) {
         return SingleResponse.buildSuccess(setLogger(packageName, level));
     }
@@ -52,7 +57,8 @@ public class LogLevelController {
      * curl [baseUrl]/log/level/get?package=[包名]
      */
     @GetMapping("/get")
-    SingleResponse<Map<String, String>> get(String packageName) {
+    @ApiModelProperty("获取包名的日志级别")
+    public SingleResponse<Map<String, String>> get(String packageName) {
         Map<String, String> map = new HashMap<>(1);
 
         if (Strings.isNotEmpty(packageName)) {
@@ -65,6 +71,7 @@ public class LogLevelController {
     }
 
     @GetMapping("/del")
+    @ApiModelProperty("删除配置")
     SingleResponse<String> del(@RequestParam String packageName) {
         final List<Logger> loggerList = loggerContext.getLoggerList();
         loggerList.removeIf(next -> Objects.equals(next.getName(), packageName));
@@ -72,6 +79,7 @@ public class LogLevelController {
     }
 
     @GetMapping("/list")
+    @ApiModelProperty("列出已配置的日志键值对")
     SingleResponse<Map<String, String>> list() {
         final List<Logger> loggerList = loggerContext.getLoggerList();
         //全局日志等级 + 项目日志等级 + 具体包的日志等级

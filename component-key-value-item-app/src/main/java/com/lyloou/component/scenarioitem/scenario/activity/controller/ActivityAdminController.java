@@ -30,7 +30,7 @@ import java.util.Map;
  * @since 2021-03-17
  */
 @RestController
-@Api(tags = "[活动]-活动API")
+@Api(tags = "[活动]-活动接口")
 @RequestMapping("/activity")
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 @Validated

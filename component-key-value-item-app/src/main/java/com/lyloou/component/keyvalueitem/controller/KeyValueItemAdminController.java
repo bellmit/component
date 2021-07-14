@@ -30,7 +30,7 @@ import java.util.List;
  * @since 2021-03-17
  */
 @RestController
-@Api(tags = "[通用]-键值项API")
+@Api(tags = "[通用]-键值项接口")
 @RequestMapping("/admin/key-value-item")
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 @Validated
