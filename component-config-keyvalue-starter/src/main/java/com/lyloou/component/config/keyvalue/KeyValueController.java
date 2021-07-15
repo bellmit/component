@@ -3,10 +3,12 @@ package com.lyloou.component.config.keyvalue;
 import com.lyloou.component.dto.SingleResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,6 +23,7 @@ import java.util.Objects;
  */
 @RestController
 @Api(tags = "【component】配置-键值对接口")
+@RequestMapping("keyValue")
 public class KeyValueController {
 
     @Autowired
@@ -35,7 +38,7 @@ public class KeyValueController {
     @ApiOperation("根据type获取键值对列表")
     @GetMapping("/getKeyValueByType")
     public SingleResponse<List<KeyValue>> getKeyValueByType(
-            @RequestParam("类型") String type) {
+            @ApiParam("类型") @RequestParam("type") String type) {
         return SingleResponse.buildSuccess(getKeyValueList(type, properties.getType()));
     }
 
@@ -57,8 +60,8 @@ public class KeyValueController {
     @ApiOperation("根据type和key获取具体的某一个value")
     @GetMapping("/getValueByTypeAndKey")
     public SingleResponse<String> getValueByTypeAndKey(
-            @RequestParam("类型") String type,
-            @RequestParam("键") String key) {
+            @ApiParam("类型") @RequestParam("type") String type,
+            @ApiParam("键") @RequestParam("key") String key) {
         final Map<String, List<KeyValue>> keyValueMap = properties.getType();
         final List<KeyValue> data = getKeyValueList(type, keyValueMap);
         if (CollectionUtils.isEmpty(data)) {
