@@ -30,6 +30,7 @@
         <module>component-tool-captcha-starter</module>
         <module>component-tool-code-generator</module>
         <module>component-tool-swagger2-starter</module>
+        <module>component-config-keyvalue-starter</module>
     </modules>
 
     <properties>
@@ -65,6 +66,12 @@
         <dependencies>
 
             <!--component配置-->
+            <dependency>
+                <groupId>com.lyloou</groupId>
+                <artifactId>component-config-keyvalue-starter</artifactId>
+                <version>${lyloou.component.version}</version>
+            </dependency>
+
             <dependency>
                 <groupId>com.lyloou</groupId>
                 <artifactId>component-domain-starter</artifactId>
