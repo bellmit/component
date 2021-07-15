@@ -1,4 +1,4 @@
-package com.lyloou.tool.captcha.cache;
+package com.lyloou.component.tool.captcha.cache;
 
 import lombok.Getter;
 import lombok.Setter;

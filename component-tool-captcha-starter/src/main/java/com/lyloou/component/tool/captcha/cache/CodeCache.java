@@ -1,4 +1,4 @@
-package com.lyloou.tool.captcha.cache;
+package com.lyloou.component.tool.captcha.cache;
 
 /**
  * 验证码缓存，用来缓存code

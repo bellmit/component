@@ -1,4 +1,4 @@
-package com.lyloou.tool.captcha;
+package com.lyloou.component.tool.captcha;
 
 
 import cn.hutool.core.util.IdUtil;

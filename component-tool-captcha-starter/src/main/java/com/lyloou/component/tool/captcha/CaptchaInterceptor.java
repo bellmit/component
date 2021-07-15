@@ -1,4 +1,4 @@
-package com.lyloou.tool.captcha;
+package com.lyloou.component.tool.captcha;
 
 import com.lyloou.component.exceptionhandler.exception.ParamException;
 import lombok.extern.slf4j.Slf4j;

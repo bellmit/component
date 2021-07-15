@@ -1,4 +1,4 @@
-package com.lyloou.tool.captcha;
+package com.lyloou.component.tool.captcha;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

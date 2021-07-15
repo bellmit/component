@@ -1,7 +1,7 @@
-package com.lyloou.tool.captcha;
+package com.lyloou.component.tool.captcha;
 
-import com.lyloou.tool.captcha.cache.CodeCache;
-import com.lyloou.tool.captcha.cache.CodeDefaultCache;
+import com.lyloou.component.tool.captcha.cache.CodeCache;
+import com.lyloou.component.tool.captcha.cache.CodeDefaultCache;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;

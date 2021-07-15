@@ -1,4 +1,4 @@
-package com.lyloou.tool.captcha;
+package com.lyloou.component.tool.captcha;
 
 import com.lyloou.component.dto.DTO;
 import io.swagger.annotations.ApiModel;

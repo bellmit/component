@@ -1,8 +1,8 @@
-package com.lyloou.tool.captcha;
+package com.lyloou.component.tool.captcha;
 
 import cn.hutool.captcha.CaptchaUtil;
 import cn.hutool.captcha.LineCaptcha;
-import com.lyloou.tool.captcha.cache.CodeCache;
+import com.lyloou.component.tool.captcha.cache.CodeCache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
