@@ -6,6 +6,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -28,7 +29,8 @@ public class QiniuController {
 
 
     @PostMapping("/upload")
-    @ApiOperation(value = "上传文件", notes = "上传文件，返回键值对：文件名->URL地址")
+    @ApiOperation(value = "上传文件", notes = "上传文件，返回键值对：文件名->URL地址",
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public SingleResponse<Map<String, String>> uploadFile(
             @ApiParam(value = "文件列表", required = true)
             @RequestParam("file") MultipartFile[] files) {
