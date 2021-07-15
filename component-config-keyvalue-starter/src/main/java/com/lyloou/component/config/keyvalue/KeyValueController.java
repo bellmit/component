@@ -36,8 +36,7 @@ public class KeyValueController {
     @GetMapping("/getKeyValueByType")
     public SingleResponse<List<KeyValue>> getKeyValueByType(
             @RequestParam("类型") String type) {
-        final Map<String, List<KeyValue>> keyValueMap = properties.getType();
-        return SingleResponse.buildSuccess(getKeyValueList(type, keyValueMap));
+        return SingleResponse.buildSuccess(getKeyValueList(type, properties.getType()));
     }
 
     private List<KeyValue> getKeyValueList(String type, Map<String, List<KeyValue>> keyValueMap) {
@@ -63,7 +62,7 @@ public class KeyValueController {
         final Map<String, List<KeyValue>> keyValueMap = properties.getType();
         final List<KeyValue> data = getKeyValueList(type, keyValueMap);
         if (CollectionUtils.isEmpty(data)) {
-            return SingleResponse.buildSuccess();
+            return SingleResponse.buildSuccess(null);
         }
 
         final String value = data.stream()
