@@ -3,6 +3,7 @@ package com.lyloou.component.dto.codemessage;
 /**
  * @author lilou
  */
+@FunctionalInterface
 public interface CodeMessage {
 
     /**
@@ -27,7 +28,9 @@ public interface CodeMessage {
      *
      * @return 消息
      */
-    String message();
+    default String message() {
+        return null;
+    }
 
     /**
      * 替换内容

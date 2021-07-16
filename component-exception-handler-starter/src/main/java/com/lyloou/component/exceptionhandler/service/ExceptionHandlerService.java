@@ -23,17 +23,4 @@ public interface ExceptionHandlerService {
         return ExceptionUtil.throwableToString(e);
     }
 
-    static String briefErrorMsg(String code, String msg, Throwable e) {
-        StackTraceElement se = e.getStackTrace()[0];
-        StringBuilder sb = new StringBuilder();
-        sb.append("error code:").append(code).append("\n")
-                .append(",error msg:").append(msg).append("\n")
-                .append(",error name:").append(e.getClass().getName()).append("\n")
-                .append(",error happened to class:").append(se.getClassName()).append("\n")
-                .append(",error happened to method:").append(se.getMethodName()).append("\n")
-                .append(",error happened to line:").append(se.getLineNumber()).append("\n")
-        ;
-        return sb.toString();
-    }
-
 }

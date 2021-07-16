@@ -19,4 +19,19 @@ public class ExceptionUtil {
         }
         return trace.toString();
     }
+
+    public static String briefErrorMsg(Throwable e) {
+        StackTraceElement se = e.getStackTrace()[0];
+        return FormatterUtil.format("" +
+                        "=> name: {},\n" +
+                        "=> class: {},\n" +
+                        "=> method: {},\n" +
+                        "=> line: {},\n",
+                e.getClass().getName(),
+                se.getClassName(),
+                se.getMethodName(),
+                se.getLineNumber()
+        );
+    }
+
 }

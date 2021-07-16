@@ -30,7 +30,7 @@ import java.util.Collection;
 public abstract class Assert {
 
     /**
-     * Assert a boolean expression, throwing {@code BizException}
+     * Assert a boolean expression, throwing {@code CommonException}
      * <p>
      * for example
      *
@@ -40,11 +40,11 @@ public abstract class Assert {
      * @param expression  a boolean expression
      * @param codeMessage 错误码
      * @param message     the exception message to use if the assertion fails
-     * @throws BizException if expression is {@code false}
+     * @throws CommonException if expression is {@code false}
      */
     public static void isTrue(boolean expression, CodeMessage codeMessage, String message) {
         if (!expression) {
-            throw new BizException(codeMessage.code(), codeMessage.appendMessage(message));
+            throw new CommonException(codeMessage.code(), codeMessage.appendMessage(message));
         }
     }
 
@@ -58,7 +58,7 @@ public abstract class Assert {
 
     public static void notNull(Object object, CodeMessage codeMessage, String message) {
         if (object == null) {
-            throw new BizException(codeMessage.code(), codeMessage.appendMessage(message));
+            throw new CommonException(codeMessage.code(), codeMessage.appendMessage(message));
         }
     }
 
@@ -79,7 +79,7 @@ public abstract class Assert {
 
     public static void notEmpty(Collection<?> collection, String message) {
         if (collection != null && collection.size() > 0) {
-            throw new BizException(message);
+            throw new CommonException(message);
         }
     }
 

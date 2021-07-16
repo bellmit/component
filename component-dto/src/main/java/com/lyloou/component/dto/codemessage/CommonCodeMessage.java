@@ -23,8 +23,8 @@ public enum CommonCodeMessage implements CodeMessage {
 
     // input
     ILLEGAL_REQUEST("100013", "无效请求"),
-    ILLEGAL_PARAM("100014", "参数错误"),
-    ILLEGAL_DATA("100015", "非法数据"),
+    ILLEGAL_PARAM("100014", "参数不正确"),
+    ILLEGAL_DATA("100015", "数据异常"),
     ILLEGAL_IP("100016", "ip来源不合法"),
     NOT_FOUND("100017", "路径不存在，请检查路径是否正确"),
     REQUEST_REPEATEDLY("100018", "重复请求操作"),
