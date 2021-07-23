@@ -10,7 +10,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
- * 默认得缓存实现
+ * 默认的缓存实现
  *
  * @author lilou
  * @since 2021/7/6

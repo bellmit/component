@@ -80,3 +80,5 @@ public class SignAutoConfiguration implements WebMvcConfigurer {
 - [基于 Spring Boot 以及 Redis 使用 Aop 来实现 Api 接口签名验证 - 知乎](https://zhuanlan.zhihu.com/p/112555362)
 
 ## 示例源码
+
+https://github.com/lyloou/component-parent-test/tree/master/component-security-signvalidator-starter-test

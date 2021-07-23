@@ -2,6 +2,7 @@ package com.lyloou.component.tool.captcha.cache;
 
 /**
  * 验证码缓存，用来缓存code
+ * 默认使用 CodeDefaultCache，可以使用 Redis 来自定义实现（Redis无需手动管理过期key）
  *
  * @author lilou
  * @since 2021/7/6
