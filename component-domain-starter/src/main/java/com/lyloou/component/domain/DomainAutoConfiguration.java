@@ -8,8 +8,8 @@ import org.springframework.context.annotation.Configuration;
 public class DomainAutoConfiguration {
 
     @Bean
-    @ConditionalOnMissingBean(ApplicationContextHelper.class)
-    public ApplicationContextHelper applicationContextHelper() {
-        return new ApplicationContextHelper();
+    @ConditionalOnMissingBean(DomainApplicationContextHelper.class)
+    public DomainApplicationContextHelper applicationContextHelper() {
+        return new DomainApplicationContextHelper();
     }
 }

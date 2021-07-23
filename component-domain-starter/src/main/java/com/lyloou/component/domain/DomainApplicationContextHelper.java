@@ -9,13 +9,13 @@ import org.springframework.stereotype.Component;
  * ApplicationContextHelper
  */
 @Component
-public class ApplicationContextHelper implements ApplicationContextAware {
+public class DomainApplicationContextHelper implements ApplicationContextAware {
     private static ApplicationContext applicationContext;
 
     @SuppressWarnings("NullableProblems")
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        ApplicationContextHelper.applicationContext = applicationContext;
+        DomainApplicationContextHelper.applicationContext = applicationContext;
     }
 
     public static <T> T getBean(Class<T> targetClz) {
@@ -43,16 +43,16 @@ public class ApplicationContextHelper implements ApplicationContextAware {
     }
 
     public static Object getBean(String clazz) {
-        return ApplicationContextHelper.applicationContext.getBean(clazz);
+        return DomainApplicationContextHelper.applicationContext.getBean(clazz);
     }
 
     public static <T> T getBean(String name, Class<T> requiredType) {
-        return ApplicationContextHelper.applicationContext.getBean(name, requiredType);
+        return DomainApplicationContextHelper.applicationContext.getBean(name, requiredType);
     }
 
     @SuppressWarnings("AlibabaVarargsParameter")
     public static <T> T getBean(Class<T> requiredType, Object... params) {
-        return ApplicationContextHelper.applicationContext.getBean(requiredType, params);
+        return DomainApplicationContextHelper.applicationContext.getBean(requiredType, params);
     }
 
     public static ApplicationContext getApplicationContext() {
