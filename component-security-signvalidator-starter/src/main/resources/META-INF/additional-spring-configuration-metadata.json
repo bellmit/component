@@ -1,0 +1,129 @@
+{
+  "groups": [
+    {
+      "name": "component.sign",
+      "type": "com.lyloou.component.security.signvalidator.properties.SignProperties",
+      "sourceType": "com.lyloou.component.security.signvalidator.properties.SignProperties"
+    },
+    {
+      "name": "component.sign.cache",
+      "type": "com.lyloou.component.security.signvalidator.cache.DataCacheProperties",
+      "sourceType": "com.lyloou.component.security.signvalidator.properties.SignProperties",
+      "sourceMethod": "getCache()"
+    }
+  ],
+  "properties": [
+    {
+      "name": "component.sign.cache.prefix",
+      "type": "java.lang.String",
+      "description": "缓存前缀 默认 COMPONENT::SIGNED::",
+      "sourceType": "com.lyloou.component.security.signvalidator.cache.DataCacheProperties",
+      "defaultValue": "COMPONENT::SIGNED::"
+    },
+    {
+      "name": "component.sign.cache.schedule-prune",
+      "type": "java.lang.Boolean",
+      "description": "是否开启定时{@link DataDefaultCache#pruneCache()}的任务",
+      "sourceType": "com.lyloou.component.security.signvalidator.cache.DataCacheProperties",
+      "defaultValue": true
+    },
+    {
+      "name": "component.sign.cache.timeout",
+      "type": "java.lang.Long",
+      "description": "默认缓存过期时间：3分钟",
+      "sourceType": "com.lyloou.component.security.signvalidator.cache.DataCacheProperties",
+      "defaultValue": 0
+    },
+    {
+      "name": "component.sign.clients",
+      "type": "java.util.List<com.lyloou.component.security.signvalidator.properties.ClientConfig>",
+      "description": "签名客户端列表。（需要动态增删的话，可以修改此列表）",
+      "sourceType": "com.lyloou.component.security.signvalidator.properties.SignProperties"
+    },
+    {
+      "name": "component.sign.enabled",
+      "type": "java.lang.Boolean",
+      "description": "全局开关：是否启用 签名",
+      "sourceType": "com.lyloou.component.security.signvalidator.properties.SignProperties",
+      "defaultValue": true
+    },
+    {
+      "name": "component.sign.ignore-validate",
+      "type": "java.lang.Boolean",
+      "description": "true会忽略验证，只有被注解了{@link com.lyloou.component.security.signvalidator.annotation.ValidateSign}才会验证；false会全局验证，只有被注解了{@link com.lyloou.component.security.signvalidator.annotation.IgnoreValidateSign}才不会验证",
+      "sourceType": "com.lyloou.component.security.signvalidator.properties.SignProperties",
+      "defaultValue": true
+    },
+    {
+      "name": "component.sign.validators",
+      "type": "java.util.Map<java.lang.String,com.lyloou.component.security.signvalidator.properties.ValidatorConfig>",
+      "description": "验证器，可以配置多个 validatorName -> validatorConfig（默认：default）",
+      "sourceType": "com.lyloou.component.security.signvalidator.properties.SignProperties"
+    },
+    {
+      "name": "component.sign.validators.default",
+      "type": "com.lyloou.component.security.signvalidator.properties.ValidatorConfig",
+      "description": "默认的签名验证器",
+      "sourceType": "com.lyloou.component.security.signvalidator.properties.ValidatorConfig"
+    },
+    {
+      "name": "component.sign.validators.default.enabled",
+      "type": "java.lang.Boolean",
+      "description": "局部开关",
+      "sourceType": "com.lyloou.component.security.signvalidator.properties.ValidatorConfig",
+      "defaultValue": true
+    },
+    {
+      "name": "component.sign.validators.default.timeout",
+      "type": "java.lang.Long",
+      "description": "超时时长，用来验证时间戳；默认1分钟，单位秒",
+      "sourceType": "com.lyloou.component.security.signvalidator.properties.ValidatorConfig",
+      "defaultValue": 60
+    },
+    {
+      "name": "component.sign.validators.default.beanName",
+      "type": "java.lang.String",
+      "description": "默认验证器的bean名称 默认为：{@link SignConstant#DEFAULT_VALIDATOR}，对应的实现类为 @{@link DefaultValidator}",
+      "sourceType": "com.lyloou.component.security.signvalidator.properties.ValidatorConfig"
+    },
+    {
+      "name": "component.sign.validators.default.ext-values",
+      "type": "java.util.Map<java.lang.String,java.lang.Object>",
+      "description": "扩展参数",
+      "sourceType": "com.lyloou.component.security.signvalidator.properties.ValidatorConfig"
+    }
+  ],
+  "hints": [
+    {
+      "name": "component.sign.validators.keys",
+      "values": [
+        {
+          "value": "default",
+          "description": "默认验证器"
+        }
+      ]
+    },
+    {
+      "name": "component.sign.validators.values",
+      "providers": [
+        {
+          "name": "handle-as",
+          "parameters": {
+            "target": "com.lyloou.component.security.signvalidator.properties.ValidatorConfig"
+          }
+        }
+      ]
+    },
+    {
+      "name": "component.sign.clients",
+      "providers": [
+        {
+          "name": "handle-as",
+          "parameters": {
+            "target": "com.lyloou.component.security.signvalidator.properties.ClientConfig"
+          }
+        }
+      ]
+    }
+  ]
+}
