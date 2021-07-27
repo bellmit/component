@@ -116,7 +116,7 @@
 
         <dependency>
             <groupId>com.lyloou</groupId>
-            <artifactId>component-tool-swagger2-starter</artifactId>
+            <artifactId>component-tool-knife4j-starter</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

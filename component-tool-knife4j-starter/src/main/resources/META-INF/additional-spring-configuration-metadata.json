@@ -1,0 +1,57 @@
+{
+  "groups": [
+    {
+      "name": "component.swagger",
+      "type": "com.lyloou.component.tool.knife4j.GroupProperties",
+      "sourceType": "com.lyloou.component.tool.knife4j.GroupProperties"
+    },
+    {
+      "name": "component.swagger.items",
+      "type": "java.util.Map",
+      "sourceType": "com.lyloou.component.tool.knife4j.GroupProperties",
+      "sourceMethod": "getItems()"
+    }
+  ],
+  "properties": [
+    {
+      "name": "component.swagger.enable",
+      "type": "java.lang.Boolean",
+      "description": "是否启用Swagger",
+      "sourceType": "com.lyloou.component.tool.knife4j.GroupProperties"
+    },
+    {
+      "name": "component.swagger.items",
+      "type": "java.util.Map<java.lang.String,com.lyloou.component.tool.knife4j.ItemProperties>",
+      "description": "分组配置swagger",
+      "sourceType": "com.lyloou.component.tool.knife4j.GroupProperties"
+    },
+    {
+      "name": "component.swagger.items.default",
+      "type": "com.lyloou.component.tool.knife4j.ItemProperties",
+      "description": "默认的swagger",
+      "sourceType": "com.lyloou.component.tool.knife4j.ItemProperties"
+    }
+  ],
+  "hints": [
+    {
+      "name": "component.swagger.items.keys",
+      "values": [
+        {
+          "value": "default",
+          "description": "默认验证器"
+        }
+      ]
+    },
+    {
+      "name": "component.swagger.items.values",
+      "providers": [
+        {
+          "name": "handle-as",
+          "parameters": {
+            "target": "com.lyloou.component.tool.knife4j.ItemProperties"
+          }
+        }
+      ]
+    }
+  ]
+}

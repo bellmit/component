@@ -29,6 +29,7 @@
         <module>component-schedule-monitor-starter</module>
         <module>component-tool-captcha-starter</module>
         <module>component-tool-code-generator</module>
+        <module>component-tool-knife4j-starter</module>
         <module>component-tool-swagger2-starter</module>
         <module>component-config-keyvalue-starter</module>
         <module>component-security-signvalidator-starter</module>
@@ -55,8 +56,10 @@
         <guava.version>30.1-jre</guava.version>
         <pagehelper.version>1.2.12</pagehelper.version>
         <jedis.version>3.3.0</jedis.version>
-        <swagger.version>2.9.2</swagger.version>
-        <swagger.annotation.version>1.5.20</swagger.annotation.version>
+        <swagger.version>2.10.5</swagger.version>
+        <io.swagger.version>1.5.22</io.swagger.version>
+
+        <knife4j.version>2.0.7</knife4j.version>
         <hutool.version>5.5.8</hutool.version>
         <jacoco-version>0.8.2</jacoco-version>
 
@@ -146,6 +149,11 @@
             <dependency>
                 <groupId>com.lyloou</groupId>
                 <artifactId>component-tool-swagger2-starter</artifactId>
+                <version>${lyloou.component.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.lyloou</groupId>
+                <artifactId>component-tool-knife4j-starter</artifactId>
                 <version>${lyloou.component.version}</version>
             </dependency>
 
@@ -255,10 +263,36 @@
                 <version>${hutool.version}</version>
             </dependency>
 
+            <!-- swagger and knife4j -->
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-spring-webmvc</artifactId>
+                <version>${swagger.version}</version>
+            </dependency>
             <dependency>
                 <groupId>io.springfox</groupId>
                 <artifactId>springfox-swagger2</artifactId>
                 <version>${swagger.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>io.swagger</groupId>
+                        <artifactId>swagger-annotations</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>io.swagger</groupId>
+                        <artifactId>swagger-models</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>io.swagger</groupId>
+                <artifactId>swagger-annotations</artifactId>
+                <version>${io.swagger.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.swagger</groupId>
+                <artifactId>swagger-models</artifactId>
+                <version>${io.swagger.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.springfox</groupId>
@@ -271,9 +305,9 @@
                 <version>${swagger.version}</version>
             </dependency>
             <dependency>
-                <groupId>io.swagger</groupId>
-                <artifactId>swagger-annotations</artifactId>
-                <version>${swagger.annotation.version}</version>
+                <groupId>com.github.xiaoymin</groupId>
+                <artifactId>knife4j-spring-boot-starter</artifactId>
+                <version>${knife4j.version}</version>
             </dependency>
         </dependencies>
 

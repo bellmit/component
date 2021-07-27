@@ -1,7 +1,5 @@
 package com.lyloou.component.tool.swagger2;
 
-import com.google.common.base.Predicate;
-import com.google.common.base.Predicates;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -20,12 +18,13 @@ import springfox.documentation.service.*;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
-import springfox.documentation.swagger2.annotations.EnableSwagger2;
+import springfox.documentation.swagger2.annotations.EnableSwagger2WebMvc;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 /**
@@ -35,7 +34,7 @@ import java.util.stream.Stream;
 @Configuration
 @EnableConfigurationProperties({Swagger2Properties.class})
 @ConditionalOnExpression(value = "${swagger2.enable:true}")
-@EnableSwagger2
+@EnableSwagger2WebMvc
 public class Swagger2AutoConfiguration {
     @Bean
     @ConditionalOnMissingBean(Docket.class)
@@ -48,7 +47,7 @@ public class Swagger2AutoConfiguration {
         } else {
             selector = basePackages.stream()
                     .map(RequestHandlerSelectors::basePackage)
-                    .reduce(Predicates::or)
+                    .reduce(Predicate::or)
                     .orElse(null);
         }
 
@@ -60,17 +59,18 @@ public class Swagger2AutoConfiguration {
                 .apis(selector)
                 .paths(PathSelectors.any())
                 // 关闭错误
-                .paths(Predicates.not(PathSelectors.regex("/error.*")))
+                .paths(PathSelectors.regex("/error.*").negate())
                 .build()
                 .globalOperationParameters(buildParameter(swagger2Properties))
                 .consumes(CONSUMES)
                 ;
+
     }
 
     private Predicate<RequestHandler> defaultSelector() {
         return Stream.of(RestController.class, Controller.class)
                 .map(RequestHandlerSelectors::withClassAnnotation)
-                .reduce(Predicates::or).get();
+                .reduce(Predicate::or).get();
     }
 
     public static final HashSet<String> CONSUMES = new HashSet<String>() {{
