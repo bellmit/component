@@ -25,16 +25,17 @@ public class CorsAutoConfiguration {
     public void corsFilter() {
         final CorsGroupProperties corsGroupProperties = SpringUtil.getBean(CorsGroupProperties.class);
         final Map<String, CorsItemProperties> items = corsGroupProperties.getItems();
-        items.forEach((groupName, corsItemProperties) -> {
-            final CorsFilter corsFilter = createCorsFilter(corsItemProperties);
-            final String beanName = "CORS_FILTER_" + groupName;
-            corsFilterMap.put(beanName, corsFilter);
+        items.forEach(this::addCorsFilter);
+    }
 
-            SpringUtil.registerBean(beanName, new FilterRegistrationBean<CorsFilter>(corsFilter) {{
-                setOrder(0);
-            }});
-        });
+    public void addCorsFilter(String groupName, CorsItemProperties corsItemProperties) {
+        final CorsFilter corsFilter = createCorsFilter(corsItemProperties);
+        final String beanName = "CORS_FILTER_" + groupName;
+        corsFilterMap.put(beanName, corsFilter);
 
+        SpringUtil.registerBean(beanName, new FilterRegistrationBean<CorsFilter>(corsFilter) {{
+            setOrder(0);
+        }});
     }
 
     public CorsFilter createCorsFilter(CorsItemProperties corsProperties) {
