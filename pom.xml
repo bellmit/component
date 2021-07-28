@@ -26,13 +26,14 @@
         <module>component-logger-request-statistic-starter</module>
         <module>component-notify-qywechat-library</module>
         <module>component-redis-manager-starter</module>
+        <module>component-security-cors-starter</module>
+        <module>component-security-signvalidator-starter</module>
         <module>component-schedule-monitor-starter</module>
         <module>component-tool-captcha-starter</module>
         <module>component-tool-code-generator</module>
         <module>component-tool-knife4j-starter</module>
         <module>component-tool-swagger2-starter</module>
         <module>component-config-keyvalue-starter</module>
-        <module>component-security-signvalidator-starter</module>
     </modules>
 
     <properties>
@@ -134,6 +135,16 @@
             <dependency>
                 <groupId>com.lyloou</groupId>
                 <artifactId>component-schedule-monitor-starter</artifactId>
+                <version>${lyloou.component.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.lyloou</groupId>
+                <artifactId>component-security-cors-starter</artifactId>
+                <version>${lyloou.component.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.lyloou</groupId>
+                <artifactId>component-security-signvalidator-starter</artifactId>
                 <version>${lyloou.component.version}</version>
             </dependency>
             <dependency>

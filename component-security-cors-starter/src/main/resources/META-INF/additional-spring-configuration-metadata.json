@@ -1,0 +1,77 @@
+{
+  "groups": [
+    {
+      "name": "component.cors",
+      "type": "com.lyloou.component.security.cors.CorsGroupProperties",
+      "sourceType": "com.lyloou.component.security.cors.CorsGroupProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "component.cors.items",
+      "type": "java.util.Map<java.lang.String,com.lyloou.component.security.cors.CorsItemProperties>",
+      "description": "按组设置cors，默认全允许",
+      "sourceType": "com.lyloou.component.security.cors.CorsGroupProperties"
+    },
+    {
+      "name": "component.cors.item.default.allow-credentials",
+      "type": "java.lang.Boolean",
+      "description": "Whether user credentials are supported.",
+      "sourceType": "com.lyloou.component.security.cors.CorsItemProperties",
+      "defaultValue": true
+    },
+    {
+      "name": "component.cors.item.default.allowed-headers",
+      "type": "java.util.List<java.lang.String>",
+      "description": " Set the list of headers that a pre-flight request can list as allowed.",
+      "sourceType": "com.lyloou.component.security.cors.CorsItemProperties"
+    },
+    {
+      "name": "component.cors.item.default.allowed-methods",
+      "type": "java.util.List<java.lang.String>",
+      "description": "Set the HTTP methods to allow, e.g. {@code \"GET\"}, {@code \"POST\"}.",
+      "sourceType": "com.lyloou.component.security.cors.CorsItemProperties"
+    },
+    {
+      "name": "component.cors.item.default.allowed-origins",
+      "type": "java.util.List<java.lang.String>",
+      "description": "Set the origins to allow, e.g. {@code \"https://domain1.com\"}.",
+      "sourceType": "com.lyloou.component.security.cors.CorsItemProperties"
+    },
+    {
+      "name": "component.cors.item.default.max-age",
+      "type": "java.lang.Long",
+      "description": "Configure how long, as a duration, the response from a pre-flight request can be cached by clients.",
+      "sourceType": "com.lyloou.component.security.cors.CorsItemProperties",
+      "defaultValue": 1800
+    },
+    {
+      "name": "component.cors.item.default.path",
+      "type": "java.lang.String",
+      "description": "Register a {@link org.springframework.web.cors.CorsConfiguration} for the specified path pattern.",
+      "sourceType": "com.lyloou.component.security.cors.CorsItemProperties"
+    }
+  ],
+  "hints": [
+    {
+      "name": "component.cors.items.keys",
+      "values": [
+        {
+          "value": "default",
+          "description": "默认配置"
+        }
+      ]
+    },
+    {
+      "name": "component.cors.items.values",
+      "providers": [
+        {
+          "name": "handle-as",
+          "parameters": {
+            "target": "com.lyloou.component.security.cors.CorsItemProperties"
+          }
+        }
+      ]
+    }
+  ]
+}
