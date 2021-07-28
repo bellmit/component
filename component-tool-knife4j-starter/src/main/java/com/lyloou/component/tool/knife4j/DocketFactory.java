@@ -113,7 +113,7 @@ public class DocketFactory {
         } else if (basePackage.contains(SPLIT_SEMICOLON)) {
             basePackages = basePackage.split(SPLIT_SEMICOLON);
         } else {
-            basePackages = new String[]{swaggerProperties.getBasePackage()};
+            basePackages = new String[]{basePackage};
         }
         log.info("swagger scan basePackages:" + Arrays.toString(basePackages));
         return basePackages;
