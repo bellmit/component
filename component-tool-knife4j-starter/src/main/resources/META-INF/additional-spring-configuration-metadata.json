@@ -2,13 +2,13 @@
   "groups": [
     {
       "name": "component.swagger",
-      "type": "com.lyloou.component.tool.knife4j.GroupProperties",
-      "sourceType": "com.lyloou.component.tool.knife4j.GroupProperties"
+      "type": "com.lyloou.component.tool.knife4j.SwaggerGroupProperties",
+      "sourceType": "com.lyloou.component.tool.knife4j.SwaggerGroupProperties"
     },
     {
       "name": "component.swagger.items",
       "type": "java.util.Map",
-      "sourceType": "com.lyloou.component.tool.knife4j.GroupProperties",
+      "sourceType": "com.lyloou.component.tool.knife4j.SwaggerGroupProperties",
       "sourceMethod": "getItems()"
     }
   ],
@@ -17,19 +17,19 @@
       "name": "component.swagger.enable",
       "type": "java.lang.Boolean",
       "description": "是否启用Swagger",
-      "sourceType": "com.lyloou.component.tool.knife4j.GroupProperties"
+      "sourceType": "com.lyloou.component.tool.knife4j.SwaggerGroupProperties"
     },
     {
       "name": "component.swagger.items",
-      "type": "java.util.Map<java.lang.String,com.lyloou.component.tool.knife4j.ItemProperties>",
+      "type": "java.util.Map<java.lang.String,com.lyloou.component.tool.knife4j.SwaggerItemProperties>",
       "description": "分组配置swagger",
-      "sourceType": "com.lyloou.component.tool.knife4j.GroupProperties"
+      "sourceType": "com.lyloou.component.tool.knife4j.SwaggerGroupProperties"
     },
     {
       "name": "component.swagger.items.default",
-      "type": "com.lyloou.component.tool.knife4j.ItemProperties",
+      "type": "com.lyloou.component.tool.knife4j.SwaggerItemProperties",
       "description": "默认的swagger",
-      "sourceType": "com.lyloou.component.tool.knife4j.ItemProperties"
+      "sourceType": "com.lyloou.component.tool.knife4j.SwaggerItemProperties"
     }
   ],
   "hints": [
@@ -48,7 +48,7 @@
         {
           "name": "handle-as",
           "parameters": {
-            "target": "com.lyloou.component.tool.knife4j.ItemProperties"
+            "target": "com.lyloou.component.tool.knife4j.SwaggerItemProperties"
           }
         }
       ]

@@ -23,7 +23,7 @@ import java.util.Map;
  * @since 2021/7/14
  */
 @Configuration
-@EnableConfigurationProperties({GroupProperties.class})
+@EnableConfigurationProperties({SwaggerGroupProperties.class})
 @EnableSwagger2WebMvc
 @Import(BeanValidatorPluginsConfiguration.class)
 @Slf4j
@@ -33,12 +33,12 @@ public class SwaggerAutoConfiguration {
 
     @PostConstruct
     public void init() {
-        final GroupProperties groupProperties = SpringUtil.getBean(GroupProperties.class);
+        final SwaggerGroupProperties groupProperties = SpringUtil.getBean(SwaggerGroupProperties.class);
         if (!groupProperties.isEnable()) {
             return;
         }
 
-        final Map<String, ItemProperties> items = groupProperties.getItems();
+        final Map<String, SwaggerItemProperties> items = groupProperties.getItems();
         if (CollectionUtil.isEmpty(items)) {
             return;
         }
@@ -46,7 +46,7 @@ public class SwaggerAutoConfiguration {
         items.forEach(this::addDocket);
     }
 
-    public void addDocket(String groupName, ItemProperties itemProperties) {
+    public void addDocket(String groupName, SwaggerItemProperties itemProperties) {
         if (!itemProperties.isEnable()) {
             return;
         }

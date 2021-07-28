@@ -27,7 +27,7 @@ import java.util.Map;
  **/
 @Data
 @ConfigurationProperties(prefix = "component.swagger")
-public class GroupProperties {
+public class SwaggerGroupProperties {
 
     /**
      * 是否启用Swagger
@@ -38,8 +38,8 @@ public class GroupProperties {
      * key：组名
      * value：配置项
      */
-    private Map<String, ItemProperties> items = new LinkedHashMap<String, ItemProperties>() {{
-        put("default", new ItemProperties());
+    private Map<String, SwaggerItemProperties> items = new LinkedHashMap<String, SwaggerItemProperties>() {{
+        put("default", new SwaggerItemProperties());
     }};
 
 }

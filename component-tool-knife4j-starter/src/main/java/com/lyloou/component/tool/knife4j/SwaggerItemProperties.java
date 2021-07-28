@@ -25,7 +25,7 @@ import java.util.List;
  * Swagger项配置属性
  **/
 @Data
-public class ItemProperties {
+public class SwaggerItemProperties {
 
     /**
      * 是否启用Swagger

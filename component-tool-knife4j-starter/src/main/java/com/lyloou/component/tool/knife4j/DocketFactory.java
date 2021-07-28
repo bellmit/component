@@ -60,11 +60,11 @@ public class DocketFactory {
             ApiIgnore.class
     };
 
-    public static Docket create(ItemProperties swaggerProperties) {
+    public static Docket create(SwaggerItemProperties swaggerProperties) {
         return INSTANCE.createDocket(swaggerProperties);
     }
 
-    private Docket createDocket(ItemProperties swaggerProperties) {
+    private Docket createDocket(SwaggerItemProperties swaggerProperties) {
         // 获取需要扫描的包
         String[] basePackages = getBasePackages(swaggerProperties);
         ApiSelectorBuilder apiSelectorBuilder = new Docket(DocumentationType.SWAGGER_2)
@@ -88,7 +88,7 @@ public class DocketFactory {
     /**
      * 获取apiInfo
      */
-    private ApiInfo apiInfo(ItemProperties swaggerProperties) {
+    private ApiInfo apiInfo(SwaggerItemProperties swaggerProperties) {
         return new ApiInfoBuilder()
                 .title(swaggerProperties.getTitle())
                 .description(swaggerProperties.getDescription())
@@ -101,7 +101,7 @@ public class DocketFactory {
     /**
      * 获取扫描的包
      */
-    private String[] getBasePackages(ItemProperties swaggerProperties) {
+    private String[] getBasePackages(SwaggerItemProperties swaggerProperties) {
         log.info("swaggerProperties = " + swaggerProperties);
         String basePackage = swaggerProperties.getBasePackage();
         if (StringUtils.isBlank(basePackage)) {
@@ -122,9 +122,9 @@ public class DocketFactory {
     /**
      * 添加额外参数
      */
-    private List<Parameter> getParameters(ItemProperties swaggerProperties) {
+    private List<Parameter> getParameters(SwaggerItemProperties swaggerProperties) {
         // 获取自定义参数配置
-        List<ItemProperties.ParameterConfig> parameterConfig = swaggerProperties.getParameterConfig();
+        List<SwaggerItemProperties.ParameterConfig> parameterConfig = swaggerProperties.getParameterConfig();
         if (CollectionUtils.isEmpty(parameterConfig)) {
             return null;
         }
