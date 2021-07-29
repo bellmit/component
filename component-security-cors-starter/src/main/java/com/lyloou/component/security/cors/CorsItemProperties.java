@@ -1,9 +1,13 @@
 package com.lyloou.component.security.cors;
 
 import lombok.Data;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 
-import java.util.Collections;
 import java.util.List;
+
+import static com.lyloou.component.security.cors.CorsConstant.DEFAULT_PATH;
+import static com.lyloou.component.security.cors.CorsConstant.DEFAULT_PERMIT_ALL;
+
 
 /**
  * ref: {@link org.springframework.web.cors.CorsConfiguration}
@@ -11,15 +15,8 @@ import java.util.List;
  * @author lilou
  */
 @Data
+@ConfigurationProperties(prefix = "component.cors")
 public class CorsItemProperties {
-
-    /**
-     * Wildcard representing <em>all</em> origins, methods, or headers.
-     */
-    public static final String ALL = "*";
-    public static final String DEFAULT_PATH = "/**";
-
-    private static final List<String> DEFAULT_PERMIT_ALL = Collections.singletonList(ALL);
 
     /**
      * Register a {@link org.springframework.web.cors.CorsConfiguration} for the specified path pattern.
