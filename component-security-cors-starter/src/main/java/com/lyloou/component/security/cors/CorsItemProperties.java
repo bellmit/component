@@ -60,6 +60,7 @@ public class CorsItemProperties {
     /**
      * Configure how long, as a duration, the response from a pre-flight request
      * can be cached by clients.
+     * <p>By default this is {@code 1800}.
      */
     private Long maxAge = 1800L;
 }
