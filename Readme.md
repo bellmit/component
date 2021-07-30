@@ -12,7 +12,7 @@
 
 ## [component-schedule-monitor-starter](./component-schedule-monitor-starter)
 
-> AOP 实现定时器方法监控——ScheduleMonitor
+> `@Scheduled`方法管理组件
 
 ## [component-logger-request-id-starter](./component-logger-request-id-starter)
 
@@ -20,7 +20,7 @@
 
 ## [component-logger-request-statistic-starter](./component-logger-request-statistic-starter)
 
-> controller 中的api请求信息统计
+> api请求信息统计组件
 
 ## [component-security-cors-starter](component-security-cors-starter)
 
@@ -36,12 +36,12 @@
 
 ## [component-redis-manager-starter](./component-redis-manager-starter)
 
-> redis缓存管理（结合缓存注解使用） 使用方法
+> redis缓存管理组件
 
 ## [component-file-qiniu-controller-starter](./component-file-qiniu-controller-starter)
 
-> 上传文件，七牛api方式
+> 上传文件，基于七牛的api组件
 
 ## [component-tool-knife4j-starter](./component-tool-knife4j-starter)
 
-> Swagger+Knife4j 接口文档服务的通用组件
+> Swagger+Knife4j 接口文档服务组件
