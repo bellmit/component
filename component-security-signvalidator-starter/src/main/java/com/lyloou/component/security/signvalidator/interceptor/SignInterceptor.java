@@ -34,7 +34,7 @@ public class SignInterceptor extends HandlerInterceptorAdapter {
 
         // 只对自定义的 controller api统计
         if (!(handler instanceof HandlerMethod)) {
-            return false;
+            return true;
         }
 
         HandlerMethod handlerMethod = (HandlerMethod) handler;
