@@ -1,4 +1,31 @@
-redis缓存管理组件
+# redis缓存管理组件
+
+## 简单使用
+
+1. 加依赖
+
+```xml
+
+<dependency>
+    <groupId>com.lyloou</groupId>
+    <artifactId>component-redis-manager-starter</artifactId>
+    <version>${lyloou.component.version}</version>
+</dependency>
+```
+
+2. 添加redis配置
+
+```yml
+spring:
+  redis:
+    host: 127.0.0.1
+    password: ''
+    port: 6379
+    cache-null-values: true  # 是否缓存null值
+    ttl: 611          # 过期时间
+```
+
+3. 结合 `@Cacheable` 、`@Caching`、`@CacheEvict` 来管理缓存
 
 ## 一、这个技术解决了什么问题？
 
