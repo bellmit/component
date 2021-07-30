@@ -5,6 +5,7 @@ import cn.hutool.extra.spring.SpringUtil;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,6 +29,7 @@ import java.util.Map;
 @Import(BeanValidatorPluginsConfiguration.class)
 @Slf4j
 @Data
+@ConditionalOnProperty(prefix = SwaggerGroupProperties.PREFIX, value = "enable", havingValue = "true", matchIfMissing = true)
 public class SwaggerAutoConfiguration {
     private Map<String, Docket> docketItems = new LinkedHashMap<>();
 

@@ -22,13 +22,15 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import static com.lyloou.component.tool.knife4j.SwaggerGroupProperties.PREFIX;
+
 /**
  * Swagger配置属性
  **/
 @Data
-@ConfigurationProperties(prefix = "component.swagger")
+@ConfigurationProperties(prefix = PREFIX)
 public class SwaggerGroupProperties {
-
+    public static final String PREFIX = "component.swagger";
     /**
      * 是否启用Swagger
      */
