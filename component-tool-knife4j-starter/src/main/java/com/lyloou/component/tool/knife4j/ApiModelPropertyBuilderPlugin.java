@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.introspect.AnnotatedField;
 import com.fasterxml.jackson.databind.introspect.BeanPropertyDefinition;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang.ArrayUtils;
 import org.springframework.stereotype.Component;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.ModelPropertyBuilderPlugin;
@@ -57,13 +56,44 @@ public class ApiModelPropertyBuilderPlugin implements ModelPropertyBuilderPlugin
                 if (notNull != null || notBlank != null) {
                     required = true;
                 }
-                int position = ArrayUtils.indexOf(fields, field);
+                int position = indexOf(fields, field);
                 if (position != -1) {
                     context.getBuilder().position(position).required(required);
                 }
             }
         } catch (Exception exception) {
             log.error("Swagger ApiModelProperty预处理异常", exception);
+        }
+    }
+
+    public static int indexOf(Object[] array, Object objectToFind) {
+        return indexOf(array, objectToFind, 0);
+    }
+
+    public static int indexOf(Object[] array, Object objectToFind, int startIndex) {
+        if (array == null) {
+            return -1;
+        } else {
+            if (startIndex < 0) {
+                startIndex = 0;
+            }
+
+            int i;
+            if (objectToFind == null) {
+                for (i = startIndex; i < array.length; ++i) {
+                    if (array[i] == null) {
+                        return i;
+                    }
+                }
+            } else if (array.getClass().getComponentType().isInstance(objectToFind)) {
+                for (i = startIndex; i < array.length; ++i) {
+                    if (objectToFind.equals(array[i])) {
+                        return i;
+                    }
+                }
+            }
+
+            return -1;
         }
     }
 

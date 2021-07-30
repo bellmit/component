@@ -2,9 +2,8 @@ package com.lyloou.component.tool.knife4j;
 
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang.ArrayUtils;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 import springfox.documentation.RequestHandler;
 import springfox.documentation.annotations.ApiIgnore;
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -71,7 +70,7 @@ public class DocketFactory {
                 .apiInfo(apiInfo(swaggerProperties))
                 .select();
         // 如果扫描的包为空，则默认扫描类上有@Api注解的类
-        if (ArrayUtils.isEmpty(basePackages)) {
+        if (basePackages == null || basePackages.length == 0) {
             apiSelectorBuilder.apis(RequestHandlerSelectors.withClassAnnotation(Api.class));
         } else {
             // 扫描指定的包
@@ -104,7 +103,7 @@ public class DocketFactory {
     private String[] getBasePackages(SwaggerItemProperties swaggerProperties) {
         log.info("swaggerProperties = " + swaggerProperties);
         String basePackage = swaggerProperties.getBasePackage();
-        if (StringUtils.isBlank(basePackage)) {
+        if (StringUtils.isEmpty(basePackage)) {
             return null;
         }
         String[] basePackages;
