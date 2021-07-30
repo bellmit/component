@@ -28,6 +28,8 @@
 
 ## [component-tool-code-generator](./component-tool-code-generator)
 
+> mybatis-plus的代码自成生成器
+
 ## [component-redis-manager-starter](./component-redis-manager-starter)
 
 > redis缓存管理（结合缓存注解使用） 使用方法
