@@ -22,9 +22,13 @@
 
 > controller 中的api请求信息统计
 
-## [component-tool-code-generator](component-tool-code-generator)
+## [component-security-cors-starter](component-security-cors-starter)
 
-> mybatis-plus的自成代码功能 使用方法
+> CORS 跨源解决方案组件
+
+## [component-security-signvalidator-starter](component-security-signvalidator-starter)
+
+> 接口签名校验解决方案组件
 
 ## [component-tool-code-generator](./component-tool-code-generator)
 
@@ -37,3 +41,7 @@
 ## [component-file-qiniu-controller-starter](./component-file-qiniu-controller-starter)
 
 > 上传文件，七牛api方式
+
+## [component-tool-knife4j-starter](./component-tool-knife4j-starter)
+
+> Swagger+Knife4j 接口文档服务的通用组件
