@@ -11,7 +11,7 @@ import java.util.Map;
  * @author lilou
  * @since 2021/7/15
  */
-@ConfigurationProperties(prefix = "key-value")
+@ConfigurationProperties(prefix = "component.key-value")
 @Data
 public class KeyValueProperties {
     /**
