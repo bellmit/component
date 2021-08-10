@@ -15,6 +15,8 @@
     <description>Component Parent</description>
 
     <modules>
+        <module>component-config-keyvalue-starter</module>
+        <module>component-db-mysql-support-library</module>
         <module>component-domain-starter</module>
         <module>component-dto</module>
         <module>component-dto-page</module>
@@ -33,7 +35,6 @@
         <module>component-tool-code-generator</module>
         <module>component-tool-knife4j-starter</module>
         <module>component-tool-swagger2-starter</module>
-        <module>component-config-keyvalue-starter</module>
     </modules>
 
     <properties>

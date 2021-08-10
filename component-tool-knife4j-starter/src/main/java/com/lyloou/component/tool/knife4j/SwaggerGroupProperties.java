@@ -40,8 +40,10 @@ public class SwaggerGroupProperties {
      * key：组名
      * value：配置项
      */
-    private Map<String, SwaggerItemProperties> items = new LinkedHashMap<String, SwaggerItemProperties>() {{
-        put("default", new SwaggerItemProperties());
-    }};
+    private Map<String, SwaggerItemProperties> items = new LinkedHashMap<>();
+
+    {
+        items.put("default", new SwaggerItemProperties());
+    }
 
 }

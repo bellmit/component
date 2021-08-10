@@ -22,34 +22,29 @@ public class CorsAutoConfiguration {
     @Bean("corsFilter")
     public FilterRegistrationBean<CorsFilter> corsFilter(CorsItemProperties corsItemProperties) {
         final CorsFilter corsFilter = createCorsFilter(corsItemProperties);
-        return new FilterRegistrationBean<CorsFilter>(corsFilter) {{
-            setOrder(0);
-        }};
+        final FilterRegistrationBean<CorsFilter> filterRegistrationBean = new FilterRegistrationBean<CorsFilter>(corsFilter);
+        filterRegistrationBean.setOrder(0);
+        return filterRegistrationBean;
     }
 
     private CorsFilter createCorsFilter(CorsItemProperties corsProperties) {
-        final String path = corsProperties.getPath();
-        final CorsConfiguration corsConfiguration = new CorsConfiguration() {{
-            setAllowCredentials(corsProperties.isAllowCredentials());
 
-            for (String origin : corsProperties.getAllowedOrigins()) {
-                addAllowedOrigin(origin);
-            }
+        final CorsConfiguration corsConfiguration = new CorsConfiguration();
+        corsConfiguration.setAllowCredentials(corsProperties.isAllowCredentials());
+        for (String origin : corsProperties.getAllowedOrigins()) {
+            corsConfiguration.addAllowedOrigin(origin);
+        }
+        for (String header : corsProperties.getAllowedHeaders()) {
+            corsConfiguration.addAllowedHeader(header);
+        }
+        for (String method : corsProperties.getAllowedMethods()) {
+            corsConfiguration.addAllowedMethod(method);
+        }
+        corsConfiguration.setMaxAge(corsProperties.getMaxAge());
 
-            for (String header : corsProperties.getAllowedHeaders()) {
-                addAllowedHeader(header);
-            }
-
-            for (String method : corsProperties.getAllowedMethods()) {
-                addAllowedMethod(method);
-            }
-
-            setMaxAge(corsProperties.getMaxAge());
-        }};
-
-        return new CorsFilter(new UrlBasedCorsConfigurationSource() {{
-            registerCorsConfiguration(path, corsConfiguration);
-        }});
+        final UrlBasedCorsConfigurationSource configSource = new UrlBasedCorsConfigurationSource();
+        configSource.registerCorsConfiguration(corsProperties.getPath(), corsConfiguration);
+        return new CorsFilter(configSource);
     }
 
 }
