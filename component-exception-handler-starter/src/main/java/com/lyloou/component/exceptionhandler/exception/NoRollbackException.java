@@ -17,8 +17,8 @@ import com.lyloou.component.dto.codemessage.CommonCodeMessage;
 public class NoRollbackException extends CommonException {
 
     public NoRollbackException() {
-        this.code = CommonCodeMessage.DB_NO_ROLLBACK_ERROR.code();
-        this.message = CommonCodeMessage.DB_NO_ROLLBACK_ERROR.message();
+        this.code = CommonCodeMessage.NO_ROLLBACK_ERROR.code();
+        this.message = CommonCodeMessage.NO_ROLLBACK_ERROR.message();
     }
 
     public NoRollbackException(CodeMessage codeMessage) {
@@ -29,7 +29,7 @@ public class NoRollbackException extends CommonException {
 
     public NoRollbackException(String message) {
         super(message);
-        this.code = CommonCodeMessage.DB_NO_ROLLBACK_ERROR.code();
+        this.code = CommonCodeMessage.NO_ROLLBACK_ERROR.code();
         this.message = message;
     }
 
@@ -41,7 +41,7 @@ public class NoRollbackException extends CommonException {
 
     public NoRollbackException(String message, Throwable cause) {
         super(message, cause);
-        this.code = CommonCodeMessage.DB_NO_ROLLBACK_ERROR.code();
+        this.code = CommonCodeMessage.NO_ROLLBACK_ERROR.code();
         this.message = message;
     }
 

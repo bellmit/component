@@ -6,14 +6,12 @@ import com.lyloou.component.exceptionhandler.service.ExceptionHandlerServiceLogI
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.EnableAspectJAutoProxy;
 
 /**
  * @author lilou
  * @since 2021/4/29
  */
 @Configuration
-@EnableAspectJAutoProxy
 public class ExceptionHandlerAutoConfiguration {
 
     @Bean
