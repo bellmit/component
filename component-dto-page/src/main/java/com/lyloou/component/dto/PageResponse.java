@@ -1,7 +1,5 @@
 package com.lyloou.component.dto;
 
-import com.github.pagehelper.Page;
-import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -50,9 +48,4 @@ public class PageResponse<T> extends Response {
         response.setMessage(message);
         return response;
     }
-
-    public static void startPage(int pageNo, int pageSize) {
-        final Page<Object> page = PageHelper.startPage(pageNo, pageSize);
-    }
-
 }

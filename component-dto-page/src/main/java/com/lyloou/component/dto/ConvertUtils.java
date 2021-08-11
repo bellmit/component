@@ -1,4 +1,4 @@
-package com.lyloou.component.domain;
+package com.lyloou.component.dto;
 
 import org.springframework.cglib.beans.BeanCopier;
 
@@ -8,6 +8,8 @@ import java.util.stream.Collectors;
 
 /**
  * 对象拷贝
+ *
+ * @author lilou
  */
 public class ConvertUtils {
 
