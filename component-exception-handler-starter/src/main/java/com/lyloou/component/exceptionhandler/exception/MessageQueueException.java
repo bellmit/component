@@ -8,6 +8,7 @@ import com.lyloou.component.dto.codemessage.CommonCodeMessage;
  * @since 2021/8/11
  */
 public class MessageQueueException extends CommonException {
+    private Object data;
 
     public MessageQueueException() {
         this.code = CommonCodeMessage.MQ_ERROR.code();
@@ -39,6 +40,11 @@ public class MessageQueueException extends CommonException {
     }
 
     public MessageQueueException(String code, String message, Throwable cause) {
+        this(code, message, cause, null);
+    }
+
+    public MessageQueueException(String code, String message, Throwable cause, Object data) {
         super(code, message, cause);
+        this.data = data;
     }
 }
