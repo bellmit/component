@@ -1,0 +1,15 @@
+server:
+  port: 8888
+spring:
+  application:
+    name: demo
+  profiles:
+    active: dev
+  kafka:
+    bootstrap-servers:
+      - 172.20.154.101:9092
+      - 172.20.154.103:9092
+      - 172.20.154.104:9092
+    consumer:
+      group-id: demo # 同组会消费一次
+      auto-offset-reset: latest # 不会从头开始消费
