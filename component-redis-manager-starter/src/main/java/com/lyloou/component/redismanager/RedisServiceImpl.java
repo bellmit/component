@@ -13,13 +13,11 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ScanOptions;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Consumer;
 
 @Slf4j
@@ -34,6 +32,11 @@ public class RedisServiceImpl implements RedisService {
     @Qualifier("jackson2JsonRedisSerializer")
     @Autowired
     private Jackson2JsonRedisSerializer<Object> jackson2JsonRedisSerializer;
+
+    @Override
+    public RedisTemplate<String, Object> getRedisTemplate() {
+        return redisTemplate;
+    }
 
     @Override
     public void set(String key, String value) {
@@ -130,6 +133,27 @@ public class RedisServiceImpl implements RedisService {
     @Override
     public byte[] get(final byte[] key) {
         return redisTemplate.execute((RedisCallback<byte[]>) con -> con.get(key));
+    }
+
+    @Override
+    public Map<String, Object> multiGet(Collection<String> keys) {
+        if (CollectionUtils.isEmpty(keys)) {
+            return new HashMap<>();
+        }
+
+        final List<Object> list = redisTemplate.opsForValue().multiGet(keys);
+        if (CollectionUtils.isEmpty(list)) {
+            return new HashMap<>();
+        }
+
+        Map<String, Object> map = new LinkedHashMap<>();
+        int i = 0;
+        for (String key : keys) {
+            final Object value = list.get(i);
+            i++;
+            map.put(key, value);
+        }
+        return map;
     }
 
     private Long ttl(final byte[] key) {

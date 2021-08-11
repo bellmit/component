@@ -14,7 +14,7 @@
     <dependencies>
         <dependency>
             <groupId>com.lyloou</groupId>
-            <artifactId>component-dto</artifactId>
+            <artifactId>component-dto-page</artifactId>
         </dependency>
         <!--Springboot配置-->
         <dependency>

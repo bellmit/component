@@ -2,9 +2,11 @@ package com.lyloou.component.redismanager;
 
 import org.springframework.data.redis.connection.RedisZSetCommands;
 import org.springframework.data.redis.core.Cursor;
+import org.springframework.data.redis.core.RedisTemplate;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -13,6 +15,13 @@ import java.util.function.Consumer;
  * @author lilou
  */
 public interface RedisService {
+    /**
+     * 获取redisTemplate，以支持更多操作
+     *
+     * @return template对象
+     */
+    RedisTemplate<String, Object> getRedisTemplate();
+
     /**
      * 存储String 类型的键值对
      *
@@ -81,6 +90,14 @@ public interface RedisService {
      * @return 结果，字节数组类型的值
      */
     byte[] get(final byte[] key);
+
+    /**
+     * 批量获取值
+     *
+     * @param keys
+     * @return
+     */
+    Map<String, Object> multiGet(Collection<String> keys);
 
     /**
      * 判断键是否存在

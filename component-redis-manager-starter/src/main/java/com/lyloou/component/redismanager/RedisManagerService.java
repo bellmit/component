@@ -1,6 +1,8 @@
 package com.lyloou.component.redismanager;
 
 
+import com.github.pagehelper.PageInfo;
+import com.lyloou.component.dto.PageInfoHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,11 +11,9 @@ import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 /**
  * 监控处理类
@@ -137,5 +137,33 @@ public class RedisManagerService {
             return new HashSet<>();
         }
         return redisService.keys(prefix + SEP_STAR);
+    }
+
+    public PageInfo<PrefixPageResponse> page(PrefixPageQuery qry) {
+        if (isNotValid(qry.getPrefix())) {
+            return new PageInfo<>();
+        }
+
+        final Set<String> keys = redisService.keys(qry.getPrefix() + SEP_STAR);
+        final Set<String> sortedSet = new TreeSet<>(keys);
+        final List<String> limitKeys = sortedSet.stream()
+                .skip(qry.getOffset())
+                .limit(qry.getPageSize())
+                .collect(Collectors.toList());
+
+
+        final Map<String, Object> multiGet = redisService.multiGet(limitKeys);
+        List<PrefixPageResponse> list = new ArrayList<>(multiGet.size());
+        multiGet.forEach((k, v) -> {
+            final PrefixPageResponse item = new PrefixPageResponse();
+            item.setKey(k);
+            item.setValue(v);
+            list.add(item);
+        });
+        final PageInfo pageInfo = PageInfoHelper.getPageInfo(new ArrayList<>(list));
+        pageInfo.setTotal(keys.size());
+        pageInfo.setPageNum(qry.getPageNum());
+        pageInfo.setPageSize(qry.getPageSize());
+        return pageInfo;
     }
 }

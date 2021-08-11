@@ -1,5 +1,6 @@
 package com.lyloou.component.redismanager;
 
+import com.github.pagehelper.PageInfo;
 import com.lyloou.component.dto.MultiResponse;
 import com.lyloou.component.dto.SingleResponse;
 import com.lyloou.component.dto.codemessage.CommonCodeMessage;
@@ -50,6 +51,12 @@ public class RedisManagerController {
     @ApiOperation(value = "根据前缀获取所有的 key")
     public MultiResponse<Set<String>, String> keys(String prefix) {
         return MultiResponse.buildSuccess(redisManagerService.keys(prefix));
+    }
+
+    @GetMapping("/page")
+    @ApiOperation(value = "根据前缀分页获取键值对")
+    public SingleResponse<PageInfo<PrefixPageResponse>> page(PrefixPageQuery qry) {
+        return SingleResponse.buildSuccess(redisManagerService.page(qry));
     }
 
     /**
