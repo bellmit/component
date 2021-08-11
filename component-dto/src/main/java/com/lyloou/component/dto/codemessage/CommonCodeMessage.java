@@ -37,6 +37,10 @@ public enum CommonCodeMessage implements CodeMessage {
 
     // db
     DB_ERROR("100031", "数据库异常"),
+    DB_NO_ROLLBACK_ERROR("100032", "无须回滚异常"),
+
+    // mq
+    MQ_ERROR("100041", "消息队列异常"),
 
 
     ;
