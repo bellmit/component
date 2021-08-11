@@ -29,6 +29,7 @@ public enum CommonCodeMessage implements CodeMessage {
     NOT_FOUND("100017", "路径不存在，请检查路径是否正确"),
     REQUEST_REPEATEDLY("100018", "重复请求操作"),
     REQUEST_FREQUENTLY("100019", "请求过于频繁"),
+    NO_ROLLBACK_ERROR("100020", "无须回滚异常"),
 
 
     // compute
@@ -37,7 +38,6 @@ public enum CommonCodeMessage implements CodeMessage {
 
     // db
     DB_ERROR("100031", "数据库异常"),
-    DB_NO_ROLLBACK_ERROR("100032", "无须回滚异常"),
 
     // mq
     MQ_ERROR("100041", "消息队列异常"),
