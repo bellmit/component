@@ -11,6 +11,11 @@
 
 ```xml
 
+<dependency>
+    <groupId>com.lyloou</groupId>
+    <artifactId>component-security-loginvalidator-starter</artifactId>
+    <version>${lyloou.component.version}</version>
+</dependency>
 ```
 
 1. 继承`BaseTokenController`类。 因为这个类被`@ValidateLogin`标记，所以其下的所有子类都需要身份认证（具体实现细节，查看`ValidateLoginAspect`）。
@@ -20,13 +25,13 @@
 @RestController
 public class UserController extends BaseTokenController {
 
-   // 从父类继承了ValidateLogin，需要身份验证
-   @GetMapping("/ping")
-   public String ping() {
-      final Integer userId = currentUserId();
-      System.out.println(userId);
-      return "pong";
-   }
+    // 从父类继承了ValidateLogin，需要身份验证
+    @GetMapping("/ping")
+    public String ping() {
+        final Integer userId = currentUserId();
+        System.out.println(userId);
+        return "pong";
+    }
 
 }
 ```
@@ -38,22 +43,22 @@ public class UserController extends BaseTokenController {
 @RestController
 public class UserController extends BaseTokenController {
 
-   @Autowired
-   TokenService tokenService;
+    @Autowired
+    TokenService tokenService;
 
-   // 手动忽略身份验证
-   @IgnoreValidateLogin
-   @GetMapping("/login")
-   public String login(String userId, String username) {
+    // 手动忽略身份验证
+    @IgnoreValidateLogin
+    @GetMapping("/login")
+    public String login(String userId, String username) {
 
-      Map<String, String> map = new HashMap<>();
-      map.put("userId", userId);
-      map.put("userName", username);
-      map.put("userAvatar", "http://cdn.lyloou.com/a.jpg");
+        Map<String, String> map = new HashMap<>();
+        map.put("userId", userId);
+        map.put("userName", username);
+        map.put("userAvatar", "http://cdn.lyloou.com/a.jpg");
 
-      final String token = tokenService.createToken(userId, username, JSONUtil.toJsonStr(map));
-      return token;
-   }
+        final String token = tokenService.createToken(userId, username, JSONUtil.toJsonStr(map));
+        return token;
+    }
 }
 ```
 
@@ -65,17 +70,17 @@ public class UserController extends BaseTokenController {
 public class UserController {
 
 
-   // 手动添加身份验证
-   @ValidateLogin
-   @GetMapping("userinfo")
-   public Map<String, String> userInfo() {
-      Map<String, String> map = new HashMap<>();
-      map.put(UserManager.X_USER_ID, UserManager.getUserId() + "");
-      map.put(UserManager.X_USER_IP, UserManager.getUserIP());
-      map.put(UserManager.X_USER_NAME, UserManager.getUserName());
-      map.put(UserManager.X_USER_INFO, UserManager.getUserInfo());
-      return map;
-   }
+    // 手动添加身份验证
+    @ValidateLogin
+    @GetMapping("userinfo")
+    public Map<String, String> userInfo() {
+        Map<String, String> map = new HashMap<>();
+        map.put(UserManager.X_USER_ID, UserManager.getUserId() + "");
+        map.put(UserManager.X_USER_IP, UserManager.getUserIP());
+        map.put(UserManager.X_USER_NAME, UserManager.getUserName());
+        map.put(UserManager.X_USER_INFO, UserManager.getUserInfo());
+        return map;
+    }
 }
 ```
 
@@ -93,34 +98,34 @@ public class UserController {
 @Service
 public class RedisCodeCache implements DataCache {
 
-   @Autowired
-   private RedisService redisService;
-   @Autowired
-   private TokenProperties tokenProperties
+    @Autowired
+    private RedisService redisService;
+    @Autowired
+    private TokenProperties tokenProperties
 
-   @Override
-   public void set(String key, String value) {
-      set(key, value, tokenProperties.getExpireSecond());
-   }
+    @Override
+    public void set(String key, String value) {
+        set(key, value, tokenProperties.getExpireSecond());
+    }
 
-   @Override
-   public void set(String key, String value, long timeout) {
-      redisService.set(key, value, (int) timeout);
-   }
+    @Override
+    public void set(String key, String value, long timeout) {
+        redisService.set(key, value, (int) timeout);
+    }
 
-   @Override
-   public String get(String key) {
-      return redisService.get(key);
-   }
+    @Override
+    public String get(String key) {
+        return redisService.get(key);
+    }
 
-   @Override
-   public void remove(String key) {
-      redisService.del(key);
-   }
+    @Override
+    public void remove(String key) {
+        redisService.del(key);
+    }
 
-   @Override
-   public boolean containsKey(String key) {
-      return redisService.exists(key);
-   }
+    @Override
+    public boolean containsKey(String key) {
+        return redisService.exists(key);
+    }
 }
 ```
