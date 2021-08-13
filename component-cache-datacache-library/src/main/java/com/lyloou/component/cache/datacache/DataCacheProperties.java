@@ -1,4 +1,4 @@
-package com.lyloou.component.security.loginvalidator.cache;
+package com.lyloou.component.cache.datacache;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -7,6 +7,8 @@ import lombok.Setter;
  * <p>
  * 缓存配置类
  * </p>
+ *
+ * @author lilou
  */
 @Getter
 @Setter
@@ -21,10 +23,5 @@ public class DataCacheProperties {
      * 是否开启定时{@link DataDefaultCache#pruneCache()}的任务
      */
     private boolean schedulePrune = true;
-
-    /**
-     * 缓存前缀 默认 COMPONENT::SIGNED::
-     */
-    private String prefix = "COMPONENT::SIGNED::";
 
 }

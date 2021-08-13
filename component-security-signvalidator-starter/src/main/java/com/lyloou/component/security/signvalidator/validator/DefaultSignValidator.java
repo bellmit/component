@@ -2,8 +2,7 @@ package com.lyloou.component.security.signvalidator.validator;
 
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.spring.SpringUtil;
-import com.lyloou.component.security.signvalidator.cache.DataCache;
-import com.lyloou.component.security.signvalidator.cache.DataCacheProperties;
+import com.lyloou.component.cache.datacache.DataCache;
 import com.lyloou.component.security.signvalidator.constant.SignConstant;
 import com.lyloou.component.security.signvalidator.exception.SignAssert;
 import com.lyloou.component.security.signvalidator.exception.SignException;
@@ -89,8 +88,7 @@ public class DefaultSignValidator implements SignValidator {
         DataCache dataCache = SpringUtil.getBean(DataCache.class);
         SignAssert.notNull(dataCache, "无效的缓存配置");
 
-        final DataCacheProperties cache = signProperties.getCache();
-        final String prefix = cache.getPrefix();
+        final String prefix = "COMPONENT::SIGNED::";
         final String clientId = signParameterMap.get(SignConstant.PARAM_CLIENT_ID);
         final String nonce = signParameterMap.get(SignConstant.PARAM_NONCE);
         // key 由【前缀+clientId+随机数】组成

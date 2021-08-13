@@ -1,9 +1,7 @@
 package com.lyloou.component.security.loginvalidator.properties;
 
-import com.lyloou.component.security.loginvalidator.cache.DataCacheProperties;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.context.properties.NestedConfigurationProperty;
 
 /**
  * @author huan.fu 2020-06-07 - 14:22
@@ -32,17 +30,14 @@ public class TokenProperties {
     private Long expireSecond = 60 * 60 * 24 * 7L;
 
     /**
+     * TODO:暂未实现刷新token机制
      * jwt 中 refresh token的过期时间，7天: 60*60*24*7
      */
     private Long refreshTokenExpiredSecond = 60 * 60 * 24 * 30L;
     /**
+     * TODO:暂未实现刷新token机制
      * refresh header 的名字
      */
     private String refreshTokenHeaderName = "RefreshToken";
 
-
-    private String userIdFieldName = "userId";
-
-    @NestedConfigurationProperty
-    private DataCacheProperties cache = new DataCacheProperties();
 }

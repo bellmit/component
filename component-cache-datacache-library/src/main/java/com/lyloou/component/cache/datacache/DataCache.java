@@ -1,4 +1,4 @@
-package com.lyloou.component.security.loginvalidator.cache;
+package com.lyloou.component.cache.datacache;
 
 /**
  * 数据缓存，用来缓存已经发起的请求。过滤不可重复的请求

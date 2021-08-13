@@ -1,7 +1,7 @@
 package com.lyloou.component.security.signvalidator;
 
-import com.lyloou.component.security.signvalidator.cache.DataCache;
-import com.lyloou.component.security.signvalidator.cache.DataDefaultCache;
+import com.lyloou.component.cache.datacache.DataCache;
+import com.lyloou.component.cache.datacache.DataDefaultCache;
 import com.lyloou.component.security.signvalidator.constant.SignConstant;
 import com.lyloou.component.security.signvalidator.filter.RequestWrapperFilter;
 import com.lyloou.component.security.signvalidator.interceptor.SignInterceptor;
@@ -56,7 +56,7 @@ public class SignAutoConfiguration implements WebMvcConfigurer {
     @Bean
     @ConditionalOnMissingBean(DataCache.class)
     public DataCache dataCache(SignProperties signProperties) {
-        return new DataDefaultCache(signProperties);
+        return new DataDefaultCache(signProperties.getCache());
     }
 
 }

@@ -1,32 +1,31 @@
-package com.lyloou.component.security.signvalidator.cache;
+package com.lyloou.component.cache.datacache;
 
-import com.lyloou.component.security.signvalidator.properties.SignProperties;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
- * 默认的缓存实现
+ * 默认的缓存实现，可配置过期自动清理功能
  *
  * @author lilou
  * @since 2021/7/6
  */
 public class DataDefaultCache implements DataCache {
 
-    private static final Map<String, CacheData> CODE_CACHE = new HashMap<>();
+    private static final Map<String, CacheData> CODE_CACHE = new ConcurrentHashMap<>();
     private final ReentrantReadWriteLock cacheLock = new ReentrantReadWriteLock(true);
     private final Lock writeLock = cacheLock.writeLock();
     private final Lock readLock = cacheLock.readLock();
-    private final SignProperties signProperties;
+    private final DataCacheProperties dataCacheProperties;
 
-    public DataDefaultCache(SignProperties signProperties) {
-        this.signProperties = signProperties;
-        final DataCacheProperties cache = signProperties.getCache();
+    public DataDefaultCache(DataCacheProperties signProperties) {
+        this.dataCacheProperties = signProperties;
+        final DataCacheProperties cache = this.dataCacheProperties;
         if (cache.isSchedulePrune()) {
             this.schedulePrune(cache.getTimeout());
         }
@@ -44,7 +43,7 @@ public class DataDefaultCache implements DataCache {
      */
     @Override
     public void set(String key, String value) {
-        set(key, value, signProperties.getCache().getTimeout());
+        set(key, value, dataCacheProperties.getTimeout());
     }
 
     @Override

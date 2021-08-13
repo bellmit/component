@@ -1,6 +1,6 @@
 package com.lyloou.component.security.signvalidator.properties;
 
-import com.lyloou.component.security.signvalidator.cache.DataCacheProperties;
+import com.lyloou.component.cache.datacache.DataCacheProperties;
 import com.lyloou.component.security.signvalidator.constant.SignConstant;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;

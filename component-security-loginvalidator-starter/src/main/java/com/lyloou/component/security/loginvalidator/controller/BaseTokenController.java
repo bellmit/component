@@ -14,7 +14,7 @@ public abstract class BaseTokenController {
     /**
      * 在子类中可以直接获取用户id
      *
-     * @return
+     * @return 当前发起请求用户的ID
      */
     protected Integer currentUserId() {
         return UserManager.getUserId();

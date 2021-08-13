@@ -38,6 +38,7 @@
         <module>component-mq-kafka-support-library</module>
         <module>component-mq-rocketmq-support-library</module>
         <module>component-mq-common-support-library</module>
+        <module>component-cache-datacache-library</module>
     </modules>
 
     <properties>
@@ -77,6 +78,12 @@
         <dependencies>
 
             <!--component配置-->
+            <dependency>
+                <groupId>com.lyloou</groupId>
+                <artifactId>component-cache-datacache-library</artifactId>
+                <version>${lyloou.component.version}</version>
+            </dependency>
+
             <dependency>
                 <groupId>com.lyloou</groupId>
                 <artifactId>component-config-keyvalue-starter</artifactId>

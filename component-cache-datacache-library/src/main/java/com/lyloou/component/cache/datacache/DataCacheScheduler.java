@@ -1,4 +1,4 @@
-package com.lyloou.component.security.loginvalidator.cache;
+package com.lyloou.component.cache.datacache;
 
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;

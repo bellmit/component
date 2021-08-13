@@ -18,7 +18,6 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -26,13 +25,13 @@ import javax.servlet.http.HttpServletRequest;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 /**
  * @author lilou
  */
 @Aspect
-@Component
 public class ValidateLoginAspect {
 
     @Autowired
@@ -92,7 +91,7 @@ public class ValidateLoginAspect {
         final String userId = jws.getBody().get(UserManager.X_USER_ID, String.class);
         final String userName = jws.getBody().get(UserManager.X_USER_NAME, String.class);
         final String userIp = request.getRemoteHost();
-        final HashMap<String, String> map = new HashMap<>();
+        final Map<String, String> map = new HashMap<>();
         map.put(UserManager.X_USER_ID, userId);
         map.put(UserManager.X_USER_NAME, userName);
         map.put(UserManager.X_USER_IP, userIp);
