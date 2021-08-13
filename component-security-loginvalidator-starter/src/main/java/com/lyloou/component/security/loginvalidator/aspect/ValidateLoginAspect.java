@@ -130,6 +130,7 @@ public class ValidateLoginAspect {
 
         // 如果类上面没有注解，则获取接口上或此方法的注解
         // (FIXME:接口上的注解不能直接被继承，即使注解上添加了 @Inherited 元注解)
+        // https://www.jianshu.com/p/e91ee83f2348
         Class<?>[] inters = targetClass.getInterfaces();
         for (Class<?> inter : inters) {
 
