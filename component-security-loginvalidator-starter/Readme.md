@@ -12,18 +12,21 @@
   中，这样在执行切面逻辑的时候。就可以从 `ThreadLocal` 中获取数据了，如`UserManager.getUserId()`；执行完成后需要清除 ThreadLocal 中的数据；代码如下
 
 ```java
-@Around("pointCutMethod()")
-public Object preHandle(ProceedingJoinPoint pjp){
-        // ......
-        UserContextHolder.getInstance().setContext(userMap);
-final Object proceed;
-        try{
-        proceed=pjp.proceed();
-        }finally{
-        UserContextHolder.getInstance().clear();
-        }
-        return proceed;
-        }
+class ValidateLoginAspect {
+
+  @Around("pointCutMethod()")
+  public Object preHandle(ProceedingJoinPoint pjp) {
+    // ......
+    UserContextHolder.getInstance().setContext(userMap);
+    final Object proceed;
+    try {
+      proceed = pjp.proceed();
+    } finally {
+      UserContextHolder.getInstance().clear();
+    }
+    return proceed;
+  }
+}
 ```
 
 - 认证接口的范围：给 `BaseTokenController`这个基类添加 `@ValidateLogin`， 可以实现一个效果，只要自己的 `Controller` 继承了`BaseTokenController`
