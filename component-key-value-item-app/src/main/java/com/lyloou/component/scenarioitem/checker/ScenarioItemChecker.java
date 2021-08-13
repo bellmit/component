@@ -1,6 +1,6 @@
 package com.lyloou.component.scenarioitem.checker;
 
-import com.lyloou.component.exceptionhandler.exception.ParamException;
+import com.lyloou.component.exceptionhandler.util.AssertUtil;
 import com.lyloou.component.scenarioitem.convertor.ScenarioItemConvertor;
 import com.lyloou.component.scenarioitem.dto.ItemType;
 import com.lyloou.component.scenarioitem.dto.ScenarioItem;
@@ -67,13 +67,10 @@ public class ScenarioItemChecker {
         final Object itemValue = scenarioItem.getValue(itemKeyValueMap);
         final Boolean required = scenarioItem.isRequired();
         if (required != null && required) {
-            if (itemValue == null) {
-                final String message = String.format("必填参数为空，itemType:%s,itemKey:%s",
-                        scenarioItem.getItemType().getName(),
-                        scenarioItem.getItemKey()
-                );
-                throw new ParamException(message);
-            }
+            AssertUtil.notNull(itemValue, String.format("必填参数为空，itemType:%s,itemKey:%s",
+                    scenarioItem.getItemType().getName(),
+                    scenarioItem.getItemKey()
+            ));
         }
     }
 }

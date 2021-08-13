@@ -1,8 +1,7 @@
 package com.lyloou.component.tool.captcha;
 
-import com.lyloou.component.exceptionhandler.exception.ParamException;
+import com.lyloou.component.exceptionhandler.util.AssertUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.ServletWebRequest;
@@ -25,9 +24,7 @@ public class CaptchaInterceptor extends HandlerInterceptorAdapter {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         if (ifNeedCheck(handler)) {
-            if (!validateCode(new ServletWebRequest(request))) {
-                throw new ParamException("验证码无效或已过期");
-            }
+            AssertUtil.isTrue(validateCode(new ServletWebRequest(request)), "验证码无效或已过期");
         }
         return true;
     }
@@ -36,12 +33,8 @@ public class CaptchaInterceptor extends HandlerInterceptorAdapter {
     private boolean validateCode(ServletWebRequest servletWebRequest) {
         String captchaKey = servletWebRequest.getParameter("captchaKey");
         String captchaCode = servletWebRequest.getParameter("captchaCode");
-        if (Strings.isEmpty(captchaKey)) {
-            throw new ParamException("缺少参数：captchaKey");
-        }
-        if (Strings.isEmpty(captchaCode)) {
-            throw new ParamException("缺少参数：captchaCode");
-        }
+        AssertUtil.notEmptyParam(captchaKey, "缺少参数：captchaKey");
+        AssertUtil.notEmptyParam(captchaCode, "缺少参数：captchaCode");
 
         return captchaService.verifyCaptcha(captchaKey, captchaCode);
     }

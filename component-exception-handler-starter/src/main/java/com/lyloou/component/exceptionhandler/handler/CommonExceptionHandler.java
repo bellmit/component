@@ -5,7 +5,6 @@ import com.lyloou.component.dto.SingleResponse;
 import com.lyloou.component.dto.codemessage.CommonCodeMessage;
 import com.lyloou.component.exceptionhandler.exception.BizException;
 import com.lyloou.component.exceptionhandler.exception.CommonException;
-import com.lyloou.component.exceptionhandler.exception.ParamException;
 import com.lyloou.component.exceptionhandler.model.ErrorLevel;
 import com.lyloou.component.exceptionhandler.service.ExceptionHandlerService;
 import org.springframework.validation.FieldError;
@@ -47,11 +46,6 @@ public class CommonExceptionHandler {
         return SingleResponse.buildFailure(CommonCodeMessage.FORBIDDEN.appendMessage(e.getMessage()));
     }
 
-    @ExceptionHandler(ParamException.class)
-    public SingleResponse<Void> paramException(ParamException e) {
-        handleThrowable(e, ErrorLevel.WARN);
-        return SingleResponse.buildFailure(e.getCode(), e.getMessage());
-    }
 
     /**
      * 自定义验证异常
