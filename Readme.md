@@ -22,13 +22,17 @@
 
 > api请求信息统计组件
 
-## [component-security-cors-starter](component-security-cors-starter)
+## [component-security-cors-starter](./component-security-cors-starter)
 
 > CORS 跨源解决方案组件
 
-## [component-security-signvalidator-starter](component-security-signvalidator-starter)
+## [component-security-signvalidator-starter](./component-security-signvalidator-starter)
 
 > 接口签名校验解决方案组件
+
+## [component-security-loginvalidator-starter](./component-security-loginvalidator-starter)
+
+> 基于AOP和JWT实现的Token身份认证组件
 
 ## [component-tool-code-generator](./component-tool-code-generator)
 

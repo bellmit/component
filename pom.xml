@@ -30,6 +30,7 @@
         <module>component-redis-manager-starter</module>
         <module>component-security-cors-starter</module>
         <module>component-security-signvalidator-starter</module>
+        <module>component-security-loginvalidator-starter</module>
         <module>component-schedule-monitor-starter</module>
         <module>component-tool-captcha-starter</module>
         <module>component-tool-code-generator</module>
@@ -158,6 +159,11 @@
             <dependency>
                 <groupId>com.lyloou</groupId>
                 <artifactId>component-security-signvalidator-starter</artifactId>
+                <version>${lyloou.component.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.lyloou</groupId>
+                <artifactId>component-security-loginvalidator-starter</artifactId>
                 <version>${lyloou.component.version}</version>
             </dependency>
             <dependency>
