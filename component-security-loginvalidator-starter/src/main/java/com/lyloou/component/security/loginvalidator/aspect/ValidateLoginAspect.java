@@ -115,30 +115,32 @@ public class ValidateLoginAspect {
         MethodSignature ms = (MethodSignature) pjp.getSignature();
         final Class<?> targetClass = pjp.getTarget().getClass();
 
-        // 方法上得注解
+        // 从此方法上或继承得方法上得注解
         Method targetMethod = targetClass.getDeclaredMethod(ms.getName(), ms.getMethod().getParameterTypes());
         Annotation methodAnnotation = targetMethod.getAnnotation(clazz);
         if (methodAnnotation != null) {
             return true;
         }
 
-        // 类上得注解
-        final Annotation clazzAnnotation = targetClass.getDeclaredAnnotation(clazz);
+        // 从类上或继承的类上得注解
+        final Annotation clazzAnnotation = targetClass.getAnnotation(clazz);
         if (clazzAnnotation != null) {
             return true;
         }
 
 
         // 如果类上面没有注解，则获取接口上或此方法的注解
+        // (FIXME:接口上的注解不能直接被继承，即使注解上添加了 @Inherited 元注解)
         Class<?>[] inters = targetClass.getInterfaces();
         for (Class<?> inter : inters) {
-            if (inter.getDeclaredAnnotation(clazz) != null) {
-                return true;
-            }
 
             Method targetInterMethod = inter.getDeclaredMethod(ms.getName(), ms.getMethod().getParameterTypes());
             methodAnnotation = targetInterMethod.getAnnotation(clazz);
             if (methodAnnotation != null) {
+                return true;
+            }
+
+            if (inter.getAnnotation(clazz) != null) {
                 return true;
             }
         }
