@@ -1,8 +1,7 @@
 package com.lyloou.component.security.signvalidator.constant;
 
 /**
- * @author lvguixing
- * @date 2019/12/3 13:58
+ * @author lilou
  */
 public class SignConstant {
 
