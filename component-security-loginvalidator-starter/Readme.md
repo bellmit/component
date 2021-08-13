@@ -1,20 +1,44 @@
 # 基于AOP和JWT实现的Token身份认证组件
 
-## 客户端使用
+## 原理
 
-在 Header 中配置身份认证 Token 的信息：
-如：`Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2Mjg4MzQ3MjQsImV4cCI6MTYyOTQzOTUyNCwieC11c2VyLW5hbWUiOiJhYmNkZSIsIngtdXNlci1pZCI6IjEifQ.x0nIhSUPfxC5FlnzJ-MmJvLnJv7w5ZvFzGlNphdSByE`
+> 基于 AOP 面向切面编程，在执行前后插入身份认证的逻辑。
+
+**原理细节：**
+
+- 登录过程：这个过程比较简单，将用户 id、用户名、过期时间等属性结合 jwt 工具生成 token，并将用户的信息存入到缓存中，以供后期使用。
+
+- 验证过程：前端通过 Header 头信息的 Authorization 属性得到 Token，先进行 token 验证，再结合缓存验证，验证成功的话，将用户 id 和用户名等信息存入 `ThreadLocal`
+  中，这样在执行切面逻辑的时候。就可以从 `ThreadLocal` 中获取数据了，如`UserManager.getUserId()`；执行完成后需要清除 ThreadLocal 中的数据；代码如下
+
+```java
+@Around("pointCutMethod()")
+public Object preHandle(ProceedingJoinPoint pjp){
+        // ......
+        UserContextHolder.getInstance().setContext(userMap);
+final Object proceed;
+        try{
+        proceed=pjp.proceed();
+        }finally{
+        UserContextHolder.getInstance().clear();
+        }
+        return proceed;
+        }
+```
+
+- 认证接口的范围：给 `BaseTokenController`这个基类添加 `@ValidateLogin`， 可以实现一个效果，只要自己的 `Controller` 继承了`BaseTokenController`
+  ，那么就不用再声明`@ValidateLogin`注解，自定义`Controller`中的 mapping 都需要身份认证。 （这样就免去了繁琐配置：在拦截器中通过通配符的方式配置哪些接口需要拦截，哪些接口需要放行）
 
 ## 服务端使用方式
 
-添加依赖
+**添加依赖**
 
 ```xml
 
 <dependency>
-    <groupId>com.lyloou</groupId>
-    <artifactId>component-security-loginvalidator-starter</artifactId>
-    <version>${lyloou.component.version}</version>
+  <groupId>com.lyloou</groupId>
+  <artifactId>component-security-loginvalidator-starter</artifactId>
+  <version>${lyloou.component.version}</version>
 </dependency>
 ```
 
@@ -113,19 +137,28 @@ public class RedisCodeCache implements DataCache {
         redisService.set(key, value, (int) timeout);
     }
 
-    @Override
-    public String get(String key) {
-        return redisService.get(key);
-    }
+  @Override
+  public String get(String key) {
+    return redisService.get(key);
+  }
 
-    @Override
-    public void remove(String key) {
-        redisService.del(key);
-    }
+  @Override
+  public void remove(String key) {
+    redisService.del(key);
+  }
 
-    @Override
-    public boolean containsKey(String key) {
-        return redisService.exists(key);
-    }
+  @Override
+  public boolean containsKey(String key) {
+    return redisService.exists(key);
+  }
 }
 ```
+
+## 客户端使用
+
+在 Header 中配置身份认证 Token 的信息：
+如：`Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2Mjg4MzQ3MjQsImV4cCI6MTYyOTQzOTUyNCwieC11c2VyLW5hbWUiOiJhYmNkZSIsIngtdXNlci1pZCI6IjEifQ.x0nIhSUPfxC5FlnzJ-MmJvLnJv7w5ZvFzGlNphdSByE`
+
+## 源码实现
+
+[component/component-security-loginvalidator-starter at master · lyloou/component](https://github.com/lyloou/component/tree/master/component-security-loginvalidator-starter)
