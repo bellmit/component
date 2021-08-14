@@ -1,0 +1,10 @@
+rocketmq:
+  name-server: node4.com:9876
+  producer:
+    group: edu_group
+  consumer:
+    group: edu_group
+spring:
+  redis:
+    host: localhost
+    port: 6379

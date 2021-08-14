@@ -114,9 +114,7 @@ public abstract class AssertUtil {
     }
 
     public static void notEmpty(Collection<?> collection) {
-        notEmpty(collection,
-                "[Assertion failed] - this collection must not be empty: " +
-                        "it must contain at least 1 element");
+        notEmpty(collection, "列表不能为空");
     }
 
     public static void notEmpty(Collection<?> collection, String message) {
@@ -126,9 +124,7 @@ public abstract class AssertUtil {
     }
 
     public static void notEmptyParam(String value) {
-        if (StringUtils.isEmpty(value)) {
-            throw new AlertException(CommonCodeMessage.ILLEGAL_PARAM.code(), "参数错误，不能为空");
-        }
+        notEmptyParam(value, "参数错误，不能为空");
     }
 
     public static void notEmptyParam(String value, String message) {
