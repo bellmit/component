@@ -40,6 +40,7 @@
         <module>component-mq-rocketmq-support-library</module>
         <module>component-mq-common-support-library</module>
         <module>component-cache-datacache-library</module>
+        <module>component-tool-execcommand-library</module>
     </modules>
 
     <properties>
@@ -204,6 +205,11 @@
             <dependency>
                 <groupId>com.lyloou</groupId>
                 <artifactId>component-mq-common-support-library</artifactId>
+                <version>${lyloou.component.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.lyloou</groupId>
+                <artifactId>component-tool-execcommand-library</artifactId>
                 <version>${lyloou.component.version}</version>
             </dependency>
 
