@@ -47,7 +47,7 @@ public abstract class AssertUtil {
      */
     public static void isTrue(boolean expression, CodeMessage codeMessage, String message) {
         if (!expression) {
-            throw new AlertException(codeMessage.code(), codeMessage.appendMessage(message));
+            throw new AlertException(codeMessage.code(), message);
         }
     }
 
@@ -61,7 +61,7 @@ public abstract class AssertUtil {
 
     public static void isFalse(boolean expression, CodeMessage codeMessage, String message) {
         if (expression) {
-            throw new AlertException(codeMessage.code(), codeMessage.appendMessage(message));
+            throw new AlertException(codeMessage.code(), message);
         }
     }
 
@@ -70,7 +70,7 @@ public abstract class AssertUtil {
     }
 
     public static void isFalse(boolean expression) {
-        isTrue(expression, "[Assertion failed] - this expression must be true");
+        isTrue(expression, "[Assertion failed] - this expression must be false");
     }
 
     public static void notEmpty(String value, String code, String msg) {
@@ -100,7 +100,7 @@ public abstract class AssertUtil {
 
     public static void notNull(Object object, CodeMessage codeMessage, String message) {
         if (object == null) {
-            throw new AlertException(codeMessage.code(), codeMessage.appendMessage(message));
+            throw new AlertException(codeMessage.code(), message);
         }
     }
 

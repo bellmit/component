@@ -61,13 +61,13 @@ public class UserController {
 
     @RequestMapping("ttlTest")
     public void ttlTest() {
-        log.info("user 1:{}", redisManagerService.expire(CacheNames.TEST_USER, "1", 0));
-        log.info("user 2:{}", redisManagerService.expire(CacheNames.TEST_USER, "2", 0));
-        log.info("user 3:{}", redisManagerService.expire(CacheNames.TEST_USER, "3", 0));
-        log.info("user 4:{}", redisManagerService.expire(CacheNames.TEST_USER, "4", 0));
-        log.info("user 5:{}", redisManagerService.expire(CacheNames.TEST_USER, "5", 0));
-        log.info("user 6:{}", redisManagerService.expire(CacheNames.TEST_USER, "6", 0));
-        log.info("user 7:{}", redisManagerService.expire(CacheNames.TEST_USER, "7", 0));
+        redisManagerService.expire(CacheNames.TEST_USER, "1", 0);
+        redisManagerService.expire(CacheNames.TEST_USER, "2", 0);
+        redisManagerService.expire(CacheNames.TEST_USER, "3", 0);
+        redisManagerService.expire(CacheNames.TEST_USER, "4", 0);
+        redisManagerService.expire(CacheNames.TEST_USER, "5", 0);
+        redisManagerService.expire(CacheNames.TEST_USER, "6", 0);
+        redisManagerService.expire(CacheNames.TEST_USER, "7", 0);
     }
 
     @RequestMapping("keyDeleteTest")

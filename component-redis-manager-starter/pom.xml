@@ -16,6 +16,11 @@
             <groupId>com.lyloou</groupId>
             <artifactId>component-dto-page</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.lyloou</groupId>
+            <artifactId>component-exception-handler-starter</artifactId>
+        </dependency>
+
         <!--Springboot配置-->
         <dependency>
             <groupId>org.springframework.boot</groupId>

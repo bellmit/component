@@ -2,6 +2,7 @@ package com.lyloou.component.tool.execcommand;
 
 import cn.hutool.core.lang.Snowflake;
 import cn.hutool.core.util.IdUtil;
+import cn.hutool.system.SystemUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Arrays;
@@ -30,6 +31,8 @@ public class ExecCommandExample {
         });
 
         new Thread(execCommand).start();
+        System.out.println(SystemUtil.getHostInfo());
+        System.out.println(SystemUtil.getUserInfo());
     }
 
 }

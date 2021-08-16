@@ -3,6 +3,7 @@ package com.lyloou.component.exceptionhandler.handler;
 
 import com.lyloou.component.dto.SingleResponse;
 import com.lyloou.component.dto.codemessage.CommonCodeMessage;
+import com.lyloou.component.exceptionhandler.exception.AlertException;
 import com.lyloou.component.exceptionhandler.exception.BizException;
 import com.lyloou.component.exceptionhandler.exception.CommonException;
 import com.lyloou.component.exceptionhandler.model.ErrorLevel;
@@ -56,6 +57,12 @@ public class CommonExceptionHandler {
         return SingleResponse.buildFailure(e.getCode(), e.getMessage());
     }
 
+    @ExceptionHandler(AlertException.class)
+    public SingleResponse<Void> handleAlertException(AlertException e) {
+        handleThrowable(e, ErrorLevel.WARN);
+        return SingleResponse.buildFailure(e.getCode(), e.getMessage());
+    }
+
     /**
      * 自定义验证异常
      */
@@ -102,6 +109,6 @@ public class CommonExceptionHandler {
         handleThrowable(e, ErrorLevel.WARN);
         FieldError fieldError = e.getBindingResult().getFieldError();
         String message = fieldError == null ? "参数无效" : fieldError.getDefaultMessage();
-        return SingleResponse.buildFailure(CommonCodeMessage.ILLEGAL_PARAM.appendMessage(message));
+        return SingleResponse.buildFailure(CommonCodeMessage.ILLEGAL_PARAM.replaceMessage(message));
     }
 }

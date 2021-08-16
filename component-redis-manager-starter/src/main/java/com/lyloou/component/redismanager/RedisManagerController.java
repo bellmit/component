@@ -3,10 +3,9 @@ package com.lyloou.component.redismanager;
 import com.github.pagehelper.PageInfo;
 import com.lyloou.component.dto.MultiResponse;
 import com.lyloou.component.dto.SingleResponse;
-import com.lyloou.component.dto.codemessage.CommonCodeMessage;
+import com.lyloou.component.exceptionhandler.util.AssertUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -70,8 +69,8 @@ public class RedisManagerController {
     @ApiOperation(value = "删除缓存")
     public SingleResponse<String> del(@RequestParam(required = true) String prefix,
                                       @RequestParam(required = false) String key) {
-        final boolean result = redisManagerService.delByPrefixAndKey(prefix, key);
-        return SingleResponse.buildSuccess(String.format("删除缓存：%s::%s，结果:%s", prefix, key, result));
+        redisManagerService.delByPrefixAndKey(prefix, key);
+        return SingleResponse.buildSuccess();
     }
 
     /**
@@ -89,8 +88,8 @@ public class RedisManagerController {
                                          @RequestParam(required = false) String key,
                                          @RequestParam(required = false) Integer ttl
     ) {
-        final boolean result = redisManagerService.expire(prefix, key, ttl);
-        return SingleResponse.buildSuccess(String.format("设置缓存过期：%s::%s，ttl:%s, 结果:%s", prefix, key, ttl, result));
+        redisManagerService.expire(prefix, key, ttl);
+        return SingleResponse.buildSuccess();
     }
 
     /**
@@ -102,11 +101,9 @@ public class RedisManagerController {
     @GetMapping("/delKey")
     @ApiOperation(value = "根据具体的key删除缓存")
     public SingleResponse<String> del(String key) {
-        if (Strings.isEmpty(key)) {
-            return SingleResponse.buildFailure(CommonCodeMessage.ILLEGAL_PARAM.appendMessage("key is invalid"));
-        }
+        AssertUtil.notNullParam(key, "key is invalid");
 
-        final boolean result = redisManagerService.delByWrapKey(key);
-        return SingleResponse.buildSuccess(String.format("删除缓存：%s，结果:%s", key, result));
+        redisManagerService.delByWrapKey(key);
+        return SingleResponse.buildSuccess();
     }
 }

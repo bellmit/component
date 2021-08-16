@@ -3,14 +3,22 @@ package com.lyloou.component.redismanager;
 
 import com.github.pagehelper.PageInfo;
 import com.lyloou.component.dto.PageInfoHelper;
+import com.lyloou.component.exceptionhandler.util.AssertUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.cache.CacheKeyPrefix;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.http.HttpServletRequest;
+import java.net.Inet4Address;
+import java.net.UnknownHostException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
@@ -24,6 +32,9 @@ import java.util.stream.Collectors;
 @Service
 @Slf4j
 public class RedisManagerService {
+
+    @Value("${server.port:8080}")
+    private int port;
 
     @Autowired
     private RedisService redisService;
@@ -47,23 +58,44 @@ public class RedisManagerService {
         return map;
     }
 
+    public static HttpServletRequest getRequest() {
+        RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
+        if (requestAttributes instanceof ServletRequestAttributes) {
+            return ((ServletRequestAttributes) requestAttributes).getRequest();
+        }
+        return null;
+    }
+
     private Map<String, String> getOperationMap(String prefix) {
-        Map<String, String> map = new HashMap<>();
-        map.put("获取所有键", "/keys?prefix=".concat(prefix));
-        map.put("根据前缀和key删除", "/del?prefix=".concat(prefix).concat("&key="));
-        map.put("设置过期", "/expire?prefix=".concat(prefix).concat("&key=").concat("&ttl="));
-        map.put("根据具体key删除", "/delKey?key=".concat(prefix));
+        String prefixUrl = "";
+        final HttpServletRequest request = getRequest();
+        if (request != null) {
+            try {
+                final String hostAddress = Inet4Address.getLocalHost().getHostAddress();
+                final String uri = request.getRequestURI();
+                prefixUrl = "http://" + hostAddress + ":" + port + uri.substring(0, uri.lastIndexOf("/"));
+            } catch (UnknownHostException e) {
+                // ignore
+            }
+        }
+
+        Map<String, String> map = new LinkedHashMap<>(4);
+        map.put("1. 获取所有键", prefixUrl.concat("/keys?prefix=").concat(prefix));
+        map.put("2. 根据prefix和key删除", prefixUrl.concat("/del?prefix=").concat(prefix).concat("&key="));
+        map.put("3. 设置过期", prefixUrl.concat("/expire?prefix=").concat(prefix).concat("&key=").concat("&ttl="));
+        map.put("4. 根据具体key删除", prefixUrl.concat("/delKey?key=").concat(prefix));
         return map;
     }
 
-    // 只允许操作自己的这个项目的key（防止乱删除）
-    public boolean isNotValid(String prefix) {
-        if (Strings.isEmpty(prefix)) {
-            return true;
-        }
+    /**
+     * 检查当前项目的key前缀，只可操作本项目中的key（防止乱删除）
+     */
+    public void checkProjectPrefix(String prefix) {
+        AssertUtil.notNullParam(prefix, "prefix不能为空");
+
         final boolean noneMatch = cachePrefixMap.keySet().stream()
                 .noneMatch(prefix::startsWith);
-        return noneMatch;
+        AssertUtil.isFalse(noneMatch, "只可操作本项目中的key");
     }
 
     public void unregisterCachePrefix(String cachePrefix) {
@@ -76,73 +108,50 @@ public class RedisManagerService {
 
 
     // 手动调用删除方法
-    public boolean delByWrapKey(String wrapKey) {
-        try {
-            final String[] prefixKeyArray = wrapKey.split(SEP);
-            if (isNotValid(prefixKeyArray[0])) {
-                return false;
-            }
-            redisService.del(wrapKey);
-            return true;
-        } catch (Exception e) {
-            log.warn("删除缓存出现异常：wrapKey={}，error={}", wrapKey, e.getMessage());
-            return false;
-        }
+    public void delByWrapKey(String wrapKey) {
+        final String[] prefixKeyArray = wrapKey.split(SEP);
+        checkProjectPrefix(prefixKeyArray[0]);
+        AssertUtil.isTrue(redisService.exists(wrapKey), "key不存在");
+
+        redisService.del(wrapKey);
     }
 
-    public boolean delByPrefixAndKey(@NonNull String prefix, @Nullable String key) {
+    public void delByPrefixAndKey(@NonNull String prefix, @Nullable String key) {
 
-        try {
-            if (isNotValid(prefix)) {
-                return false;
-            }
+        checkProjectPrefix(prefix);
 
-            if (Strings.isEmpty(key)) {
-                redisService.delPattern(prefix + SEP_STAR);
-                return true;
-            }
-
-            final String wrapKey = prefix + SEP + key;
-            redisService.del(wrapKey.getBytes());
-            return true;
-        } catch (Exception e) {
-            log.warn("删除缓存出现异常：prefix={}，key={}，error={}", prefix, key, e.getMessage());
-            return false;
+        if (Strings.isEmpty(key)) {
+            redisService.delPattern(prefix + SEP_STAR);
+            return;
         }
+
+        final String wrapKey = prefix + SEP + key;
+        AssertUtil.isTrue(redisService.exists(wrapKey), "key不存在");
+        redisService.del(wrapKey.getBytes());
     }
 
-    public boolean expire(String prefix, String key, Integer ttl) {
-        try {
-            if (isNotValid(prefix)) {
-                return false;
-            }
+    public void expire(String prefix, String key, Integer ttl) {
+        checkProjectPrefix(prefix);
 
-            String wrapKey = prefix;
-            if (Strings.isNotEmpty(key)) {
-                wrapKey = wrapKey + SEP + key;
-            }
-            if (ttl == null) {
-                ttl = DEFAULT_TTL;
-            }
-            redisService.expire(ttl, wrapKey);
-            return true;
-        } catch (Exception e) {
-            log.warn("设置ttl失败：prefix={}，key={}，ttl={}，error={}", prefix, key, ttl, e.getMessage());
-            return false;
+        String wrapKey = prefix;
+        if (Strings.isNotEmpty(key)) {
+            wrapKey = wrapKey + SEP + key;
         }
+        AssertUtil.isTrue(redisService.exists(wrapKey), "key不存在");
+
+        if (ttl == null) {
+            ttl = DEFAULT_TTL;
+        }
+        redisService.expire(ttl, wrapKey);
     }
 
     public Set<String> keys(String prefix) {
-        if (isNotValid(prefix)) {
-            return new HashSet<>();
-        }
+        checkProjectPrefix(prefix);
         return redisService.keys(prefix + SEP_STAR);
     }
 
     public PageInfo<PrefixPageResponse> page(PrefixPageQuery qry) {
-        if (isNotValid(qry.getPrefix())) {
-            return new PageInfo<>();
-        }
+        checkProjectPrefix(qry.getPrefix());
 
         final Set<String> keys = redisService.keys(qry.getPrefix() + SEP_STAR);
         final Set<String> sortedSet = new TreeSet<>(keys);
