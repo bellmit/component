@@ -41,6 +41,7 @@
         <module>component-mq-common-support-library</module>
         <module>component-cache-datacache-library</module>
         <module>component-tool-execcommand-library</module>
+        <module>component-tool-execcommand-starter</module>
     </modules>
 
     <properties>
@@ -212,7 +213,11 @@
                 <artifactId>component-tool-execcommand-library</artifactId>
                 <version>${lyloou.component.version}</version>
             </dependency>
-
+            <dependency>
+                <groupId>com.lyloou</groupId>
+                <artifactId>component-tool-execcommand-starter</artifactId>
+                <version>${lyloou.component.version}</version>
+            </dependency>
 
             <!--Springboot配置-->
             <dependency>

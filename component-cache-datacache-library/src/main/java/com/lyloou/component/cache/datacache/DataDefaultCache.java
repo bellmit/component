@@ -23,8 +23,8 @@ public class DataDefaultCache implements DataCache {
     private final Lock readLock = cacheLock.readLock();
     private final DataCacheProperties dataCacheProperties;
 
-    public DataDefaultCache(DataCacheProperties signProperties) {
-        this.dataCacheProperties = signProperties;
+    public DataDefaultCache(DataCacheProperties dataCacheProperties) {
+        this.dataCacheProperties = dataCacheProperties;
         final DataCacheProperties cache = this.dataCacheProperties;
         if (cache.isSchedulePrune()) {
             this.schedulePrune(cache.getTimeout());
@@ -61,8 +61,7 @@ public class DataDefaultCache implements DataCache {
         readLock.lock();
         try {
             CacheData code = CODE_CACHE.get(key);
-            if (null == code || code.isExpired()) {
-
+            if (null == code || (this.dataCacheProperties.isSchedulePrune() && code.isExpired())) {
                 return null;
             }
             return code.getData();

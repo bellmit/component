@@ -1,0 +1,11 @@
+# 测试ping.cmd内容为
+# ping lyloou.com
+
+###
+http://localhost:8888/execcommand/execCommandFile?filename=C:/Users/lilou/Desktop/ping.cmd
+
+###
+http://localhost:8888/execcommand/execCommand?command=echo&command=hello
+
+###
+http://localhost:8888/execcommand/getLogFile?taskId=1427475362543042561

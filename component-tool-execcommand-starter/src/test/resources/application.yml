@@ -1,0 +1,6 @@
+server:
+  port: 8888
+component:
+  execcommand:
+    enable-log-file: true
+    log-file-dir: /log/execcommand/
