@@ -42,6 +42,7 @@
         <module>component-cache-datacache-library</module>
         <module>component-tool-execcommand-library</module>
         <module>component-tool-execcommand-starter</module>
+        <module>component-db-mysql-seata-support-library</module>
     </modules>
 
     <properties>
@@ -258,6 +259,22 @@
                 <groupId>org.springframework.kafka</groupId>
                 <artifactId>spring-kafka</artifactId>
                 <version>${spring.boot.version}</version>
+            </dependency>
+
+            <!-- spring cloud -->
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>Hoxton.SR11</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.alibaba.cloud</groupId>
+                <artifactId>spring-cloud-alibaba-dependencies</artifactId>
+                <version>2.1.4.RELEASE</version>
+                <type>pom</type>
+                <scope>import</scope>
             </dependency>
             <!-- 工具包 -->
             <dependency>
