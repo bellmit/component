@@ -42,21 +42,24 @@ public class CommonExceptionHandler {
     }
 
     @ExceptionHandler(AccessDeniedException.class)
-    public SingleResponse<Void> handleAuthorizationException(Exception e) {
+    public SingleResponse<Void> handleAccessDeniedException(Exception e) {
         handleThrowable(e, ErrorLevel.WARN);
         return SingleResponse.buildFailure(CommonCodeMessage.FORBIDDEN.appendMessage(e.getMessage()));
     }
 
 
     /**
-     * 自定义验证异常
+     * 业务异常
      */
     @ExceptionHandler(BizException.class)
-    public SingleResponse<Void> handleBusinessException(BizException e) {
+    public SingleResponse<Void> handleBizException(BizException e) {
         handleThrowable(e, ErrorLevel.WARN);
         return SingleResponse.buildFailure(e.getCode(), e.getMessage());
     }
 
+    /**
+     * 提示性异常
+     */
     @ExceptionHandler(AlertException.class)
     public SingleResponse<Void> handleAlertException(AlertException e) {
         handleThrowable(e, ErrorLevel.WARN);
@@ -79,6 +82,9 @@ public class CommonExceptionHandler {
         }
     }
 
+    /**
+     * 其他的默认异常
+     */
     @ExceptionHandler(Exception.class)
     public SingleResponse<Void> handleException(Exception e) {
         handleThrowable(e, ErrorLevel.ERROR);
@@ -87,13 +93,12 @@ public class CommonExceptionHandler {
 
 
     /**
-     * 可能需要添加以下配置，才能监听得到
+     * NoHandlerFoundException 异常
+     * <p>
+     * 需要添加以下配置，才能捕捉的到
      * spring.mvc.throw-exception-if-no-handler-found=true
      * # 不要为我们工程中的资源文件建立映射
      * spring.resources.add-mappings=false
-     *
-     * @param e
-     * @return
      */
     @ExceptionHandler(NoHandlerFoundException.class)
     public SingleResponse<Void> handleNoHandlerFoundException(Exception e) {
@@ -102,10 +107,10 @@ public class CommonExceptionHandler {
     }
 
     /**
-     * 自定义验证异常
+     * 参数验证异常
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public Object validExceptionHandler(MethodArgumentNotValidException e) {
+    public SingleResponse<Void> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         handleThrowable(e, ErrorLevel.WARN);
         FieldError fieldError = e.getBindingResult().getFieldError();
         String message = fieldError == null ? "参数无效" : fieldError.getDefaultMessage();
