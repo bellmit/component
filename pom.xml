@@ -43,6 +43,7 @@
         <module>component-tool-execcommand-library</module>
         <module>component-tool-execcommand-starter</module>
         <module>component-db-mysql-seata-support-library</module>
+        <module>component-file-ali-controller-starter</module>
     </modules>
 
     <properties>

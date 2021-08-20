@@ -1,4 +1,4 @@
-package com.lyloou.component.file.qiniu.service.impl;
+package com.lyloou.component.file.ali;
 
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
@@ -6,21 +6,14 @@ import cn.hutool.core.date.TimeInterval;
 import cn.hutool.core.thread.ThreadFactoryBuilder;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.json.JSONUtil;
-import com.lyloou.component.file.qiniu.config.QiniuProperties;
-import com.lyloou.component.file.qiniu.service.QiniuService;
-import com.qiniu.http.Response;
-import com.qiniu.storage.Region;
-import com.qiniu.storage.UploadManager;
-import com.qiniu.storage.model.DefaultPutRet;
-import com.qiniu.util.Auth;
-import com.qiniu.util.IOUtils;
+import com.aliyun.oss.OSSClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.ByteArrayInputStream;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -37,9 +30,12 @@ import java.util.stream.Collectors;
  */
 @Service
 @Slf4j
-public class QiniuServiceImpl implements QiniuService {
+public class AliFileServiceImpl implements AliFileService {
     @Autowired
-    private QiniuProperties qiNiuUploadConfig;
+    private AliFileProperties aliFileProperties;
+
+    @Autowired
+    private OSSClient ossClient;
 
     private final ThreadPoolExecutor executor = new ThreadPoolExecutor(Runtime.getRuntime().availableProcessors(),
             Runtime.getRuntime().availableProcessors() * 2,
@@ -47,17 +43,13 @@ public class QiniuServiceImpl implements QiniuService {
             TimeUnit.MINUTES,
             new LinkedBlockingQueue<>(Runtime.getRuntime().availableProcessors() * 5),
             new ThreadFactoryBuilder()
-                    .setNamePrefix("file-qiniu-upload")
+                    .setNamePrefix("file-ali-upload")
                     .build()
     );
 
 
     /**
-     * https://developer.qiniu.com/kodo/1239/java#upload-bytes
-     *
-     * @param originFilename
-     * @param content
-     * @return 结果
+     * [Java SDK快速入门](https://help.aliyun.com/document_detail/195870.html)
      */
     public String upload(String originFilename, byte[] content) {
         if (originFilename == null || content == null) {
@@ -65,30 +57,11 @@ public class QiniuServiceImpl implements QiniuService {
         }
 
         final TimeInterval timer = DateUtil.timer();
-        log.info("start upload single file: {}", originFilename);
-
-        //...生成上传凭证，然后准备上传
-        String accessKey = qiNiuUploadConfig.getAccessKey();
-        String secretKey = qiNiuUploadConfig.getSecretKey();
-        String bucket = qiNiuUploadConfig.getBucket();
-        String bucketUrl = qiNiuUploadConfig.getBucketUrl();
-        String uploadDir = qiNiuUploadConfig.getUploadDir();
-
-        String newFileName = getNewFilename(originFilename);
-
-        //构造一个带指定 Region 对象的配置类
-        com.qiniu.storage.Configuration cfg = new com.qiniu.storage.Configuration(Region.region0());
-        //...其他参数参考类注释
-        UploadManager uploadManager = new UploadManager(cfg);
-        String key = uploadDir + newFileName;
-        Auth auth = Auth.create(accessKey, secretKey);
-        String upToken = auth.uploadToken(bucket);
         try {
-            Response response = uploadManager.put(content, key, upToken);
-            //解析上传成功的结果
-            DefaultPutRet putRet = JSONUtil.toBean(response.bodyString(), DefaultPutRet.class);
-            final String url = bucketUrl + "/" + putRet.key;
-            return url;
+            log.info("start upload single file: {}", originFilename);
+            String filePath = getNewFilename(originFilename);
+            ossClient.putObject(aliFileProperties.getBucketName(), filePath, new ByteArrayInputStream(content));
+            return aliFileProperties.getUrlPrefix() + "/" + filePath;
         } catch (Exception ex) {
             log.error("上传失败：", ex);
         } finally {
