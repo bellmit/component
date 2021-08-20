@@ -17,7 +17,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  */
 public class DataDefaultCache implements DataCache {
 
-    private static final Map<String, CacheData> CODE_CACHE = new ConcurrentHashMap<>();
+    private static final Map<String, CacheData> CACHE_DATA = new ConcurrentHashMap<>();
     private final ReentrantReadWriteLock cacheLock = new ReentrantReadWriteLock(true);
     private final Lock writeLock = cacheLock.writeLock();
     private final Lock readLock = cacheLock.readLock();
@@ -50,7 +50,7 @@ public class DataDefaultCache implements DataCache {
     public void set(String key, String value, long timeout) {
         writeLock.lock();
         try {
-            CODE_CACHE.put(key, new CacheData(value, timeout));
+            CACHE_DATA.put(key, new CacheData(value, timeout));
         } finally {
             writeLock.unlock();
         }
@@ -60,21 +60,25 @@ public class DataDefaultCache implements DataCache {
     public String get(String key) {
         readLock.lock();
         try {
-            CacheData code = CODE_CACHE.get(key);
-            if (null == code || (this.dataCacheProperties.isSchedulePrune() && code.isExpired())) {
+            CacheData data = CACHE_DATA.get(key);
+            if (invalid(data)) {
                 return null;
             }
-            return code.getData();
+            return data.getData();
         } finally {
             readLock.unlock();
         }
+    }
+
+    private boolean invalid(CacheData cacheData) {
+        return null == cacheData || (this.dataCacheProperties.isSchedulePrune() && cacheData.isExpired());
     }
 
     @Override
     public void remove(String key) {
         writeLock.lock();
         try {
-            CODE_CACHE.remove(key);
+            CACHE_DATA.remove(key);
         } finally {
             writeLock.unlock();
         }
@@ -84,8 +88,8 @@ public class DataDefaultCache implements DataCache {
     public boolean containsKey(String key) {
         readLock.lock();
         try {
-            final CacheData code = CODE_CACHE.get(key);
-            return null != code && !code.isExpired();
+            final CacheData data = CACHE_DATA.get(key);
+            return !invalid(data);
         } finally {
             readLock.unlock();
         }
@@ -93,11 +97,11 @@ public class DataDefaultCache implements DataCache {
 
     @Override
     public void pruneCache() {
-        final Iterator<CacheData> values = CODE_CACHE.values().iterator();
-        CacheData cacheCode;
+        final Iterator<CacheData> values = CACHE_DATA.values().iterator();
+        CacheData data;
         while (values.hasNext()) {
-            cacheCode = values.next();
-            if (cacheCode.isExpired()) {
+            data = values.next();
+            if (data.isExpired()) {
                 values.remove();
             }
         }

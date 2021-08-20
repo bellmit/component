@@ -6,7 +6,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * 缓存调度器
+ * 缓存清理调度器
  *
  * @author lilou
  * @since 2021/7/13

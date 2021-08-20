@@ -20,7 +20,7 @@ public class DataCacheProperties {
     private long timeout = 3 * 60;
 
     /**
-     * 是否开启定时{@link DataDefaultCache#pruneCache()}的任务
+     * 是否开启定时清理功能{@link DataDefaultCache#pruneCache()}
      */
     private boolean schedulePrune = true;
 
