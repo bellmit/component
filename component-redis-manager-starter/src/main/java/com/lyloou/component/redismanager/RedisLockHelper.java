@@ -11,6 +11,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * https://www.programcreek.com/java-api-examples/?code=micro-jframework%2Fjframework%2Fjframework-master%2Fjframework-redis%2Fsrc%2Fmain%2Fjava%2Fcom%2Fgithub%2Fneatlife%2Fjframework%2Fredis%2Futil%2FLockUtil.java#
  * https://github.com/micro-jframework/jframework/blob/master/jframework-redis/src/main/java/com/github/neatlife/jframework/redis/util/LockUtil.java
+ * https://redis.io/topics/distlock
  *
  * @author lilou
  */
@@ -67,10 +68,15 @@ public class RedisLockHelper {
      * @param expireSecond  超时秒
      * @param loopTimes     循环次数
      * @param sleepInterval 等待间隔（毫秒）
+     * @formatter:off <code>
+     * SET resource_name my_random_value NX PX 30000
+     * </code>
+     * @formatter:on
      */
     public boolean tryGetDistributedLock(String lockKey, String requestId, Integer expireSecond, Long loopTimes, Long sleepInterval) {
         DefaultRedisScript<Long> redisScript = new DefaultRedisScript<>(LOCK_SCRIPT_STR, Long.class);
         while (loopTimes-- >= 0) {
+            //noinspection unchecked
             Object result = redisTemplate.execute(
                     (RedisConnection connection) -> connection.eval(
                             redisScript.getScriptAsString().getBytes(),
@@ -105,6 +111,16 @@ public class RedisLockHelper {
 
     /**
      * 释放锁
+     * https://redis.io/topics/distlock
+     * @formatter:off
+     * <code>
+ *     if redis.call("get",KEYS[1]) == ARGV[1] then
+     *     return redis.call("del",KEYS[1])
+     * else
+     *     return 0
+     * end
+     * </code>
+     * @formatter:on
      *
      * @param lockKey   key
      * @param requestId 加锁的请求id
