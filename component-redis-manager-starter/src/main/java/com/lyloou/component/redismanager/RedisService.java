@@ -258,27 +258,11 @@ public interface RedisService {
     Cursor<RedisZSetCommands.Tuple> zscan(String key, String match);
 
     /**
-     * 加锁
-     *
-     * @param key     键
-     * @param timeout 超时（秒）
-     * @return 结果
-     */
-    boolean lock(String key, int timeout);
-
-    /**
-     * 释放锁
-     *
-     * @param key 键
-     */
-    void unlock(String key);
-
-    /**
      * 以加锁的方式运行 consumer
      *
      * @param key      键
      * @param timeout  超时
-     * @param consumer 消费
+     * @param consumer 消费，当为 true 时，获取到了锁
      */
     void doWithLock(String key, int timeout, Consumer<Boolean> consumer);
 

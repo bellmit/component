@@ -14,8 +14,8 @@ import org.springframework.data.redis.core.ScanOptions;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
 
+import javax.annotation.PostConstruct;
 import java.io.Serializable;
 import java.util.*;
 import java.util.function.Consumer;
@@ -32,6 +32,13 @@ public class RedisServiceImpl implements RedisService {
     @Qualifier("jackson2JsonRedisSerializer")
     @Autowired
     private Jackson2JsonRedisSerializer<Object> jackson2JsonRedisSerializer;
+
+    private RedisLockHelper redisLockHelper;
+
+    @PostConstruct
+    public void init() {
+        this.redisLockHelper = new RedisLockHelper(redisTemplate);
+    }
 
     @Override
     public RedisTemplate<String, Object> getRedisTemplate() {
@@ -306,62 +313,14 @@ public class RedisServiceImpl implements RedisService {
 
 
     @Override
-    public boolean lock(String key, int timeout) {
-        final long now = System.currentTimeMillis();
-        // 获取【新锁的过期时间】
-        String newExpireTime = now + timeout + "";
-        final Boolean result = redisTemplate.opsForValue().setIfAbsent(key, newExpireTime);
-        if (result != null && result) {
-            return true;
-        }
-
-        // 获取【旧锁的过期时间】
-        String oldExpiredTime = (String) Objects.requireNonNull(redisTemplate.opsForValue().get(key));
-
-        // 不可相同，不可重入
-        if (Objects.equals(oldExpiredTime, newExpireTime)) {
-            return false;
-        }
-
-        // 新锁过期比老锁过期还早
-        if (Long.parseLong(newExpireTime) < Long.parseLong(oldExpiredTime)) {
-            return false;
-        }
-
-        //如果锁过期(根据设置的时间来判断过期)
-        //oldExpiredTime=A   这两个线程的value都是B  其中一个线程拿到锁
-        if (Long.parseLong(oldExpiredTime) < System.currentTimeMillis()) {
-            // getAndSet线程安全所以只会有一个线程重新设置锁的新值
-            String oldValue = (String) redisTemplate.opsForValue().getAndSet(key, newExpireTime);
-            // 比较锁的getSet获取到的最近锁值和最开始获取到的锁值，如果不相等则证明锁已经被其他线程获取了。
-            if (!StringUtils.isEmpty(oldValue) && oldValue.equals(oldExpiredTime)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    @Override
-    public void unlock(String key) {
-        try {
-            del(key);
-        } catch (Exception e) {
-            log.error("释放分布式锁失败,key = {}", key, e);
-        }
-        log.debug("释放分布式锁,key = {}", key);
-    }
-
-    @Override
     public void doWithLock(String key, int timeout, Consumer<Boolean> consumer) {
-        boolean lock = false;
+        // 获取【新锁的过期时间】
+        String value = UUID.randomUUID().toString();
         try {
-            lock = lock(key, timeout);
-            consumer.accept(lock);
+            final boolean result = redisLockHelper.tryGetDistributedLock(key, value, timeout);
+            consumer.accept(result);
         } finally {
-            if (lock) {
-                unlock(key);
-            }
+            redisLockHelper.releaseDistributedLock(key, value);
         }
     }
 
