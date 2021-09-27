@@ -10,6 +10,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * https://www.programcreek.com/java-api-examples/?code=micro-jframework%2Fjframework%2Fjframework-master%2Fjframework-redis%2Fsrc%2Fmain%2Fjava%2Fcom%2Fgithub%2Fneatlife%2Fjframework%2Fredis%2Futil%2FLockUtil.java#
+ * https://github.com/micro-jframework/jframework/blob/master/jframework-redis/src/main/java/com/github/neatlife/jframework/redis/util/LockUtil.java
  *
  * @author lilou
  */

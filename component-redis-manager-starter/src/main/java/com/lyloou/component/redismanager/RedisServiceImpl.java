@@ -317,8 +317,8 @@ public class RedisServiceImpl implements RedisService {
         // 获取【新锁的过期时间】
         String value = UUID.randomUUID().toString();
         try {
-            final boolean result = redisLockHelper.tryGetDistributedLock(key, value, timeout);
-            consumer.accept(result);
+            final boolean locked = redisLockHelper.tryGetDistributedLock(key, value, timeout);
+            consumer.accept(locked);
         } finally {
             redisLockHelper.releaseDistributedLock(key, value);
         }
