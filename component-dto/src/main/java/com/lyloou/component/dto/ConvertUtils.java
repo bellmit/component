@@ -1,6 +1,7 @@
 package com.lyloou.component.dto;
 
-import org.springframework.cglib.beans.BeanCopier;
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.convert.ConvertException;
 
 import java.util.List;
 import java.util.function.Function;
@@ -20,14 +21,13 @@ public class ConvertUtils {
         }
         try {
             T result = dest.newInstance();
-            final BeanCopier copier = BeanCopier.create(source.getClass(), dest, false);
-            copier.copy(source, result, null);
+            convert(source, result);
             if (function != null) {
                 function.apply(result);
             }
             return result;
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new ConvertException(e);
         }
     }
 
@@ -39,10 +39,8 @@ public class ConvertUtils {
         if (source == null || dest == null) {
             return null;
         }
-        T result = dest;
-        final BeanCopier copier = BeanCopier.create(source.getClass(), dest.getClass(), false);
-        copier.copy(source, result, null);
-        return result;
+        BeanUtil.copyProperties(source, dest);
+        return dest;
     }
 
     public static <S, T> List<T> convertList(List<S> source, Class<T> dest) {
@@ -54,21 +52,26 @@ public class ConvertUtils {
             return null;
         }
         return source.stream().map(s -> {
-            T result = null;
             try {
-                result = dest.newInstance();
+                T result = dest.newInstance();
                 convert(s, result);
                 if (callback != null) {
                     callback.callback(s, result);
                 }
+                return result;
             } catch (InstantiationException | IllegalAccessException e) {
-                throw new RuntimeException(e);
+                throw new ConvertException(e);
             }
-            return result;
         }).collect(Collectors.toList());
     }
 
     public interface ConvertCallback<S, D> {
+        /**
+         * 回调方法
+         *
+         * @param source 源
+         * @param dest   目标
+         */
         void callback(S source, D dest);
     }
 }

@@ -6,6 +6,7 @@
 # 删除文件
 find . -name .flattened-pom.xml | xargs rm -f
 find . -name .project | xargs rm -f
+find . -name pom.xml.versionsBackup | xargs rm -f
 
 # 删除目录
 find . -name ".settings" | xargs rm -rf

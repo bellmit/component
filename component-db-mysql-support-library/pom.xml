@@ -42,9 +42,5 @@
             <groupId>com.lyloou</groupId>
             <artifactId>component-dto-page</artifactId>
         </dependency>
-        <dependency>
-            <groupId>cn.hutool</groupId>
-            <artifactId>hutool-all</artifactId>
-        </dependency>
     </dependencies>
 </project>
