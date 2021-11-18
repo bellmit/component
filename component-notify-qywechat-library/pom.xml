@@ -6,7 +6,7 @@
     <parent>
         <artifactId>component-parent</artifactId>
         <groupId>com.lyloou</groupId>
-        <version>1.0.14</version>
+        <version>1.0.15</version>
     </parent>
     <artifactId>component-notify-qywechat-library</artifactId>
 
