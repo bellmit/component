@@ -1,6 +1,8 @@
 package com.lyloou.component.exceptionhandler.handler;
 
 
+import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.util.StrUtil;
 import com.lyloou.component.dto.SingleResponse;
 import com.lyloou.component.dto.codemessage.CommonCodeMessage;
 import com.lyloou.component.exceptionhandler.exception.AlertException;
@@ -8,6 +10,7 @@ import com.lyloou.component.exceptionhandler.exception.BizException;
 import com.lyloou.component.exceptionhandler.exception.CommonException;
 import com.lyloou.component.exceptionhandler.model.ErrorLevel;
 import com.lyloou.component.exceptionhandler.service.ExceptionHandlerService;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -18,6 +21,7 @@ import java.nio.file.AccessDeniedException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 通用异常处理器
@@ -55,6 +59,24 @@ public class CommonExceptionHandler {
     public SingleResponse<Void> handleBizException(BizException e) {
         handleThrowable(e, ErrorLevel.WARN);
         return SingleResponse.buildFailure(e.getCode(), e.getMessage());
+    }
+
+    /**
+     * 参数异常
+     */
+    @ExceptionHandler(IllegalArgumentException.class)
+    public SingleResponse<Void> handleIllegalArgumentException(IllegalArgumentException e) {
+        handleThrowable(e, ErrorLevel.WARN);
+        return SingleResponse.buildFailure(CommonCodeMessage.ILLEGAL_PARAM.code(), e.getMessage());
+    }
+
+    /**
+     * 非法状态异常
+     */
+    @ExceptionHandler(IllegalStateException.class)
+    public SingleResponse<Void> handleIllegalStateException(IllegalStateException e) {
+        handleThrowable(e, ErrorLevel.WARN);
+        return SingleResponse.buildFailure(CommonCodeMessage.ILLEGAL_STATUS.code(), e.getMessage());
     }
 
     /**
@@ -112,8 +134,20 @@ public class CommonExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public SingleResponse<Void> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         handleThrowable(e, ErrorLevel.WARN);
-        FieldError fieldError = e.getBindingResult().getFieldError();
-        String message = fieldError == null ? "参数无效" : fieldError.getDefaultMessage();
-        return SingleResponse.buildFailure(CommonCodeMessage.ILLEGAL_PARAM.replaceMessage(message));
+        final String msg = getDefaultMessageStr(e);
+        return SingleResponse.buildFailure(CommonCodeMessage.ILLEGAL_PARAM.replaceMessage(msg));
+    }
+
+
+    private String getDefaultMessageStr(MethodArgumentNotValidException e) {
+        BindingResult result = e.getBindingResult();
+        final List<FieldError> fieldErrors = result.getFieldErrors();
+        String defaultMessageStr = CommonCodeMessage.ILLEGAL_PARAM.message();
+        if (!CollectionUtil.isEmpty(fieldErrors)) {
+            final List<String> msgList = fieldErrors.stream().map(FieldError::getDefaultMessage)
+                    .collect(Collectors.toList());
+            defaultMessageStr = StrUtil.join(", ", msgList);
+        }
+        return defaultMessageStr;
     }
 }

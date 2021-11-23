@@ -30,6 +30,7 @@ public enum CommonCodeMessage implements CodeMessage {
     REQUEST_REPEATEDLY("100018", "重复请求操作"),
     REQUEST_FREQUENTLY("100019", "请求过于频繁"),
     NO_ROLLBACK_ERROR("100020", "无须回滚异常"),
+    ILLEGAL_STATUS("100021", "状态不正确"),
 
 
     // compute
