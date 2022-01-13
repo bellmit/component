@@ -72,11 +72,13 @@
         <io.swagger.version>1.5.22</io.swagger.version>
 
         <knife4j.version>2.0.7</knife4j.version>
-        <hutool.version>5.5.8</hutool.version>
+        <hutool.version>5.7.19</hutool.version>
         <jacoco-version>0.8.2</jacoco-version>
         <mybatis.plus.version>3.4.2</mybatis.plus.version>
 
         <lyloou.component.version>1.0.15</lyloou.component.version>
+        <junit.version>4.13.2</junit.version>
+        <log4j.version>2.17.1</log4j.version>
     </properties>
 
     <dependencyManagement>
@@ -226,6 +228,26 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter</artifactId>
                 <version>${spring.boot.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.apache.logging.log4j</groupId>
+                        <artifactId>log4j-core</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.logging.log4j</groupId>
+                        <artifactId>log4j-api</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-core</artifactId>
+                <version>${log4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-api</artifactId>
+                <version>${log4j.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework.boot</groupId>
@@ -401,6 +423,12 @@
                 <groupId>com.github.xiaoymin</groupId>
                 <artifactId>knife4j-spring-boot-starter</artifactId>
                 <version>${knife4j.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>${junit.version}</version>
             </dependency>
         </dependencies>
 
