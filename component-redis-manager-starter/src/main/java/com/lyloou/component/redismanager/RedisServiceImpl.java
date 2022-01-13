@@ -1,6 +1,7 @@
 package com.lyloou.component.redismanager;
 
 
+import cn.hutool.core.util.IdUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -314,13 +315,13 @@ public class RedisServiceImpl implements RedisService {
 
     @Override
     public void doWithLock(String key, int timeout, Consumer<Boolean> consumer) {
-        // 获取【新锁的过期时间】
-        String value = UUID.randomUUID().toString();
+        // 使用雪花算法生成的id作为默认的requestId
+        String requestId = IdUtil.getSnowflake().nextIdStr();
         try {
-            final boolean locked = redisLockHelper.tryGetDistributedLock(key, value, timeout);
+            final boolean locked = redisLockHelper.tryGetDistributedLock(key, requestId, timeout);
             consumer.accept(locked);
         } finally {
-            redisLockHelper.releaseDistributedLock(key, value);
+            redisLockHelper.releaseDistributedLock(key, requestId);
         }
     }
 
