@@ -1,10 +1,10 @@
 package com.lyloou.component.config.keyvalue;
 
+import cn.hutool.core.util.StrUtil;
 import com.lyloou.component.dto.SingleResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -43,7 +43,7 @@ public class KeyValueController {
     }
 
     private List<KeyValue> getKeyValueList(String type, Map<String, List<KeyValue>> keyValueMap) {
-        if (Strings.isBlank(type)) {
+        if (StrUtil.isBlank(type)) {
             return new ArrayList<>();
         }
 
@@ -69,7 +69,7 @@ public class KeyValueController {
         }
 
         final String value = data.stream()
-                .filter(it -> Strings.isNotBlank(it.getKey()))
+                .filter(it -> StrUtil.isNotBlank(it.getKey()))
                 .filter(it -> isEquals(key, it))
                 .map(KeyValue::getValue)
                 .findFirst().orElse(null);

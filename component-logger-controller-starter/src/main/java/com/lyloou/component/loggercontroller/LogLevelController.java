@@ -3,12 +3,12 @@ package com.lyloou.component.loggercontroller;
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.LoggerContext;
+import cn.hutool.core.util.StrUtil;
 import com.lyloou.component.dto.SingleResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.logging.log4j.util.Strings;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -61,7 +61,7 @@ public class LogLevelController {
     public SingleResponse<Map<String, String>> get(String packageName) {
         Map<String, String> map = new HashMap<>(1);
 
-        if (Strings.isNotEmpty(packageName)) {
+        if (StrUtil.isNotEmpty(packageName)) {
             map.put(packageName, getLogger(packageName));
         } else {
             map.put(packageName, null);

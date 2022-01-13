@@ -1,8 +1,8 @@
 package com.lyloou.component.schedulemonitor;
 
 
+import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.logging.log4j.util.Strings;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.InvocationTargetException;
@@ -36,7 +36,7 @@ public class ScheduleMonitorHandler {
     }
 
     public boolean isKeyExisted(String key) {
-        if (Strings.isEmpty(key)) {
+        if (StrUtil.isEmpty(key)) {
             return false;
         }
         return keyStatusMap.containsKey(key);

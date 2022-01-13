@@ -1,5 +1,6 @@
 package com.lyloou.component.keyvalueitem.executor.query;
 
+import cn.hutool.core.util.StrUtil;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -11,7 +12,6 @@ import com.lyloou.component.keyvalueitem.dto.command.query.KeyValueItemPageQry;
 import com.lyloou.component.keyvalueitem.repository.entity.KeyValueItemEntity;
 import com.lyloou.component.keyvalueitem.repository.service.KeyValueItemService;
 import lombok.RequiredArgsConstructor;
-import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
@@ -33,7 +33,7 @@ public class KeyValueItemPageQryExe {
     @Cacheable(value = CacheNames.KeyValueItemCo_PAGE_KEY, key = "#qry.itemName + '::' + #qry.itemKey+'::' + #qry.cachePageKey")
     public PageInfo<KeyValueItemCo> execute3(KeyValueItemPageQry qry) {
         final Page<Object> page = PageHelper.startPage(qry.getPageNum(), qry.getPageSize());
-        if (!Strings.isEmpty(qry.getOrderBy())) {
+        if (!StrUtil.isEmpty(qry.getOrderBy())) {
             page.setOrderBy(qry.getOrderBy().concat(" ").concat(qry.getOrderDirection()));
         }
         page.setCount(qry.isNeedTotalCount());
@@ -65,7 +65,7 @@ public class KeyValueItemPageQryExe {
     public PageInfo<KeyValueItemCo> execute(KeyValueItemPageQry qry) {
 
         final Page<Object> page = PageHelper.startPage(qry.getPageNum(), qry.getPageSize(), qry.isNeedTotalCount(), false, false);
-        if (!Strings.isEmpty(qry.getOrderBy())) {
+        if (!StrUtil.isEmpty(qry.getOrderBy())) {
             page.setOrderBy(qry.getOrderBy().concat(" ").concat(qry.getOrderDirection()));
         }
 

@@ -2,6 +2,7 @@ package com.lyloou.component.tool.codegenerator;
 
 
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.generator.AutoGenerator;
 import com.baomidou.mybatisplus.generator.InjectionConfig;
 import com.baomidou.mybatisplus.generator.config.*;
@@ -11,7 +12,6 @@ import com.baomidou.mybatisplus.generator.config.rules.DbColumnType;
 import com.baomidou.mybatisplus.generator.config.rules.IColumnType;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
 import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
-import org.apache.logging.log4j.util.Strings;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -209,7 +209,7 @@ public class CodeGenerator {
         strategy.setSuperServiceClass(strategySuperServiceClass);
         strategy.setSuperControllerClass(strategySuperControllerClass);
         // 写于父类中的公共字段
-        if (Strings.isNotEmpty(strategySuperEntityColumns)) {
+        if (StringUtils.isNotEmpty(strategySuperEntityColumns)) {
             strategy.setSuperEntityColumns(strategySuperEntityColumns.split(","));
         }
 

@@ -1,11 +1,11 @@
 package com.lyloou.component.redismanager;
 
 
+import cn.hutool.core.util.StrUtil;
 import com.github.pagehelper.PageInfo;
 import com.lyloou.component.dto.PageInfoHelper;
 import com.lyloou.component.exceptionhandler.util.AssertUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.cache.CacheKeyPrefix;
@@ -51,10 +51,8 @@ public class RedisManagerService {
 
 
     public Map<String, Map<String, String>> list() {
-        Map<String, Map<String, String>> map = new HashMap<>();
-        this.cachePrefixMap.forEach((prefix, aBoolean) -> {
-            map.put(prefix, getOperationMap(prefix));
-        });
+        Map<String, Map<String, String>> map = new HashMap<>(cachePrefixMap.size());
+        this.cachePrefixMap.forEach((prefix, aBoolean) -> map.put(prefix, getOperationMap(prefix)));
         return map;
     }
 
@@ -120,7 +118,7 @@ public class RedisManagerService {
 
         checkProjectPrefix(prefix);
 
-        if (Strings.isEmpty(key)) {
+        if (StrUtil.isEmpty(key)) {
             redisService.delPattern(prefix + SEP_STAR);
             return;
         }
@@ -134,7 +132,7 @@ public class RedisManagerService {
         checkProjectPrefix(prefix);
 
         String wrapKey = prefix;
-        if (Strings.isNotEmpty(key)) {
+        if (StrUtil.isNotEmpty(key)) {
             wrapKey = wrapKey + SEP + key;
         }
         AssertUtil.isTrue(redisService.exists(wrapKey), "key不存在");

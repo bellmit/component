@@ -1,7 +1,7 @@
 package com.lyloou.component.loggerrequeststatistic;
 
+import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.logging.log4j.util.Strings;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
@@ -85,7 +85,7 @@ public class RequestStatisticInterceptor extends HandlerInterceptorAdapter {
 
         StringBuffer url = request.getRequestURL();
         final String queryString = request.getQueryString();
-        if (Strings.isNotEmpty(queryString)) {
+        if (StrUtil.isNotEmpty(queryString)) {
             url.append("?").append(queryString);
         }
         list.add("\"" + url + "\"");
@@ -103,7 +103,7 @@ public class RequestStatisticInterceptor extends HandlerInterceptorAdapter {
 
         final RequestWrapper requestServlet = new RequestWrapper(request);
         final String bodyString = requestServlet.getBody();
-        if (Strings.isNotEmpty(bodyString)) {
+        if (StrUtil.isNotEmpty(bodyString)) {
             list.add("-d");
             list.add(String.format("\"%s\"", bodyString.replaceAll("\"", "\\\\\"")));
         }
