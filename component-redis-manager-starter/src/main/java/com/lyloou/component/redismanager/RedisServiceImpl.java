@@ -1,7 +1,9 @@
 package com.lyloou.component.redismanager;
 
 
+import cn.hutool.core.lang.TypeReference;
 import cn.hutool.core.util.IdUtil;
+import cn.hutool.json.JSONUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -20,6 +22,7 @@ import javax.annotation.PostConstruct;
 import java.io.Serializable;
 import java.util.*;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 @Slf4j
 @Service
@@ -330,4 +333,33 @@ public class RedisServiceImpl implements RedisService {
         return redisTemplate.keys(prefix);
     }
 
+
+    public <T> List<T> cacheList(String key, int ttl, Supplier<List<T>> supplier) {
+        final String dataStr = get(key);
+        if (Objects.nonNull(dataStr)) {
+            final Object bean = JSONUtil.toBean(dataStr, new TypeReference<List<T>>() {
+            }, true);
+            if (bean != null) {
+                //noinspection unchecked,CastCanBeRemovedNarrowingVariableType
+                return (List<T>) bean;
+            }
+        }
+        final List<T> data = supplier.get();
+        set(key, JSONUtil.toJsonStr(data), ttl);
+        return data;
+    }
+
+    public <T> T cacheObject(String key, int ttl, Class<T> clazz, Supplier<T> supplier) {
+        final String dataStr = get(key);
+        if (Objects.nonNull(dataStr)) {
+            final Object bean = JSONUtil.toBean(dataStr, clazz);
+            if (bean != null) {
+                //noinspection unchecked,CastCanBeRemovedNarrowingVariableType
+                return (T) bean;
+            }
+        }
+        final T data = supplier.get();
+        set(key, JSONUtil.toJsonStr(data), ttl);
+        return data;
+    }
 }
