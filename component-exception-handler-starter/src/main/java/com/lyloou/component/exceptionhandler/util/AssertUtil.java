@@ -4,7 +4,7 @@ import com.lyloou.component.dto.codemessage.CodeMessage;
 import com.lyloou.component.dto.codemessage.CommonCodeMessage;
 import com.lyloou.component.exceptionhandler.exception.AlertException;
 import com.lyloou.component.exceptionhandler.exception.CommonException;
-import com.sun.istack.internal.Nullable;
+import org.springframework.lang.Nullable;
 
 import java.util.Collection;
 
