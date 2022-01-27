@@ -4,7 +4,7 @@ import com.lyloou.component.dto.codemessage.CodeMessage;
 import com.lyloou.component.dto.codemessage.CommonCodeMessage;
 import com.lyloou.component.exceptionhandler.exception.AlertException;
 import com.lyloou.component.exceptionhandler.exception.CommonException;
-import org.springframework.util.StringUtils;
+import com.sun.istack.internal.Nullable;
 
 import java.util.Collection;
 
@@ -73,79 +73,79 @@ public abstract class AssertUtil {
         isTrue(expression, "[Assertion failed] - this expression must be false");
     }
 
-    public static void notEmpty(String value, String code, String msg) {
+    public static void notEmpty(@Nullable String value, String code, String msg) {
         if (value == null || value.isEmpty()) {
             throw new AlertException(code, msg);
         }
     }
 
-    public static void notEmpty(String value, CodeMessage codeMessage) {
+    public static void notEmpty(@Nullable String value, CodeMessage codeMessage) {
         if (value == null || value.isEmpty()) {
             throw new AlertException(codeMessage.code(), codeMessage.message());
         }
     }
 
 
-    public static void notBlank(String value, String code, String msg) {
+    public static void notBlank(@Nullable String value, String code, String msg) {
         if (isBlank(value)) {
             throw new AlertException(code, msg);
         }
     }
 
-    public static void notBlank(String value, CodeMessage codeMessage) {
+    public static void notBlank(@Nullable String value, CodeMessage codeMessage) {
         if (isBlank(value)) {
             throw new AlertException(codeMessage.code(), codeMessage.message());
         }
     }
 
-    public static void notNull(Object object, CodeMessage codeMessage, String message) {
+    public static void notNull(@Nullable Object object, CodeMessage codeMessage, String message) {
         if (object == null) {
             throw new AlertException(codeMessage.code(), message);
         }
     }
 
-    public static void notNull(Object object, String message) {
+    public static void notNull(@Nullable Object object, String message) {
         notNull(object, CommonCodeMessage.ILLEGAL_DATA, message);
     }
 
-    public static void notNull(Object object) {
+    public static void notNull(@Nullable Object object) {
         notNull(object, CommonCodeMessage.ILLEGAL_DATA,
                 "[Assertion failed] - the argument " + object + " must not be null");
     }
 
-    public static void notEmpty(Collection<?> collection) {
+    public static void notEmpty(@Nullable Collection<?> collection) {
         notEmpty(collection, "列表不能为空");
     }
 
-    public static void notEmpty(Collection<?> collection, String message) {
-        if (collection != null && collection.size() > 0) {
+    public static void notEmpty(@Nullable Collection<?> collection, String message) {
+        if (collection == null || collection.isEmpty()) {
             throw new AlertException(message);
         }
     }
 
-    public static void notEmptyParam(String value) {
+    public static void notEmptyParam(@Nullable String value) {
         notEmptyParam(value, "参数错误，不能为空");
     }
 
-    public static void notEmptyParam(String value, String message) {
-        if (StringUtils.isEmpty(value)) {
+    public static void notEmptyParam(@Nullable String value, String message) {
+        if (value == null || value.length() == 0) {
             throw new AlertException(CommonCodeMessage.ILLEGAL_PARAM.code(), message);
         }
     }
 
-    public static void notNullParam(Object value) {
+    public static void notNullParam(@Nullable Object value) {
         if (value == null) {
             throw new AlertException(CommonCodeMessage.ILLEGAL_PARAM.code(), "参数错误，不能为空");
         }
     }
 
-    public static void notNullParam(Object value, String message) {
+    public static void notNullParam(@Nullable Object value, String message) {
         if (value == null) {
             throw new AlertException(CommonCodeMessage.ILLEGAL_PARAM.code(), message);
         }
     }
 
-    public static void notEmptyParam(Collection<?> collection, String message) {
+    public static void notEmptyParam(@Nullable Collection<?> collection, String message) {
         if (collection == null || collection.isEmpty()) {
             throw new AlertException(CommonCodeMessage.ILLEGAL_PARAM.code(), message);
         }

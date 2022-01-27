@@ -1,5 +1,6 @@
 package com.lyloou.component.exceptionhandler.exception;
 
+import com.lyloou.component.dto.codemessage.CodeMessage;
 import com.lyloou.component.dto.codemessage.CommonCodeMessage;
 
 /**
@@ -12,6 +13,12 @@ public class AlertException extends RuntimeException {
 
     public AlertException() {
         super();
+    }
+
+    public AlertException(CodeMessage codeMessage) {
+        super(codeMessage.message());
+        this.code = codeMessage.code();
+        this.message = codeMessage.message();
     }
 
     public AlertException(String message) {
