@@ -8,7 +8,7 @@
 
     <groupId>com.lyloou</groupId>
     <artifactId>component-parent</artifactId>
-    <version>1.0.16</version>
+    <version>1.0.17</version>
 
     <name>component-parent</name>
     <url>https://github.com/lyloou/component</url>
@@ -76,7 +76,7 @@
         <jacoco-version>0.8.2</jacoco-version>
         <mybatis.plus.version>3.4.2</mybatis.plus.version>
 
-        <lyloou.component.version>1.0.16</lyloou.component.version>
+        <lyloou.component.version>1.0.17</lyloou.component.version>
         <junit.version>4.13.2</junit.version>
         <log4j.version>2.17.1</log4j.version>
     </properties>
