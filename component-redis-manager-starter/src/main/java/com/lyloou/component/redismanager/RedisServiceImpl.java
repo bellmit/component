@@ -173,6 +173,10 @@ public class RedisServiceImpl implements RedisService {
         Map<String, Object> map = new LinkedHashMap<>();
         for (String key : keys) {
             final Object value = getEntity(key);
+            if (value == null) {
+                map.put(key, get(key));
+                continue;
+            }
             map.put(key, value);
         }
         return map;
