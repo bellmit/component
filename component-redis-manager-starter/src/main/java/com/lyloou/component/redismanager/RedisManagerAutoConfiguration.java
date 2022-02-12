@@ -2,7 +2,9 @@ package com.lyloou.component.redismanager;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import lombok.Data;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -118,6 +120,16 @@ public class RedisManagerAutoConfiguration {
         ObjectMapper om = new ObjectMapper();
         om.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
         om.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
+        om.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true)
+                .configure(DeserializationFeature.UNWRAP_SINGLE_VALUE_ARRAYS, true)
+                .configure(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES, false)
+                .configure(DeserializationFeature.FAIL_ON_INVALID_SUBTYPE, false)
+                .configure(DeserializationFeature.FAIL_ON_NULL_FOR_PRIMITIVES, false)
+                .configure(DeserializationFeature.FAIL_ON_NUMBERS_FOR_ENUMS, false)
+                .configure(DeserializationFeature.FAIL_ON_READING_DUP_TREE_KEY, false)
+                .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+                .configure(DeserializationFeature.FAIL_ON_UNRESOLVED_OBJECT_IDS, false)
+                .configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
         jackson2JsonRedisSerializer.setObjectMapper(om);
         return jackson2JsonRedisSerializer;
     }

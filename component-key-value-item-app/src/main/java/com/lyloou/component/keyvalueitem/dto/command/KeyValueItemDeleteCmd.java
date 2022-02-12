@@ -21,8 +21,7 @@ public class KeyValueItemDeleteCmd extends CommonCommand {
     @NotNull(message = "项名称不能为空")
     private String itemName;
 
-    @ApiModelProperty(value = "项键", required = true)
-    @NotNull(message = "项键不能为空")
+    @ApiModelProperty(value = "项键", required = false)
     private String itemKey;
 
 }

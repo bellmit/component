@@ -173,4 +173,8 @@ public class RedisManagerService {
         pageInfo.setPageSize(qry.getPageSize());
         return pageInfo;
     }
+
+    public String get(String key) {
+        return redisService.get(key);
+    }
 }

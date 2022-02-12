@@ -1,12 +1,16 @@
 package com.lyloou.component.redismanager;
 
 
-import cn.hutool.core.lang.TypeReference;
 import cn.hutool.core.util.IdUtil;
-import cn.hutool.json.JSONUtil;
+import cn.hutool.core.util.StrUtil;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.lyloou.component.exceptionhandler.util.AssertUtil;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.cache.support.NullValue;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.data.redis.connection.RedisZSetCommands;
@@ -28,8 +32,8 @@ import java.util.function.Supplier;
 @Service
 @Qualifier("redisService")
 public class RedisServiceImpl implements RedisService {
+    private static final ObjectMapper OM = new ObjectMapper();
 
-    @Qualifier("redisTemplate")
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
 
@@ -51,20 +55,22 @@ public class RedisServiceImpl implements RedisService {
 
     @Override
     public void set(String key, String value) {
-        set(key.getBytes(), value.getBytes());
+        set(key, value, 0);
     }
 
     @Override
-    public <T extends Serializable> void set(String key, T entity) {
-        try {
-            set(key.getBytes(), jackson2JsonRedisSerializer.serialize(entity));
-        } catch (Exception e) {
-            log.error(e.getMessage());
+    public void set(final String key, final String value, final int ttl) {
+        Objects.requireNonNull(key, "key should not be null");
+        if (Objects.isNull(value)) {
+            set(key.getBytes(), null, ttl);
+            return;
         }
+        set(key.getBytes(), value.getBytes(), ttl);
     }
 
     @Override
     public String get(final String key) {
+        Objects.requireNonNull(key, "key should not be null");
         byte[] bytes = get(key.getBytes());
         if (bytes == null) {
             return null;
@@ -73,47 +79,54 @@ public class RedisServiceImpl implements RedisService {
     }
 
     @Override
-    public <T extends Serializable> T getEntity(final String key) {
+    public <T extends Serializable> void set(String key, T entity) {
+        set(key, entity, 0);
+    }
+
+    @Override
+    public <T extends Serializable> void set(final String key, final T entity, final int ttl) {
+        Objects.requireNonNull(key, "key should not be null");
         try {
-            byte[] bytes = get(key.getBytes());
-            if (bytes == null) {
-                return null;
-            }
+            set(key.getBytes(), jackson2JsonRedisSerializer.serialize(entity), ttl);
+        } catch (Exception e) {
+            log.error("serialize entity error", e);
+        }
+    }
+
+    @Override
+    public <T extends Serializable> T getEntity(final String key) {
+        Objects.requireNonNull(key, "key should not be null");
+        byte[] bytes = get(key.getBytes());
+        if (bytes == null) {
+            return null;
+        }
+
+        try {
             final Object data = jackson2JsonRedisSerializer.deserialize(bytes);
             //noinspection unchecked
             return (T) data;
         } catch (Exception e) {
-            log.error(e.getMessage());
+            log.warn("deserialize failed, str：" + new String(bytes), e.getMessage());
         }
         return null;
     }
 
     @Override
     public Boolean exists(final String key) {
+        Objects.requireNonNull(key, "key should not be null");
         return exists(key.getBytes());
     }
 
     @Override
     public void del(String key) {
+        Objects.requireNonNull(key, "key should not be null");
         del(key.getBytes());
     }
 
-    @Override
-    public void set(final String key, final String value, final int ttl) {
-        set(key.getBytes(), value.getBytes(), ttl);
-    }
-
-    @Override
-    public <T extends Serializable> void set(final String key, final T entity, final int ttl) {
-        try {
-            set(key.getBytes(), jackson2JsonRedisSerializer.serialize(entity), ttl);
-        } catch (Exception e) {
-            log.error(e.getMessage());
-        }
-    }
 
     @Override
     public Long ttl(final String key) {
+        Objects.requireNonNull(key, "key should not be null");
         return ttl(key.getBytes());
     }
 
@@ -127,12 +140,17 @@ public class RedisServiceImpl implements RedisService {
     }
 
     private void set(final byte[] key, final byte[] value, final int ttl) {
-        redisTemplate.execute((RedisCallback<Void>) con -> {
-            con.set(key, value);
-            if (ttl != 0) {
-                con.expire(key, ttl);
+        redisTemplate.execute((RedisCallback<Boolean>) con -> {
+            if (value == null) {
+                byte[] serialize = jackson2JsonRedisSerializer.serialize(null);
+                return con.setEx(key, 3 * 60, serialize);
             }
-            return null;
+
+            if (ttl <= 0) {
+                return con.set(key, value);
+            } else {
+                return con.setEx(key, ttl, value);
+            }
         });
     }
 
@@ -152,16 +170,9 @@ public class RedisServiceImpl implements RedisService {
             return new HashMap<>();
         }
 
-        final List<Object> list = redisTemplate.opsForValue().multiGet(keys);
-        if (CollectionUtils.isEmpty(list)) {
-            return new HashMap<>();
-        }
-
         Map<String, Object> map = new LinkedHashMap<>();
-        int i = 0;
         for (String key : keys) {
-            final Object value = list.get(i);
-            i++;
+            final Object value = getEntity(key);
             map.put(key, value);
         }
         return map;
@@ -196,6 +207,7 @@ public class RedisServiceImpl implements RedisService {
 
     @Override
     public void delPattern(String keyPattern) {
+        AssertUtil.isTrue(StrUtil.isNotBlank(keyPattern), "keyPattern should not be null or empty");
         del(keys(keyPattern.getBytes()));
     }
 
@@ -245,8 +257,7 @@ public class RedisServiceImpl implements RedisService {
 
     @Override
     public Boolean zadd(String key, Double score, String value) {
-        return redisTemplate.execute((RedisCallback<Boolean>) redisConnection ->
-                redisConnection.zAdd(key.getBytes(), score, value.getBytes()));
+        return redisTemplate.execute((RedisCallback<Boolean>) redisConnection -> redisConnection.zAdd(key.getBytes(), score, value.getBytes()));
     }
 
     @Override
@@ -319,7 +330,7 @@ public class RedisServiceImpl implements RedisService {
     @Override
     public void doWithLock(String key, int timeout, Consumer<Boolean> consumer) {
         // 使用雪花算法生成的id作为默认的requestId
-        String requestId = IdUtil.getSnowflake().nextIdStr();
+        String requestId = IdUtil.getSnowflakeNextIdStr();
         try {
             final boolean locked = redisLockHelper.tryGetDistributedLock(key, requestId, timeout);
             consumer.accept(locked);
@@ -334,32 +345,34 @@ public class RedisServiceImpl implements RedisService {
     }
 
 
+    @SneakyThrows
     public <T> List<T> cacheList(String key, int ttl, Supplier<List<T>> supplier) {
         final String dataStr = get(key);
         if (Objects.nonNull(dataStr)) {
-            final Object bean = JSONUtil.toBean(dataStr, new TypeReference<List<T>>() {
-            }, true);
+            List<T> bean = OM.readValue(dataStr, new TypeReference<List<T>>() {
+            });
             if (bean != null) {
-                //noinspection unchecked,CastCanBeRemovedNarrowingVariableType
-                return (List<T>) bean;
+                return bean;
             }
         }
+
         final List<T> data = supplier.get();
-        set(key, JSONUtil.toJsonStr(data), ttl);
+        set(key, OM.writeValueAsString(data), ttl);
         return data;
     }
 
+    @SneakyThrows
     public <T> T cacheObject(String key, int ttl, Class<T> clazz, Supplier<T> supplier) {
         final String dataStr = get(key);
         if (Objects.nonNull(dataStr)) {
-            final Object bean = JSONUtil.toBean(dataStr, clazz);
+            final T bean = OM.readValue(dataStr, clazz);
             if (bean != null) {
-                //noinspection unchecked,CastCanBeRemovedNarrowingVariableType
-                return (T) bean;
+                return bean;
             }
         }
         final T data = supplier.get();
-        set(key, JSONUtil.toJsonStr(data), ttl);
+        String value = OM.writeValueAsString(data);
+        set(key, value, ttl);
         return data;
     }
 }

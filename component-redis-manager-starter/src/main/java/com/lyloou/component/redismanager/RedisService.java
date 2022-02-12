@@ -30,16 +30,15 @@ public interface RedisService {
      */
     void set(final String key, final String value);
 
-
     /**
-     * 存储 <code><T></code> 类型的键值对
+     * 存储String 类型的键值对,并设置存活时间
      *
-     * @param key    键
-     * @param entity 实体
-     * @param <T>    泛型
-     * @throws IOException 异常
+     * @param key   键
+     * @param value 值
+     * @param ttl   超时时长，以秒为单位
      */
-    <T extends Serializable> void set(final String key, final T entity) throws IOException;
+    void set(final String key, final String value, final int ttl);
+
 
     /**
      * 获取String 类型的键值对
@@ -48,6 +47,27 @@ public interface RedisService {
      * @return 结果
      */
     String get(final String key);
+
+    /**
+     * 存储 <code><T></code> 类型的键值对
+     *
+     * @param key    键
+     * @param entity 实体
+     * @param <T>    泛型
+     */
+    <T extends Serializable> void set(final String key, final T entity);
+
+
+    /**
+     * 存储键类型为String,值类型为对象(pojo,HashMap,ArrayList)并设置存活时间
+     *
+     * @param key    键
+     * @param entity 值
+     * @param ttl    超时时长
+     * @param <T>    泛型
+     */
+    <T extends Serializable> void set(final String key, final T entity, final int ttl);
+
 
     /**
      * 获取实体对象
@@ -114,24 +134,6 @@ public interface RedisService {
      */
     void del(final byte[]... keys);
 
-    /**
-     * 存储String 类型的键值对,并设置存活时间
-     *
-     * @param key   键
-     * @param value 值
-     * @param ttl   超时时长，以秒为单位
-     */
-    void set(final String key, final String value, final int ttl);
-
-    /**
-     * 存储键类型为String,值类型为对象(pojo,HashMap,ArrayList)并设置存活时间
-     *
-     * @param key    键
-     * @param entity 值
-     * @param ttl    超时时长
-     * @param <T>    泛型
-     */
-    <T extends Serializable> void set(final String key, final T entity, final int ttl);
 
     /**
      * key 剩余时间

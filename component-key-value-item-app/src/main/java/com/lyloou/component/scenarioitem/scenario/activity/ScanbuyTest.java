@@ -1,6 +1,7 @@
 package com.lyloou.component.scenarioitem.scenario.activity;
 
 import cn.hutool.json.JSONUtil;
+import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonAnyFormatVisitor;
 import com.lyloou.component.scenarioitem.checker.ScenarioItemChecker;
 import com.lyloou.component.scenarioitem.convertor.ScenarioItemConvertor;
 import com.lyloou.component.scenarioitem.dto.ItemType;
@@ -62,6 +63,7 @@ public class ScanbuyTest {
 
         System.out.println("获取全部组合----------");
         final Map<ItemType, List<ScenarioItemCO>> typeItemListMap = ScenarioItemConvertor.toScenarioItemListMap(ScanbuyTypeItem.values(), configMap);
+
         System.out.println(JSONUtil.toJsonPrettyStr(typeItemListMap));
 
         System.out.println("获取单个组合 List<TypeItemCO>----------");

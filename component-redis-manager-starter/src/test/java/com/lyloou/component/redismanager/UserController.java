@@ -1,5 +1,6 @@
 package com.lyloou.component.redismanager;
 
+import cn.hutool.json.JSONUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,9 @@ public class UserController {
     private final UserService userService;
     private final RedisTemplate<String, Object> redisTemplate;
     private final RedisManagerService redisManagerService;
+
+    @Autowired
+    private RedisService redisService;
 
     @RequestMapping("getUser")
     public void getUser() {
@@ -46,7 +50,8 @@ public class UserController {
 
     @RequestMapping("keysTest")
     public void keysTest() {
-        log.info("user 1:{}", userService.getUser(1));
+        User user = userService.getUser(1);
+        log.info("user 1:{}", user);
         log.info("user 2:{}", userService.getUser(2));
         log.info("user 3:{}", userService.getUser(3));
         log.info("user 4:{}", userService.getUser(4));
@@ -55,8 +60,22 @@ public class UserController {
         log.info("user 7:{}", userService.getUser(7));
         log.info("person 2:{}", userService.getPerson(3));
 
-        Set<String> keys = redisTemplate.keys("user-name::*");
-        log.info("keys:{}", keys);
+        System.out.println();
+        log.info("keys:{}", redisTemplate.keys("com.lyloou.component.redismanager.user::*"));
+
+        System.out.println();
+        log.info("keys:{}", redisTemplate.keys("com.lyloou.component.redismanager.user"));
+
+        System.out.println();
+        log.info("keys:{}", redisTemplate.keys("com.lyloou.component.redismanager"));
+
+        System.out.println();
+        log.info("keys:{}", redisTemplate.keys("com.lyloou.component.redismanager.*"));
+
+        redisService.set("user-1", JSONUtil.toJsonStr(user));
+        redisService.set("user-2", user);
+        redisService.set("user-3", null);
+        redisService.set("com.lyloou.component.redismanager.user::9", "adsfdff");
     }
 
     @RequestMapping("ttlTest")

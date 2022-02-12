@@ -10,6 +10,8 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Component;
 
+import java.util.Objects;
+
 /**
  * @author lilou
  * @since 2021/4/16
@@ -20,14 +22,14 @@ public class KeyValueItemDeleteCmdExe {
     private final KeyValueItemService keyValueItemService;
 
     @Caching(evict = {
-            @CacheEvict(value = CacheNames.KeyValueItemCo_NAME_KEY, key = "#cmd.itemName + '::' + #cmd.itemKey"),
+            @CacheEvict(value = CacheNames.KeyValueItemCo_NAME_KEY, allEntries = true),
             @CacheEvict(value = CacheNames.KeyValueItemCo_PAGE_KEY, allEntries = true),
             @CacheEvict(value = CacheNames.KeyValueItemCo_LIST_KEY, allEntries = true),
     })
     public boolean execute(KeyValueItemDeleteCmd cmd) {
         return keyValueItemService.lambdaUpdate()
                 .eq(KeyValueItemEntity::getItemName, cmd.getItemName())
-                .eq(KeyValueItemEntity::getItemKey, cmd.getItemKey())
+                .eq(Objects.nonNull(cmd.getItemKey()), KeyValueItemEntity::getItemKey, cmd.getItemKey())
                 .remove();
     }
 }

@@ -5,7 +5,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-class ExecTask {
+public class ExecTask {
     /**
      * 任务id
      */

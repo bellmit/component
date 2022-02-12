@@ -52,6 +52,12 @@ public class RedisManagerController {
         return MultiResponse.buildSuccess(redisManagerService.keys(prefix));
     }
 
+    @GetMapping("/get")
+    @ApiOperation(value = "获取 key 的值")
+    public SingleResponse<String> get(String key) {
+        return SingleResponse.buildSuccess(redisManagerService.get(key));
+    }
+
     @GetMapping("/page")
     @ApiOperation(value = "根据前缀分页获取键值对")
     public SingleResponse<PageInfo<PrefixPageResponse>> page(PrefixPageQuery qry) {
