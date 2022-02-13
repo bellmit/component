@@ -82,35 +82,35 @@ public class ConvertUtils {
     /**
      * 新建 dest 实例，并将 source 的属性值拷贝到 dest 相同的属性上，一对一形成列表
      *
-     * @param source    源实例
-     * @param destClass 目标实例的类
-     * @param <S>       源类型
-     * @param <T>       目标类型
+     * @param sourceList 源实例列表
+     * @param destClass  目标实例的类
+     * @param <S>        源类型
+     * @param <T>        目标类型
      * @return 目标实例列表
      */
-    public static <S, T> List<T> convertList(List<S> source, Class<T> destClass) {
-        return convertList(source, destClass, null);
+    public static <S, T> List<T> convertList(List<S> sourceList, Class<T> destClass) {
+        return convertList(sourceList, destClass, null);
     }
 
     /**
      * 新建 dest 实例，并将 source 的属性值拷贝到 dest 相同的属性上，一对一形成列表
      *
-     * @param source     源实例
+     * @param sourceList 源实例列表
      * @param destClass  目标实例的类
      * @param biConsumer 额外的消费操作，可以自定义赋值
      * @param <S>        源类型
      * @param <T>        目标类型
      * @return 目标实例列表
      */
-    public static <S, T> List<T> convertList(List<S> source, Class<T> destClass, BiConsumer<S, T> biConsumer) {
-        if (source == null) {
+    public static <S, T> List<T> convertList(List<S> sourceList, Class<T> destClass, BiConsumer<S, T> biConsumer) {
+        if (sourceList == null) {
             return null;
         }
-        if (source.isEmpty()) {
+        if (sourceList.isEmpty()) {
             return Collections.emptyList();
         }
 
-        return source.stream().map(s -> {
+        return sourceList.stream().map(s -> {
             try {
                 T result = destClass.newInstance();
                 convert(s, result);
@@ -128,9 +128,9 @@ public class ConvertUtils {
      * 将字符串类型的数据转换成指定类型的对象
      *
      * @param <T>   泛型
-     * @param data  数据
+     * @param data  字符串数据
      * @param clazz 要转换的类型
-     * @return 实例对象
+     * @return 转换后的实例对象
      */
     @SuppressWarnings("unchecked")
     public <T> T convertStr(String data, Class<?> clazz) {
@@ -143,7 +143,7 @@ public class ConvertUtils {
         }
 
         if (Byte.class == clazz) {
-            return (T) Byte.valueOf(String.valueOf(data));
+            return (T) Byte.valueOf(data);
         }
 
         if (Character.class == clazz) {
@@ -151,11 +151,11 @@ public class ConvertUtils {
         }
 
         if (Integer.class == clazz) {
-            return (T) Integer.valueOf(String.valueOf(data));
+            return (T) Integer.valueOf(data);
         }
 
         if (Double.class == clazz) {
-            return (T) Double.valueOf(String.valueOf(data));
+            return (T) Double.valueOf(data);
         }
 
         if (BigDecimal.class == clazz) {
@@ -163,11 +163,11 @@ public class ConvertUtils {
         }
 
         if (Float.class == clazz) {
-            return (T) Float.valueOf(String.valueOf(data));
+            return (T) Float.valueOf(data);
         }
 
         if (Boolean.class == clazz) {
-            return (T) Boolean.valueOf(String.valueOf(data));
+            return (T) Boolean.valueOf(data);
         }
 
         if (JSONObject.class == clazz) {
@@ -198,12 +198,25 @@ public class ConvertUtils {
         throw new RuntimeException("Unsupported type cast exception, class: " + clazz.getName() + ", data: " + data);
     }
 
+    /**
+     * 将字符串类型的数据转换成指定类型的对象
+     *
+     * @param <T>              泛型
+     * @param data             字符串数据
+     * @param clazz            要转换的类型
+     * @param swallowException 是否吞掉异常，如果有异常直接返回 null
+     * @return 转换后的实例对象
+     */
     public <T> T convertStr(String data, Class<?> clazz, boolean swallowException) {
-        try {
-            return convertStr(data, clazz);
-        } catch (Exception e) {
-            return null;
+        if (swallowException) {
+            try {
+                return convertStr(data, clazz);
+            } catch (Exception e) {
+                return null;
+            }
         }
+
+        return convertStr(data, clazz);
     }
 
 
