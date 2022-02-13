@@ -72,7 +72,7 @@
         <io.swagger.version>1.5.22</io.swagger.version>
 
         <knife4j.version>2.0.7</knife4j.version>
-        <hutool.version>5.7.19</hutool.version>
+        <hutool.version>5.7.20</hutool.version>
         <jacoco-version>0.8.2</jacoco-version>
         <mybatis.plus.version>3.4.2</mybatis.plus.version>
 

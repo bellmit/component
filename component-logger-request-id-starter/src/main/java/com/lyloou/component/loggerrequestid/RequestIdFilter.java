@@ -2,7 +2,9 @@ package com.lyloou.component.loggerrequestid;
 
 import cn.hutool.core.lang.Snowflake;
 import cn.hutool.core.util.IdUtil;
-import cn.hutool.json.JSONObject;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
 
@@ -130,9 +132,9 @@ public class RequestIdFilter implements Filter {
         try {
             final String strContent = new String(content, StandardCharsets.UTF_8);
             if (maybeJsonString(strContent)) {
-                final JSONObject jsonContent = new JSONObject(strContent);
-                jsonContent.set("requestId", requestId);
-                content = jsonContent.toString().getBytes(StandardCharsets.UTF_8);
+                JSONObject jsonContent = JSON.parseObject(strContent);
+                jsonContent.put("requestId", requestId);
+                content = JSON.toJSONString(jsonContent).getBytes(StandardCharsets.UTF_8);
             }
         } catch (Exception e) {
             //ignore
@@ -141,9 +143,14 @@ public class RequestIdFilter implements Filter {
     }
 
     private boolean maybeJsonString(String strContent) {
-        final boolean isStartOk = strContent.startsWith("[") || strContent.startsWith("{");
-        final boolean isEndOk = strContent.endsWith("]") || strContent.endsWith("}");
-        return isStartOk && isEndOk;
+        Object parse = JSON.parse(strContent);
+        if (parse instanceof JSONObject) {
+            return true;
+        }
+        if (parse instanceof JSONArray) {
+            return true;
+        }
+        return false;
     }
 
     private String getReqId(ServletRequest request) {

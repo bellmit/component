@@ -2,7 +2,7 @@ package com.lyloou.component.notify.qywechat.model.request;
 
 
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.json.JSONUtil;
+import com.alibaba.fastjson.JSON;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -39,6 +39,6 @@ public class ImageMessage implements Message {
         textContent.put("base64", base64);
         textContent.put("md5", md5);
         items.put("image", textContent);
-        return JSONUtil.toJsonStr(items);
+        return JSON.toJSONString(items);
     }
 }

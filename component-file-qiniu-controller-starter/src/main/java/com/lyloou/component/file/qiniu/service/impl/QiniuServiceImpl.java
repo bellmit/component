@@ -6,7 +6,7 @@ import cn.hutool.core.date.TimeInterval;
 import cn.hutool.core.thread.ThreadFactoryBuilder;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.json.JSONUtil;
+import com.alibaba.fastjson.JSON;
 import com.lyloou.component.file.qiniu.config.QiniuProperties;
 import com.lyloou.component.file.qiniu.service.QiniuService;
 import com.qiniu.http.Response;
@@ -86,7 +86,7 @@ public class QiniuServiceImpl implements QiniuService {
         try {
             Response response = uploadManager.put(content, key, upToken);
             //解析上传成功的结果
-            DefaultPutRet putRet = JSONUtil.toBean(response.bodyString(), DefaultPutRet.class);
+            DefaultPutRet putRet = JSON.parseObject(response.bodyString(), DefaultPutRet.class);
             final String url = bucketUrl + "/" + putRet.key;
             return url;
         } catch (Exception ex) {

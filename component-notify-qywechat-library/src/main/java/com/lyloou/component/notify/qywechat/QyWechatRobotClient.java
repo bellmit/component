@@ -1,7 +1,7 @@
 package com.lyloou.component.notify.qywechat;
 
 import cn.hutool.http.HttpUtil;
-import cn.hutool.json.JSONUtil;
+import com.alibaba.fastjson.JSON;
 import com.lyloou.component.notify.qywechat.model.request.Message;
 import com.lyloou.component.notify.qywechat.model.response.QyWechatResponse;
 
@@ -32,6 +32,6 @@ public class QyWechatRobotClient {
      */
     public static QyWechatResponse send(String webhookUrl, Message message, int timeout) {
         final String result = HttpUtil.post(webhookUrl, message.toJsonString(), timeout);
-        return JSONUtil.toBean(result, QyWechatResponse.class);
+        return JSON.parseObject(result, QyWechatResponse.class);
     }
 }

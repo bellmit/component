@@ -1,10 +1,11 @@
 package com.lyloou.component.security.loginvalidator;
 
-import cn.hutool.json.JSONUtil;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lyloou.component.security.loginvalidator.annotation.IgnoreValidateLogin;
 import com.lyloou.component.security.loginvalidator.annotation.ValidateLogin;
 import com.lyloou.component.security.loginvalidator.controller.BaseTokenController;
 import com.lyloou.component.security.loginvalidator.service.TokenService;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,14 +34,15 @@ public class UserController extends BaseTokenController {
     // 手动忽略身份验证
     @IgnoreValidateLogin
     @GetMapping("/login")
+    @SneakyThrows
     public String login(String userId, String username) {
 
         Map<String, String> map = new HashMap<>();
         map.put("userId", userId);
         map.put("userName", username);
         map.put("userAvatar", "http://cdn.lyloou.com/a.jpg");
-
-        final String token = tokenService.createToken(userId, username, JSONUtil.toJsonStr(map));
+        String mapStr = new ObjectMapper().writeValueAsString(map);
+        final String token = tokenService.createToken(userId, username, mapStr);
         return token;
     }
 

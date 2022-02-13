@@ -3,8 +3,8 @@ package com.lyloou.component.tool.execcommand;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.lang.Snowflake;
-import cn.hutool.json.JSONUtil;
 import cn.hutool.system.SystemUtil;
+import com.alibaba.fastjson.JSON;
 import com.lyloou.component.cache.datacache.DataCache;
 import com.lyloou.component.dto.SingleResponse;
 import com.lyloou.component.exceptionhandler.util.AssertUtil;
@@ -97,7 +97,7 @@ public class ExecCommandController {
     }
 
     private void cacheTask(String taskId, ExecTask task) {
-        final String taskStr = JSONUtil.toJsonStr(task);
+        final String taskStr = JSON.toJSONString(task);
         dataCache.set(taskId, taskStr);
     }
 
@@ -116,7 +116,7 @@ public class ExecCommandController {
         final String taskStr = dataCache.get(taskId);
         AssertUtil.notNullParam(taskStr, "找不到taskId为" + taskId + "的执行任务");
 
-        return SingleResponse.buildSuccess(JSONUtil.toBean(taskStr, ExecTask.class));
+        return SingleResponse.buildSuccess(JSON.parseObject(taskStr, ExecTask.class));
     }
 
     @GetMapping("getLogFile")
@@ -126,7 +126,7 @@ public class ExecCommandController {
         final String taskStr = dataCache.get(taskId);
         AssertUtil.notNullParam(taskStr, "找不到taskId为" + taskId + "的执行任务");
 
-        final ExecTask execTask = JSONUtil.toBean(taskStr, ExecTask.class);
+        final ExecTask execTask = JSON.parseObject(taskStr, ExecTask.class);
         final String logFilePath = execTask.getLogFilePath();
         final List<String> dataList = new ArrayList<>();
         IoUtil.readLines(FileUtil.getUtf8Reader(logFilePath), dataList);

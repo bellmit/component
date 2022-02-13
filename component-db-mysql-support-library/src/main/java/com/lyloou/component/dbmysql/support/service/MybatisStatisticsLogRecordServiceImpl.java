@@ -1,6 +1,6 @@
 package com.lyloou.component.dbmysql.support.service;
 
-import cn.hutool.json.JSONUtil;
+import com.alibaba.fastjson.JSON;
 import com.lyloou.component.dbmysql.support.inteceptor.MybatisStatisticsInterceptor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.plugin.Invocation;
@@ -45,7 +45,7 @@ public class MybatisStatisticsLogRecordServiceImpl implements MybatisStatisticsS
         log.info("Mybatis statistics log record:" +
                 "\n===============================" +
                 "\n{}" +
-                "\n===============================", JSONUtil.toJsonPrettyStr(statisticsInfoMap));
+                "\n===============================", JSON.toJSONString(statisticsInfoMap, true));
     }
 
     public List<String> getExcludedPrefixes() {

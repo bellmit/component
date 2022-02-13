@@ -1,6 +1,6 @@
 package com.lyloou.component.mqkafka.support;
 
-import cn.hutool.json.JSONUtil;
+import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -32,7 +32,7 @@ public class DemoConsumer {
     private void doConsumerRecordList(List<ConsumerRecord<String, String>> consumerRecords) {
         for (ConsumerRecord<String, String> consumerRecord : consumerRecords) {
             final String data = consumerRecord.value();
-            final DemoDTO demoDTO = JSONUtil.toBean(data, DemoDTO.class);
+            final DemoDTO demoDTO = JSON.parseObject(data, DemoDTO.class);
             // do dto
             log.info("get msg==>{}", demoDTO);
         }

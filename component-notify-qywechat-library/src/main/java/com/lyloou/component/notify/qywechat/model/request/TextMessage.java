@@ -2,7 +2,7 @@ package com.lyloou.component.notify.qywechat.model.request;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.json.JSONUtil;
+import com.alibaba.fastjson.JSON;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -91,6 +91,6 @@ public class TextMessage implements Message {
 
         items.put("text", textContent);
 
-        return JSONUtil.toJsonStr(items);
+        return JSON.toJSONString(items);
     }
 }

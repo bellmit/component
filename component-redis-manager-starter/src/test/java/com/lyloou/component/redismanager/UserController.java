@@ -1,6 +1,6 @@
 package com.lyloou.component.redismanager;
 
-import cn.hutool.json.JSONUtil;
+import com.alibaba.fastjson.JSON;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,7 +72,7 @@ public class UserController {
         System.out.println();
         log.info("keys:{}", redisTemplate.keys("com.lyloou.component.redismanager.*"));
 
-        redisService.set("user-1", JSONUtil.toJsonStr(user));
+        redisService.set("user-1", JSON.toJSONString(user));
         redisService.set("user-2", user);
         redisService.set("user-3", null);
         redisService.set("com.lyloou.component.redismanager.user::9", "adsfdff");

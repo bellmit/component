@@ -1,6 +1,6 @@
 package com.lyloou.component.notify.qywechat.model.request;
 
-import cn.hutool.json.JSONUtil;
+import com.alibaba.fastjson.JSON;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -98,6 +98,6 @@ public class MarkdownMessage implements Message {
         markdown.put("content", markdownText.toString());
         result.put("markdown", markdown);
 
-        return JSONUtil.toJsonStr(result);
+        return JSON.toJSONString(result);
     }
 }

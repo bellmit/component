@@ -1,7 +1,7 @@
 package com.lyloou.component.notify.qywechat.model.request;
 
 
-import cn.hutool.json.JSONUtil;
+import com.alibaba.fastjson.JSON;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -42,7 +42,7 @@ public class NewsMessage implements Message {
         }
         news.put("articles", articles);
         items.put("news", news);
-        return JSONUtil.toJsonStr(items);
+        return JSON.toJSONString(items);
     }
 
     public static class NewsArticle {

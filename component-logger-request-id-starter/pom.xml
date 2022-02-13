@@ -46,7 +46,6 @@
         <dependency>
             <groupId>com.lyloou</groupId>
             <artifactId>component-dto</artifactId>
-            <scope>test</scope>
         </dependency>
 
     </dependencies>
