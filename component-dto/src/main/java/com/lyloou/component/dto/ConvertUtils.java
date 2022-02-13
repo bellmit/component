@@ -132,70 +132,8 @@ public class ConvertUtils {
      * @param clazz 要转换的类型
      * @return 转换后的实例对象
      */
-    @SuppressWarnings("unchecked")
-    public <T> T convertStr(String data, Class<?> clazz) {
-        if (String.class == clazz) {
-            return (T) data;
-        }
-
-        if (StrUtil.isEmpty(data)) {
-            return null;
-        }
-
-        if (Byte.class == clazz) {
-            return (T) Byte.valueOf(data);
-        }
-
-        if (Character.class == clazz) {
-            return (T) Character.valueOf(data.charAt(0));
-        }
-
-        if (Integer.class == clazz) {
-            return (T) Integer.valueOf(data);
-        }
-
-        if (Double.class == clazz) {
-            return (T) Double.valueOf(data);
-        }
-
-        if (BigDecimal.class == clazz) {
-            return (T) new BigDecimal(data);
-        }
-
-        if (Float.class == clazz) {
-            return (T) Float.valueOf(data);
-        }
-
-        if (Boolean.class == clazz) {
-            return (T) Boolean.valueOf(data);
-        }
-
-        if (JSONObject.class == clazz) {
-            return (T) JSON.parseObject(data);
-        }
-
-        if (JSONArray.class == clazz) {
-            return (T) JSON.parseArray(data);
-        }
-
-        // 转换为对象
-        Object o;
-        try {
-            o = JSON.parse(data);
-        } catch (Exception e) {
-            o = null;
-        }
-        // 是 object 对象？
-        if (o instanceof JSONObject) {
-            return (T) JSON.parseObject(data, clazz);
-        }
-        // 是 array 对象？
-        if (o instanceof JSONArray) {
-            return JSON.parseObject(data, new TypeReference<T>() {
-            });
-        }
-
-        throw new RuntimeException("Unsupported type cast exception, class: " + clazz.getName() + ", data: " + data);
+    public static <T> T convertStr(String data, Class<?> clazz) {
+        return convertStr(data, clazz, true);
     }
 
     /**
@@ -207,16 +145,82 @@ public class ConvertUtils {
      * @param swallowException 是否吞掉异常，如果有异常直接返回 null
      * @return 转换后的实例对象
      */
-    public <T> T convertStr(String data, Class<?> clazz, boolean swallowException) {
-        if (swallowException) {
-            try {
-                return convertStr(data, clazz);
-            } catch (Exception e) {
+    @SuppressWarnings("unchecked")
+    public static <T> T convertStr(String data, Class<?> clazz, boolean swallowException) {
+
+        try {
+
+            if (String.class == clazz) {
+                return (T) data;
+            }
+
+            if (StrUtil.isEmpty(data)) {
                 return null;
             }
+
+            if (Byte.class == clazz) {
+                return (T) Byte.valueOf(data);
+            }
+
+            if (Character.class == clazz) {
+                return (T) Character.valueOf(data.charAt(0));
+            }
+
+            if (Integer.class == clazz) {
+                return (T) Integer.valueOf(data);
+            }
+
+            if (Double.class == clazz) {
+                return (T) Double.valueOf(data);
+            }
+
+            if (BigDecimal.class == clazz) {
+                return (T) new BigDecimal(data);
+            }
+
+            if (Float.class == clazz) {
+                return (T) Float.valueOf(data);
+            }
+
+            if (Boolean.class == clazz) {
+                return (T) Boolean.valueOf(data);
+            }
+
+            if (JSONObject.class == clazz) {
+                return (T) JSON.parseObject(data);
+            }
+
+            if (JSONArray.class == clazz) {
+                return (T) JSON.parseArray(data);
+            }
+        } catch (Exception e) {
+            if (swallowException) {
+                return null;
+            }
+            throw e;
         }
 
-        return convertStr(data, clazz);
+        // 转换为对象
+        try {
+            Object o = JSON.parse(data);
+            // 是 object 对象？
+            if (o instanceof JSONObject) {
+                return (T) JSON.parseObject(data, clazz);
+            }
+            // 是 array 对象？
+            if (o instanceof JSONArray) {
+                return JSON.parseObject(data, new TypeReference<T>() {
+                });
+            }
+        } catch (Exception e) {
+            // ignore
+        }
+
+        if (swallowException) {
+            return null;
+        }
+
+        throw new RuntimeException("Unsupported type cast exception, class: " + clazz.getName() + ", data: " + data);
     }
 
 

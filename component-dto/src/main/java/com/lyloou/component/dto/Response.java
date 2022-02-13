@@ -3,12 +3,18 @@ package com.lyloou.component.dto;
 import com.lyloou.component.dto.codemessage.CodeMessage;
 import com.lyloou.component.dto.codemessage.CommonCodeMessage;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 /**
  * Response to caller
  *
  * @author fulan.zjf 2017年10月21日 下午8:53:17
  */
+@Setter
+@Getter
+@ToString
 public class Response extends DTO {
 
     private static final long serialVersionUID = 1L;
@@ -25,47 +31,11 @@ public class Response extends DTO {
     @ApiModelProperty("返回消息")
     private String message;
 
-    public boolean isSuccess() {
-        return success;
-    }
-
-    public void setSuccess(boolean success) {
-        this.success = success;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public String getRequestId() {
-        return requestId;
-    }
-
-    public void setRequestId(String requestId) {
-        this.requestId = requestId;
-    }
-
     public void setCodeMessage(CodeMessage codeMessage) {
         setCode(codeMessage.code());
         setMessage(codeMessage.message());
     }
 
-    @Override
-    public String toString() {
-        return "Response [success=" + success + ", code=" + code + ", message=" + message + "]";
-    }
 
     public static Response success() {
         Response response = new Response();
