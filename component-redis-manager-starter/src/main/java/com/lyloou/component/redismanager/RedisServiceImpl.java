@@ -10,7 +10,6 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.cache.support.NullValue;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.data.redis.connection.RedisZSetCommands;
@@ -32,7 +31,6 @@ import java.util.function.Supplier;
 @Service
 @Qualifier("redisService")
 public class RedisServiceImpl implements RedisService {
-    private static final ObjectMapper OM = new ObjectMapper();
 
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
@@ -349,9 +347,26 @@ public class RedisServiceImpl implements RedisService {
     }
 
 
-    @SneakyThrows
+    private static final ObjectMapper OM = new ObjectMapper();
+    private static final String EMPTY_ARRAY = "[]";
+    private static final String EMPTY_OBJECT = "{}";
+    private static final String EMPTY_STRING = "@__null__@";
+
+    public <T> List<T> cacheList(String key, Supplier<List<T>> supplier) {
+        return cacheList(key, 0, supplier);
+    }
+
     public <T> List<T> cacheList(String key, int ttl, Supplier<List<T>> supplier) {
+        return cacheList(key, ttl, false, supplier);
+    }
+
+    @SneakyThrows
+    public <T> List<T> cacheList(String key, int ttl, boolean cacheNullValue, Supplier<List<T>> supplier) {
         final String dataStr = get(key);
+        if (EMPTY_ARRAY.equals(dataStr)) {
+            return Collections.emptyList();
+        }
+
         if (Objects.nonNull(dataStr)) {
             List<T> bean = OM.readValue(dataStr, new TypeReference<List<T>>() {
             });
@@ -361,13 +376,32 @@ public class RedisServiceImpl implements RedisService {
         }
 
         final List<T> data = supplier.get();
-        set(key, OM.writeValueAsString(data), ttl);
-        return data;
+        if (Objects.nonNull(data)) {
+            set(key, OM.writeValueAsString(data), ttl);
+            return data;
+        }
+
+        if (cacheNullValue) {
+            set(key, EMPTY_ARRAY, ttl);
+        }
+        return Collections.emptyList();
+    }
+
+    public <T> T cacheObject(String key, Class<T> clazz, Supplier<T> supplier) {
+        return cacheObject(key, clazz, 0, supplier);
+    }
+
+    public <T> T cacheObject(String key, Class<T> clazz, int ttl, Supplier<T> supplier) {
+        return cacheObject(key, clazz, ttl, false, supplier);
     }
 
     @SneakyThrows
-    public <T> T cacheObject(String key, int ttl, Class<T> clazz, Supplier<T> supplier) {
+    public <T> T cacheObject(String key, Class<T> clazz, int ttl, boolean cacheNullValue, Supplier<T> supplier) {
         final String dataStr = get(key);
+        if (EMPTY_OBJECT.equals(dataStr)) {
+            return null;
+        }
+
         if (Objects.nonNull(dataStr)) {
             final T bean = OM.readValue(dataStr, clazz);
             if (bean != null) {
@@ -375,8 +409,47 @@ public class RedisServiceImpl implements RedisService {
             }
         }
         final T data = supplier.get();
-        String value = OM.writeValueAsString(data);
-        set(key, value, ttl);
-        return data;
+        if (Objects.nonNull(data)) {
+            String value = OM.writeValueAsString(data);
+            set(key, value, ttl);
+            return data;
+        }
+
+        if (cacheNullValue) {
+            set(key, EMPTY_OBJECT, ttl);
+        }
+        return null;
+    }
+
+    public String cacheString(String key, Supplier<String> supplier) {
+        return cacheString(key, 0, supplier);
+    }
+
+    public String cacheString(String key, int ttl, Supplier<String> supplier) {
+        return cacheString(key, ttl, false, supplier);
+    }
+
+    @SneakyThrows
+    public String cacheString(String key, int ttl, boolean cacheNullValue, Supplier<String> supplier) {
+
+        final String dataStr = get(key);
+        if (EMPTY_STRING.equals(dataStr)) {
+            return null;
+        }
+
+        if (Objects.nonNull(dataStr)) {
+            return dataStr;
+        }
+
+        final String data = supplier.get();
+        if (Objects.nonNull(data)) {
+            set(key, data, ttl);
+            return data;
+        }
+
+        if (cacheNullValue) {
+            set(key, EMPTY_STRING, ttl);
+        }
+        return null;
     }
 }
