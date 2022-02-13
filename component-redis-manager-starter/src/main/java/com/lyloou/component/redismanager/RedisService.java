@@ -4,12 +4,13 @@ import org.springframework.data.redis.connection.RedisZSetCommands;
 import org.springframework.data.redis.core.Cursor;
 import org.springframework.data.redis.core.RedisTemplate;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 /**
  * @author lilou
@@ -263,7 +264,7 @@ public interface RedisService {
      * 以加锁的方式运行 consumer
      *
      * @param key      键
-     * @param timeout  超时
+     * @param timeout  超时（单位：秒）
      * @param consumer 消费，当为 true 时，获取到了锁
      */
     void doWithLock(String key, int timeout, Consumer<Boolean> consumer);
@@ -275,4 +276,49 @@ public interface RedisService {
      * @return 键集合
      */
     Set<String> keys(String prefix);
+
+    <T> List<T> cacheList(String key, Supplier<List<T>> supplier);
+
+    <T> List<T> cacheList(String key, int ttl, Supplier<List<T>> supplier);
+
+    /**
+     * 获取缓存数据（列表），如果缓存没有，则调用 supplier 获取数据并缓存数据
+     *
+     * @param key            键
+     * @param ttl            过期时间（单位秒，小于等于0表示不过期）
+     * @param cacheNullValue 是否缓存空值
+     * @param supplier       缓存中没有值时，通过 supplier 来获取值并缓存起来
+     * @return 结果(emptyList 或 列表)
+     */
+    <T> List<T> cacheList(String key, int ttl, boolean cacheNullValue, Supplier<List<T>> supplier);
+
+    <T> T cacheObject(String key, Class<T> clazz, Supplier<T> supplier);
+
+    <T> T cacheObject(String key, Class<T> clazz, int ttl, Supplier<T> supplier);
+
+    /**
+     * 获取缓存数据（对象），如果缓存没有，则调用 supplier 获取数据并缓存数据
+     *
+     * @param key            键
+     * @param ttl            过期时间（单位秒，小于等于0表示不过期）
+     * @param cacheNullValue 是否缓存空值
+     * @param supplier       缓存中没有值时，通过 supplier 来获取值并缓存起来
+     * @return 结果（null 或 对象）
+     */
+    <T> T cacheObject(String key, Class<T> clazz, int ttl, boolean cacheNullValue, Supplier<T> supplier);
+
+    String cacheString(String key, Supplier<String> supplier);
+
+    String cacheString(String key, int ttl, Supplier<String> supplier);
+
+    /**
+     * 获取缓存数据（字符串），如果缓存没有，则调用 supplier 获取数据并缓存数据
+     *
+     * @param key            键
+     * @param ttl            过期时间（单位秒，小于等于0表示不过期）
+     * @param cacheNullValue 是否缓存空值
+     * @param supplier       缓存中没有值时，通过 supplier 来获取值并缓存起来
+     * @return 结果（null 或 字符串）
+     */
+    String cacheString(String key, int ttl, boolean cacheNullValue, Supplier<String> supplier);
 }

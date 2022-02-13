@@ -352,15 +352,18 @@ public class RedisServiceImpl implements RedisService {
     private static final String EMPTY_OBJECT = "{}";
     private static final String EMPTY_STRING = "@__null__@";
 
+    @Override
     public <T> List<T> cacheList(String key, Supplier<List<T>> supplier) {
         return cacheList(key, 0, supplier);
     }
 
+    @Override
     public <T> List<T> cacheList(String key, int ttl, Supplier<List<T>> supplier) {
         return cacheList(key, ttl, false, supplier);
     }
 
     @SneakyThrows
+    @Override
     public <T> List<T> cacheList(String key, int ttl, boolean cacheNullValue, Supplier<List<T>> supplier) {
         final String dataStr = get(key);
         if (EMPTY_ARRAY.equals(dataStr)) {
@@ -387,15 +390,18 @@ public class RedisServiceImpl implements RedisService {
         return Collections.emptyList();
     }
 
+    @Override
     public <T> T cacheObject(String key, Class<T> clazz, Supplier<T> supplier) {
         return cacheObject(key, clazz, 0, supplier);
     }
 
+    @Override
     public <T> T cacheObject(String key, Class<T> clazz, int ttl, Supplier<T> supplier) {
         return cacheObject(key, clazz, ttl, false, supplier);
     }
 
     @SneakyThrows
+    @Override
     public <T> T cacheObject(String key, Class<T> clazz, int ttl, boolean cacheNullValue, Supplier<T> supplier) {
         final String dataStr = get(key);
         if (EMPTY_OBJECT.equals(dataStr)) {
@@ -421,15 +427,19 @@ public class RedisServiceImpl implements RedisService {
         return null;
     }
 
+    @Override
     public String cacheString(String key, Supplier<String> supplier) {
         return cacheString(key, 0, supplier);
     }
 
+    @Override
     public String cacheString(String key, int ttl, Supplier<String> supplier) {
         return cacheString(key, ttl, false, supplier);
     }
 
+
     @SneakyThrows
+    @Override
     public String cacheString(String key, int ttl, boolean cacheNullValue, Supplier<String> supplier) {
 
         final String dataStr = get(key);
