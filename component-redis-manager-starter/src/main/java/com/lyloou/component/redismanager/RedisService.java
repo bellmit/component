@@ -261,6 +261,13 @@ public interface RedisService {
     Cursor<RedisZSetCommands.Tuple> zscan(String key, String match);
 
     /**
+     * 有默认值作为参数来获取分布式锁
+     *
+     * @param consumer 消费，当为 true 时，获取到了锁
+     */
+    void doWithLock(Consumer<Boolean> consumer);
+
+    /**
      * 以加锁的方式运行 consumer
      *
      * @param key      键

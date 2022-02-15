@@ -328,6 +328,16 @@ public class RedisServiceImpl implements RedisService {
         });
     }
 
+    @Override
+    public void doWithLock(Consumer<Boolean> consumer) {
+        try {
+            boolean locked = redisLockHelper.tryGetDistributedLock();
+            consumer.accept(locked);
+        } finally {
+            redisLockHelper.releaseDistributedLock();
+        }
+    }
+
 
     @Override
     public void doWithLock(String key, int timeout, Consumer<Boolean> consumer) {

@@ -30,9 +30,9 @@ public class ExecCommandAutoConfiguration {
     @Bean(name = "execCommandExecutor")
     public Executor execCommandExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-        executor.setCorePoolSize(4);
-        executor.setMaxPoolSize(8);
-        executor.setQueueCapacity(500);
+        executor.setCorePoolSize(Runtime.getRuntime().availableProcessors() * 2);
+        executor.setMaxPoolSize(100);
+        executor.setQueueCapacity(50);
         executor.setThreadNamePrefix("execCommandExecutor线程前缀-");
         executor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
         executor.initialize();
@@ -50,7 +50,7 @@ public class ExecCommandAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(value = ExecCommandController.class)
-    public ExecCommandController keyValueController() {
+    public ExecCommandController execCommandController() {
         return new ExecCommandController();
     }
 }
