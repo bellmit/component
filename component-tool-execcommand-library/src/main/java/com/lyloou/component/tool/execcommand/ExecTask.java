@@ -55,6 +55,9 @@ public class ExecTask {
      */
     private String extValues;
 
+    public ExecTask() {
+    }
+
     public ExecTask(String taskId, List<String> command) {
         this.taskId = taskId;
         this.command = command;
