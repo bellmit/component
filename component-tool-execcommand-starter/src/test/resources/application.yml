@@ -3,4 +3,4 @@ server:
 component:
   execcommand:
     enable-log-file: true
-    log-file-dir: /log/execcommand/
+    log-file-dir: /logs/exec-task/

@@ -1,10 +1,14 @@
 package com.lyloou.component.tool.execcommand;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
-import java.util.List;
-
-@Data
+@Getter
+@Setter
+@ToString
+@NoArgsConstructor
 public class ExecTask {
     /**
      * 任务id
@@ -12,19 +16,14 @@ public class ExecTask {
     private String taskId;
 
     /**
-     * 命令列表
+     * 命令
      */
-    private List<String> command;
+    private String command;
 
     /**
-     * 是否开启日志文件记录功能
+     * 命令参数
      */
-    private boolean enableLogFile = false;
-
-    /**
-     * 日志文件路径
-     */
-    private String logFilePath;
+    private String[] param;
 
     /**
      * 任务执行完成后的退出状态码
@@ -39,9 +38,8 @@ public class ExecTask {
 
     /**
      * 执行状态
-     * 0：未运行
-     * 1：正在运行
-     * 2：已经结束
+     *
+     * @see ExecStatus
      */
     private Integer processStatus;
 
@@ -55,11 +53,28 @@ public class ExecTask {
      */
     private String extValues;
 
-    public ExecTask() {
-    }
 
-    public ExecTask(String taskId, List<String> command) {
+    public ExecTask(String taskId, String command, String... param) {
         this.taskId = taskId;
         this.command = command;
+        this.param = param;
     }
+
+    public void addRandomProgress() {
+        if (taskProgress == null) {
+            taskProgress = 0;
+            return;
+        }
+
+        if (taskProgress == 100) {
+            return;
+        }
+
+        taskProgress++;
+
+        if (taskProgress >= 99) {
+            taskProgress = 99;
+        }
+    }
+
 }

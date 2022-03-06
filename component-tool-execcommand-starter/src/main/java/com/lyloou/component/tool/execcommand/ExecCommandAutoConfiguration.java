@@ -2,9 +2,6 @@ package com.lyloou.component.tool.execcommand;
 
 import cn.hutool.core.lang.Snowflake;
 import cn.hutool.core.util.IdUtil;
-import com.lyloou.component.cache.datacache.DataCache;
-import com.lyloou.component.cache.datacache.DataCacheProperties;
-import com.lyloou.component.cache.datacache.DataDefaultCache;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -12,7 +9,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
-import java.util.concurrent.Executor;
 import java.util.concurrent.ThreadPoolExecutor;
 
 /**
@@ -39,15 +35,6 @@ public class ExecCommandAutoConfiguration {
         executor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
         executor.initialize();
         return executor;
-    }
-
-    @Bean
-    @ConditionalOnMissingBean(DataCache.class)
-    public DataCache dataCache() {
-        final DataCacheProperties dataCacheProperties = new DataCacheProperties();
-        dataCacheProperties.setSchedulePrune(false);
-        dataCacheProperties.setTimeout(-1);
-        return new DataDefaultCache(dataCacheProperties);
     }
 
     @Bean

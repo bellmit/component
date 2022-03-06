@@ -8,10 +8,6 @@ import org.zeroturnaround.exec.ProcessExecutor;
 import org.zeroturnaround.exec.ProcessResult;
 import org.zeroturnaround.exec.stream.LogOutputStream;
 
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.concurrent.TimeoutException;
-
 @Slf4j
 public class ExecCommandExample {
 
@@ -42,9 +38,7 @@ public class ExecCommandExample {
         final long taskId = snowflake.nextId();
 
         // final ExecTask task = new ExecTask(String.valueOf(taskId), Arrays.asList("sh", "D:\\w\\box\\bin\\commit.sh"));
-        final ExecTask task = new ExecTask(String.valueOf(taskId), Arrays.asList("sh", "D:\\aa.sh"));
-        task.setEnableLogFile(true);
-        task.setLogFilePath("D:/" + taskId + ".txt");
+        final ExecTask task = new ExecTask(String.valueOf(taskId), "sh", "D:\\aa.sh");
         final ExecCommand execCommand = new ExecCommand(task);
 
         // 添加监听器

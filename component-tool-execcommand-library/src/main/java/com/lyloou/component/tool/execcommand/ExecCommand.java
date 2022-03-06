@@ -1,17 +1,16 @@
 package com.lyloou.component.tool.execcommand;
 
-import cn.hutool.core.io.FileUtil;
-import cn.hutool.core.io.IoUtil;
-import cn.hutool.core.util.StrUtil;
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.lang.Assert;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.zeroturnaround.exec.ProcessExecutor;
 import org.zeroturnaround.exec.ProcessResult;
-import org.zeroturnaround.exec.stream.LogOutputStream;
+import org.zeroturnaround.exec.listener.ProcessListener;
 
 import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.nio.charset.Charset;
-import java.util.Observable;
+import java.io.OutputStream;
+import java.util.*;
 import java.util.concurrent.TimeoutException;
 
 /**
@@ -23,97 +22,130 @@ public class ExecCommand extends Observable implements Runnable {
 
     private final ExecTask task;
 
+    private final List<OutputStream> outputStreamList = new ArrayList<>();
+    private final List<OutputStream> errorOutputStreamList = new ArrayList<>();
+
     public ExecCommand(ExecTask task) {
         this.task = task;
         task.setTaskProgress(0);
-        task.setProcessStatus(ProcessStatus.PENDING);
+        task.setProcessStatus(ExecStatus.NEW);
     }
 
     public void execute() throws InterruptedException, TimeoutException, IOException {
-        ExecTask task = this.task;
-        task.setTaskProgress(5);
-        task.setProcessStatus(ProcessStatus.RUNNING);
-        notifyTaskChanged();
 
-        final OutputStreamWriter writer = getWriter(task);
+        // 获取和验证参数
+        Assert.notNull(task.getCommand(), "command can not null");
+        List<String> commandList = new ArrayList<>();
+        commandList.add(task.getCommand());
+        if (Objects.nonNull(task.getParam())) {
+            commandList.addAll(Arrays.asList(task.getParam()));
+        }
 
-        final ProcessExecutor executor = new ProcessExecutor().command(task.getCommand());
-        final ProcessResult execute = executor
-                .destroyOnExit()
-                .redirectOutput(new LogOutputStream() {
-                    @Override
-                    protected void processLine(String s) {
-                        task.setProcessStatus(ProcessStatus.RUNNING);
-                        task.setProcessLine(s);
+        // 获取执行器
+        final ProcessExecutor executor = new ProcessExecutor().command(commandList);
 
-                        if (writer != null) {
-                            outputData(s, writer);
-                        }
 
-                        notifyTaskChanged();
-                    }
-                })
-                .redirectError(new LogOutputStream() {
-                    @Override
-                    protected void processLine(String s) {
-                        task.setProcessStatus(ProcessStatus.RUNNING);
-                        task.setProcessLine(s);
+        // 添加输出流
+        if (CollUtil.isNotEmpty(outputStreamList)) {
+            for (OutputStream outputStream : outputStreamList) {
+                executor.redirectOutputAlsoTo(outputStream);
+            }
+        }
+        if (CollUtil.isNotEmpty(errorOutputStreamList)) {
+            for (OutputStream outputStream : errorOutputStreamList) {
+                executor.redirectErrorAlsoTo(outputStream);
+            }
+        }
 
-                        if (writer != null) {
-                            outputData(s, writer);
-                        }
-
-                        notifyTaskChanged();
-                    }
-                })
+        executor.destroyOnExit()
+                .addListener(getProcessListener())
                 .execute();
 
-        IoUtil.close(writer);
-
-        task.setTaskProgress(100);
-        task.setProcessStatus(ProcessStatus.FINISHED);
-        task.setProcessLine(null);
-        task.setExitCode(execute.getExitValue());
-        notifyTaskChanged();
     }
 
-    private void notifyTaskChanged() {
+    @SneakyThrows(IOException.class)
+    public void printTask() {
+        if (outputStreamList.isEmpty()) {
+            return;
+        }
+
+        final String s = task.toString() + "\n";
+        final byte[] taskContent = s.getBytes();
+        for (OutputStream outputStream : outputStreamList) {
+            outputStream.write(taskContent);
+            outputStream.flush();
+        }
+    }
+
+    private ProcessListener getProcessListener() {
+        return new ProcessListener() {
+            @Override
+            public void beforeStart(ProcessExecutor executor) {
+                task.setTaskProgress(0);
+                task.setProcessStatus(ExecStatus.NEW);
+                task.setProcessLine(null);
+                notifyTaskChanged();
+                printTask();
+            }
+
+            @Override
+            public void afterStart(Process process, ProcessExecutor executor) {
+                task.setTaskProgress(5);
+                task.setProcessStatus(ExecStatus.RUNNABLE);
+                task.setProcessLine(null);
+                notifyTaskChanged();
+            }
+
+            @Override
+            public void afterFinish(Process process, ProcessResult result) {
+                task.setTaskProgress(99);
+                task.setProcessStatus(ExecStatus.RUNNING);
+                task.setProcessLine(null);
+                task.setExitCode(result.getExitValue());
+                notifyTaskChanged();
+            }
+
+            @Override
+            public void afterStop(Process process) {
+                task.setTaskProgress(100);
+                task.setProcessStatus(ExecStatus.TERMINATED);
+                task.setProcessLine(null);
+                task.setExitCode(process.exitValue());
+                notifyTaskChanged();
+                printTask();
+            }
+        };
+    }
+
+    public void notifyTaskChanged() {
+        task.addRandomProgress();
         setChanged();
         notifyObservers(task);
-    }
-
-    private static OutputStreamWriter getWriter(ExecTask task) {
-        if (!task.isEnableLogFile()) {
-            return null;
-        }
-
-        if (StrUtil.isEmpty(task.getLogFilePath())) {
-            throw new IllegalArgumentException("开启了日志文件记录功能，但是没有传入路径");
-        }
-
-        try {
-            return IoUtil.getWriter(FileUtil.getOutputStream(task.getLogFilePath()), Charset.defaultCharset());
-        } catch (Exception e) {
-            throw new IllegalArgumentException("开启了日志文件记录功能，但是操作文件失败，" + e.getMessage());
-        }
-    }
-
-    private static void outputData(String s, OutputStreamWriter writer) {
-        try {
-            writer.append(s)
-                    .append("\n")
-                    .flush();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     @Override
     public void run() {
         try {
             execute();
-        } catch (InterruptedException | TimeoutException | IOException e) {
-            throw new RuntimeException(e);
+        } catch (Exception e) {
+            throw new ExecException(e.getMessage(), e);
+        }
+    }
+
+    public void clearOutputStreamList() {
+        outputStreamList.clear();
+        errorOutputStreamList.clear();
+    }
+
+    public void addOutputStream(OutputStream outputStream) {
+        if (Objects.nonNull(outputStream)) {
+            outputStreamList.add(outputStream);
+        }
+    }
+
+    public void addErrorOutputStream(OutputStream outputStream) {
+        if (Objects.nonNull(outputStream)) {
+            errorOutputStreamList.add(outputStream);
         }
     }
 }

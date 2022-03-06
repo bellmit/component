@@ -28,10 +28,6 @@
             <groupId>com.lyloou</groupId>
             <artifactId>component-logger-request-id-starter</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.lyloou</groupId>
-            <artifactId>component-cache-datacache-library</artifactId>
-        </dependency>
 
 
         <dependency>
