@@ -600,6 +600,8 @@
                         </configuration>
                     </plugin>
 
+                    <!-- https://central.sonatype.org/publish/requirements/gpg/ -->
+                    <!-- https://maven.apache.org/repository/guide-central-repository-upload.html -->
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>

@@ -2,5 +2,6 @@
 
 @REM 手动逐行运行
 start cmd
+cd /d D:\w\lyloou\component-parent
 gpg --list-key
-mvn -s C:/Users/lilou/.m2/settings_ossrh.xml clean deploy -P release
+@REM mvn -s C:/Users/lilou/.m2/settings_ossrh.xml clean deploy -P release
