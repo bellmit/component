@@ -51,23 +51,33 @@ public class AliFileServiceImpl implements AliFileService {
     /**
      * [Java SDK快速入门](https://help.aliyun.com/document_detail/195870.html)
      */
-    public String upload(String originFilename, byte[] content) {
-        if (originFilename == null || content == null) {
-            return null;
-        }
+    public AliFileItemModel upload(String originFilename, byte[] content) {
+        AliFileItemModel model = new AliFileItemModel();
+        model.setSuccess(false);
 
         final TimeInterval timer = DateUtil.timer();
         try {
-            log.info("start upload single file: {}", originFilename);
+
+            if (originFilename == null || content == null) {
+                model.setFailMsg("originFilename == null || content == null");
+                return model;
+            }
+            log.debug("start upload single file: {}", originFilename);
             String filePath = getNewFilename(originFilename);
             ossClient.putObject(aliFileProperties.getBucketName(), filePath, new ByteArrayInputStream(content));
-            return aliFileProperties.getUrlPrefix() + "/" + filePath;
+
+            model.setSuccess(true);
+            final String url = aliFileProperties.getUrlPrefix() + "/" + filePath;
+            model.setUrl(url);
+            return model;
         } catch (Exception ex) {
-            log.error("上传失败：", ex);
+            model.setFailMsg(ex.getMessage());
+            log.warn("上传失败：", ex);
         } finally {
+            model.setIntervalMs(timer.intervalMs());
             log.info("end upload single file: {}, spend:{}ms", originFilename, timer.intervalMs());
         }
-        return null;
+        return model;
     }
 
     private String getNewFilename(String sourceFileName) {
@@ -80,8 +90,8 @@ public class AliFileServiceImpl implements AliFileService {
     }
 
     @Override
-    public Map<String, String> uploadFile(@RequestParam("file") MultipartFile[] files) {
-        Map<String, String> map = new LinkedHashMap<>();
+    public Map<String, AliFileItemModel> uploadFile(@RequestParam("file") MultipartFile[] files) {
+        Map<String, AliFileItemModel> map = new LinkedHashMap<>();
         if (files.length <= 0) {
             return map;
         }
@@ -109,8 +119,8 @@ public class AliFileServiceImpl implements AliFileService {
         return map;
     }
 
-    private void doUploadFile(Map<String, String> map, String name, Map<String, byte[]> nameToContent) {
-        final String url = upload(name, nameToContent.get(name));
-        map.put(name, url);
+    private void doUploadFile(Map<String, AliFileItemModel> map, String name, Map<String, byte[]> nameToContent) {
+        final AliFileItemModel model = upload(name, nameToContent.get(name));
+        map.put(name, model);
     }
 }

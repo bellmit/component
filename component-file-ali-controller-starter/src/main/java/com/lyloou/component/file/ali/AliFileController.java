@@ -29,7 +29,7 @@ public class AliFileController {
 
     @PostMapping("/upload")
     @ApiOperation(value = "上传文件", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public SingleResponse<Map<String, String>> uploadFile(
+    public SingleResponse<Map<String, AliFileItemModel>> uploadFile(
             @ApiParam(value = "文件列表", required = true)
             @RequestParam("file") MultipartFile[] files) {
         return SingleResponse.buildSuccess(ossService.uploadFile(files));

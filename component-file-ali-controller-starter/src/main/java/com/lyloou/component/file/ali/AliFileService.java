@@ -16,5 +16,5 @@ public interface AliFileService {
      * @param files 文件
      * @return 结果：以 file->url的方式组成的map
      */
-    Map<String, String> uploadFile(@RequestParam("file") MultipartFile[] files);
+    Map<String, AliFileItemModel> uploadFile(@RequestParam("file") MultipartFile[] files);
 }
