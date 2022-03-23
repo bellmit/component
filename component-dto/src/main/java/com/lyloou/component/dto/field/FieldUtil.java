@@ -1,6 +1,7 @@
 package com.lyloou.component.dto.field;
 
 import cn.hutool.core.util.StrUtil;
+import com.lyloou.component.dto.Response;
 
 import java.io.Serializable;
 import java.lang.invoke.SerializedLambda;
@@ -22,28 +23,28 @@ public class FieldUtil {
     /**
      * 下划线样式，小写
      */
-    public static <T> String underline(IGetter<T> fn) {
+    public static <T, U> String underline(IGetter<T, U> fn) {
         return toSymbolCase(fn, '_');
     }
 
     /**
      * 下划线样式，大写
      */
-    public static <T> String underlineUpper(IGetter<T> fn) {
+    public static <T, U> String underlineUpper(IGetter<T, U> fn) {
         return underline(fn).toUpperCase();
     }
 
     /**
      * 依据符号转换样式
      */
-    public static <T> String toSymbolCase(IGetter<T> fn, char symbol) {
+    public static <T, U> String toSymbolCase(IGetter<T, U> fn, char symbol) {
         return StrUtil.toSymbolCase(noPrefix(fn), symbol);
     }
 
     /***
      * 转换getter方法引用为属性名，首字母小写
      */
-    public static <T> String noPrefix(IGetter<T> fn) {
+    public static <T, U> String noPrefix(IGetter<T, U> fn) {
         return getGeneralField(fn);
     }
 
@@ -109,15 +110,30 @@ public class FieldUtil {
         } catch (Exception e) {
             throw new IllegalArgumentException("获取SerializedLambda异常, class=" + fn.getClass().getSimpleName(), e);
         }
+
         return lambda;
+    }
+
+    public static void main(String[] args) {
+        Response r = new Response();
+        set(Response::setCode, r, "10");
+        System.out.println(get(Response::getCode, r));
+    }
+
+    public static <T, U> void set(ISetter<T, U> setter, T t, U u) {
+        setter.accept(t, u);
+    }
+
+    public static <T, U> U get(IGetter<T, U> getter, T t) {
+        return getter.apply(t);
     }
 
     /**
      * getter方法接口定义
      */
     @FunctionalInterface
-    public interface IGetter<T> extends Serializable {
-        Object apply(T source);
+    public interface IGetter<T, U> extends Serializable {
+        U apply(T source);
     }
 
     /**
